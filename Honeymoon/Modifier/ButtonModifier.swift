@@ -5,4 +5,15 @@
 //  Created by Phoon Thet Pine on 1/11/23.
 //
 
-import Foundation
+import SwiftUI
+
+struct ButtonModifier: ViewModifier {
+    func body(content: Content) -> some View {
+        content
+            .font(.headline)
+            .padding()
+            .frame(minWidth: 0, maxWidth: .infinity)
+            .background(Capsule().fill(Color.pink))
+            .foregroundColor(Color.white)
+    }
+}
