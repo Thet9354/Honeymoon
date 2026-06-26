@@ -1,0 +1,231 @@
+//
+//  TripPlannerView.swift
+//  Honeymoon
+//
+//  P3: the planning dashboard for one booked destination — countdown, budget
+//  tracker, packing checklist, and notes. Backed by TripPlanStore (Firestore).
+//
+
+import SwiftUI
+
+struct TripPlannerView: View {
+
+    @StateObject private var store: TripPlanStore
+
+    @State private var newBudgetTitle = ""
+    @State private var newBudgetAmount = ""
+    @State private var newChecklistTitle = ""
+
+    init(booking: BookingItem) {
+        let seed = TripPlan(
+            destinationId: booking.id,
+            place: booking.place,
+            country: booking.country,
+            image: booking.image
+        )
+        _store = StateObject(wrappedValue: TripPlanStore(seed: seed))
+    }
+
+    private var plan: TripPlan { store.plan }
+
+    var body: some View {
+        List {
+            headerSection
+            countdownSection
+            budgetSection
+            checklistSection
+            notesSection
+        }
+        .listStyle(.insetGrouped)
+        .navigationTitle(plan.place)
+        .navigationBarTitleDisplayMode(.inline)
+        .task { await store.load() }
+    }
+
+    // MARK: - Header
+
+    private var headerSection: some View {
+        Section {
+            HStack(spacing: 14) {
+                Image(plan.image)
+                    .resizable().scaledToFill()
+                    .frame(width: 72, height: 72)
+                    .clipShape(RoundedRectangle(cornerRadius: 14))
+                VStack(alignment: .leading, spacing: 4) {
+                    Text(plan.place).font(.title3.weight(.semibold))
+                    Text(plan.country).font(.subheadline).foregroundStyle(.secondary)
+                }
+            }
+            .padding(.vertical, 4)
+        }
+    }
+
+    // MARK: - Countdown
+
+    private var dateBinding: Binding<Date> {
+        Binding(
+            get: { plan.startDate ?? defaultStartDate },
+            set: { store.setStartDate($0) }
+        )
+    }
+
+    private var defaultStartDate: Date {
+        Calendar.current.date(byAdding: .month, value: 3, to: Date()) ?? Date()
+    }
+
+    private var countdownSection: some View {
+        Section("When") {
+            if plan.startDate == nil {
+                Button {
+                    store.setStartDate(defaultStartDate)
+                } label: {
+                    Label("Set travel date", systemImage: "calendar.badge.plus")
+                }
+            } else {
+                HStack {
+                    Image(systemName: "calendar.circle.fill")
+                        .font(.title2)
+                        .foregroundStyle(Color.pink)
+                    VStack(alignment: .leading, spacing: 2) {
+                        Text(countdownText).font(.headline)
+                        Text("Travel date").font(.caption).foregroundStyle(.secondary)
+                    }
+                }
+                DatePicker("Date", selection: dateBinding, displayedComponents: .date)
+                    .datePickerStyle(.compact)
+                Button("Clear date", role: .destructive) { store.setStartDate(nil) }
+            }
+        }
+    }
+
+    private var countdownText: String {
+        guard let days = plan.daysUntilStart else { return "—" }
+        switch days {
+        case let d where d > 1: return "\(d) days to go"
+        case 1: return "Tomorrow!"
+        case 0: return "Today — bon voyage!"
+        case -1: return "Yesterday"
+        default: return "\(-days) days ago"
+        }
+    }
+
+    // MARK: - Budget
+
+    private var budgetSection: some View {
+        Section {
+            ForEach(plan.budgetItems) { item in
+                HStack {
+                    Text(item.title)
+                    Spacer()
+                    Text(currency(item.amountUSD)).foregroundStyle(.secondary)
+                }
+            }
+            .onDelete { store.removeBudgetItems(at: $0) }
+
+            HStack(spacing: 8) {
+                TextField("Item", text: $newBudgetTitle)
+                TextField("$0", text: $newBudgetAmount)
+                    .keyboardType(.decimalPad)
+                    .multilineTextAlignment(.trailing)
+                    .frame(width: 80)
+                Button {
+                    addBudgetItem()
+                } label: {
+                    Image(systemName: "plus.circle.fill").foregroundStyle(Color.pink)
+                }
+                .disabled(newBudgetTitle.trimmingCharacters(in: .whitespaces).isEmpty)
+            }
+        } header: {
+            Text("Budget")
+        } footer: {
+            if !plan.budgetItems.isEmpty {
+                HStack {
+                    Text("Total").fontWeight(.semibold)
+                    Spacer()
+                    Text(currency(plan.budgetTotal)).fontWeight(.semibold)
+                }
+                .font(.subheadline)
+                .foregroundStyle(.primary)
+            }
+        }
+    }
+
+    private func addBudgetItem() {
+        let amount = Double(newBudgetAmount.replacingOccurrences(of: ",", with: "")) ?? 0
+        store.addBudgetItem(title: newBudgetTitle, amount: amount)
+        newBudgetTitle = ""
+        newBudgetAmount = ""
+    }
+
+    // MARK: - Checklist
+
+    private var checklistSection: some View {
+        Section {
+            if !plan.checklist.isEmpty {
+                ProgressView(value: plan.checklistProgress)
+                    .tint(Color.pink)
+            }
+            ForEach(plan.checklist) { item in
+                Button {
+                    store.toggleChecklistItem(item)
+                } label: {
+                    HStack {
+                        Image(systemName: item.done ? "checkmark.circle.fill" : "circle")
+                            .foregroundStyle(item.done ? Color.pink : Color(.tertiaryLabel))
+                        Text(item.title)
+                            .strikethrough(item.done)
+                            .foregroundStyle(item.done ? .secondary : .primary)
+                    }
+                }
+                .buttonStyle(.plain)
+            }
+            .onDelete { store.removeChecklistItems(at: $0) }
+
+            HStack(spacing: 8) {
+                TextField("Add a packing item", text: $newChecklistTitle)
+                Button {
+                    addChecklistItem()
+                } label: {
+                    Image(systemName: "plus.circle.fill").foregroundStyle(Color.pink)
+                }
+                .disabled(newChecklistTitle.trimmingCharacters(in: .whitespaces).isEmpty)
+            }
+        } header: {
+            Text("Packing checklist")
+        }
+    }
+
+    private func addChecklistItem() {
+        store.addChecklistItem(title: newChecklistTitle)
+        newChecklistTitle = ""
+    }
+
+    // MARK: - Notes
+
+    private var notesSection: some View {
+        Section("Notes") {
+            TextEditor(text: $store.plan.notes)
+                .frame(minHeight: 120)
+                .onChange(of: store.plan.notes) { store.notesChanged() }
+        }
+    }
+
+    // MARK: - Helpers
+
+    private func currency(_ amount: Double) -> String {
+        let formatter = NumberFormatter()
+        formatter.numberStyle = .currency
+        formatter.currencyCode = "USD"
+        formatter.maximumFractionDigits = amount.truncatingRemainder(dividingBy: 1) == 0 ? 0 : 2
+        return formatter.string(from: NSNumber(value: amount)) ?? "$\(amount)"
+    }
+}
+
+#Preview {
+    NavigationStack {
+        TripPlannerView(booking: BookingItem(
+            id: "veligandu-maldives", place: "Veligandu", country: "Maldives",
+            image: "photo-veligandu-island-maldives", bookedAt: Date()
+        ))
+    }
+}

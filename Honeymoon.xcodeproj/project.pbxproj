@@ -13,6 +13,9 @@
 		AAFF44440000000000000002 /* TravelPreferences.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAFF44440000000000000001 /* TravelPreferences.swift */; };
 		AAFF55550000000000000002 /* PreferenceStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAFF55550000000000000001 /* PreferenceStore.swift */; };
 		AAFF66660000000000000002 /* PreferenceQuizView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAFF66660000000000000001 /* PreferenceQuizView.swift */; };
+		AAFF77770000000000000002 /* TripPlan.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAFF77770000000000000001 /* TripPlan.swift */; };
+		AAFF88880000000000000002 /* TripPlanStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAFF88880000000000000001 /* TripPlanStore.swift */; };
+		AAFF99990000000000000002 /* TripPlannerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAFF99990000000000000001 /* TripPlannerView.swift */; };
 		D33589CC2FED846C00541A90 /* AuthViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D33589CB2FED846C00541A90 /* AuthViewModel.swift */; };
 		D33589CF2FED88E000541A90 /* OnboardingPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = D33589CE2FED88E000541A90 /* OnboardingPage.swift */; };
 		D33589D12FED88F500541A90 /* OnboardingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D33589D02FED88F500541A90 /* OnboardingView.swift */; };
@@ -63,6 +66,9 @@
 		AAFF44440000000000000001 /* TravelPreferences.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TravelPreferences.swift; sourceTree = "<group>"; };
 		AAFF55550000000000000001 /* PreferenceStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreferenceStore.swift; sourceTree = "<group>"; };
 		AAFF66660000000000000001 /* PreferenceQuizView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreferenceQuizView.swift; sourceTree = "<group>"; };
+		AAFF77770000000000000001 /* TripPlan.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TripPlan.swift; sourceTree = "<group>"; };
+		AAFF88880000000000000001 /* TripPlanStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TripPlanStore.swift; sourceTree = "<group>"; };
+		AAFF99990000000000000001 /* TripPlannerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TripPlannerView.swift; sourceTree = "<group>"; };
 		D33589CB2FED846C00541A90 /* AuthViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthViewModel.swift; sourceTree = "<group>"; };
 		D33589CE2FED88E000541A90 /* OnboardingPage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingPage.swift; sourceTree = "<group>"; };
 		D33589D02FED88F500541A90 /* OnboardingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingView.swift; sourceTree = "<group>"; };
@@ -137,6 +143,14 @@
 			path = Detail;
 			sourceTree = "<group>";
 		};
+		AAFFAAAA0000000000000001 /* Trip */ = {
+			isa = PBXGroup;
+			children = (
+				AAFF99990000000000000001 /* TripPlannerView.swift */,
+			);
+			path = Trip;
+			sourceTree = "<group>";
+		};
 		D33589F02FED900000541A90 /* Audio */ = {
 			isa = PBXGroup;
 			children = (
@@ -151,6 +165,7 @@
 				D33589CB2FED846C00541A90 /* AuthViewModel.swift */,
 				D3358A0B2FED900000541A90 /* UserDataStore.swift */,
 				AAFF55550000000000000001 /* PreferenceStore.swift */,
+				AAFF88880000000000000001 /* TripPlanStore.swift */,
 			);
 			path = ViewModel;
 			sourceTree = "<group>";
@@ -259,6 +274,7 @@
 			children = (
 				D3F8460F2AF09B81005090ED /* HoneymoonModel.swift */,
 				AAFF44440000000000000001 /* TravelPreferences.swift */,
+				AAFF77770000000000000001 /* TripPlan.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -286,6 +302,7 @@
 				D33589E12FED8ADC00541A90 /* Settings */,
 				D3358A0C2FED900000541A90 /* Saved */,
 				AAFF33330000000000000001 /* Detail */,
+				AAFFAAAA0000000000000001 /* Trip */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -460,6 +477,9 @@
 				AAFF44440000000000000002 /* TravelPreferences.swift in Sources */,
 				AAFF55550000000000000002 /* PreferenceStore.swift in Sources */,
 				AAFF66660000000000000002 /* PreferenceQuizView.swift in Sources */,
+				AAFF77770000000000000002 /* TripPlan.swift in Sources */,
+				AAFF88880000000000000002 /* TripPlanStore.swift in Sources */,
+				AAFF99990000000000000002 /* TripPlannerView.swift in Sources */,
 				D33589E92FED8B3400541A90 /* SettingsView.swift in Sources */,
 				D3F846292AF1E0B1005090ED /* ButtonModifier.swift in Sources */,
 				D33589D12FED88F500541A90 /* OnboardingView.swift in Sources */,

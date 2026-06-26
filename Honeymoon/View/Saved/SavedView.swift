@@ -45,14 +45,22 @@ struct SavedView: View {
             }
 
             if !userDataStore.bookings.isEmpty {
-                Section("Bookings") {
+                Section {
                     ForEach(userDataStore.bookings) { item in
-                        row(image: item.image, place: item.place, country: item.country, booked: true)
+                        NavigationLink {
+                            TripPlannerView(booking: item)
+                        } label: {
+                            row(image: item.image, place: item.place, country: item.country, booked: true)
+                        }
                     }
                     .onDelete { offsets in
                         offsets.map { userDataStore.bookings[$0].id }
                             .forEach(userDataStore.removeBooking)
                     }
+                } header: {
+                    Text("Bookings")
+                } footer: {
+                    Text("Tap a booking to plan it — dates, budget, and packing.")
                 }
             }
         }
