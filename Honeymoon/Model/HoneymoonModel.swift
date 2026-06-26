@@ -80,14 +80,11 @@ struct Destination: Identifiable, Codable, Hashable {
 }
 
 extension Destination {
-    /// Budget formatted as a compact currency string, e.g. "$6,800".
+    /// Budget formatted as a compact currency string in the user's chosen
+    /// currency, e.g. "S$9,180". The stored value is a USD base.
     var budgetDisplay: String {
         guard estBudgetForTwoUSD > 0 else { return "—" }
-        let formatter = NumberFormatter()
-        formatter.numberStyle = .decimal
-        formatter.maximumFractionDigits = 0
-        let number = formatter.string(from: NSNumber(value: estBudgetForTwoUSD)) ?? "\(estBudgetForTwoUSD)"
-        return "$\(number)"
+        return Currency.current.format(usd: Double(estBudgetForTwoUSD))
     }
 
     /// Flight time formatted for display, e.g. "17h".

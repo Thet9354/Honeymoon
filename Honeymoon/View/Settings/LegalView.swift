@@ -50,9 +50,11 @@ enum LegalDocument {
         the destinations you mark with "Book Destination". This information is \
         tied to your account so it is available when you sign in again.
 
-        We do not collect your precise location, your contacts, or payment \
-        information, and the app does not contain third-party advertising or \
-        analytics or tracking software.
+        We do not collect your precise location or your contacts, and the app \
+        does not contain third-party advertising, analytics, or tracking \
+        software. If you buy Honeymoon Premium, the purchase is processed by \
+        Apple through your App Store account; we receive confirmation that the \
+        purchase is active but never see or store your card or payment details.
 
         2. HOW WE USE YOUR INFORMATION
 
@@ -68,7 +70,9 @@ enum LegalDocument {
         by Google LLC, which processes this data on our behalf. When you sign in \
         with Google or Apple, those companies process your sign-in according to \
         their own privacy policies. We encourage you to review the Google \
-        Privacy Policy and the Apple Privacy Policy.
+        Privacy Policy and the Apple Privacy Policy. In-app purchases are \
+        handled by Apple's App Store, which processes payment under Apple's own \
+        privacy policy.
 
         4. WHERE YOUR DATA IS STORED
 
@@ -134,58 +138,76 @@ enum LegalDocument {
 
         The app lets you browse honeymoon destinations, save them as favorites, \
         and add them to a personal "booking" list. The "Book Destination" \
-        feature is for organising your own wish list only. It does not make a \
-        real travel reservation, does not purchase anything, and does not create \
-        any obligation by us or any third party to provide travel, lodging, or \
-        related services. Destination information is provided for general \
-        inspiration and may not be accurate, current, or available.
+        feature is for organising your own wish list only. It does not book or \
+        pay for any travel, lodging, or related services, and does not create \
+        any obligation by us or any third party to provide them. Destination \
+        information is provided for general inspiration and may not be accurate, \
+        current, or available.
 
-        4. ACCEPTABLE USE
+        4. PURCHASES AND SUBSCRIPTIONS
+
+        The app is free to use. An optional "Honeymoon Premium" upgrade unlocks \
+        additional features such as full day-by-day itineraries. Premium is \
+        offered as either a one-time "Lifetime" purchase or an auto-renewing \
+        "Annual" subscription, which may include a free trial. Prices are shown \
+        in the app before you confirm a purchase.
+
+        Payment is charged to your Apple ID account when you confirm. An annual \
+        subscription renews automatically for the same period at the \
+        then-current price unless you cancel at least 24 hours before the end of \
+        the current period; any unused portion of a free trial is forfeited when \
+        you buy a subscription. You can manage or cancel a subscription, and view \
+        its renewal date, in your Apple ID account settings, and you can restore \
+        a previous purchase from the upgrade screen. Purchases are processed by \
+        Apple and are subject to the App Store Terms of Sale; refunds are handled \
+        by Apple in accordance with those terms.
+
+        5. ACCEPTABLE USE
 
         You agree to use the app only for lawful, personal, non-commercial \
         purposes. You agree not to misuse the app, interfere with its operation, \
         attempt to access other users' data, or use it in any way that violates \
         applicable law.
 
-        5. CONTENT AND INTELLECTUAL PROPERTY
+        6. CONTENT AND INTELLECTUAL PROPERTY
 
         The app, including its design, text, and imagery, is protected by \
         intellectual property rights and may not be copied or redistributed \
         without permission. The content you save remains associated with your \
         account and is handled as described in our Privacy Policy.
 
-        6. DISCLAIMER OF WARRANTIES
+        7. DISCLAIMER OF WARRANTIES
 
         The app is provided "as is" and "as available", without warranties of \
         any kind, whether express or implied. We do not warrant that the app \
         will be uninterrupted, error-free, or that any destination information \
         is accurate or reliable.
 
-        7. LIMITATION OF LIABILITY
+        8. LIMITATION OF LIABILITY
 
         To the maximum extent permitted by law, we will not be liable for any \
         indirect, incidental, or consequential damages arising from your use of, \
         or inability to use, the app, including any reliance on destination \
         information or the "booking" feature.
 
-        8. TERMINATION
+        9. TERMINATION
 
         You may stop using the app and delete your account at any time. We may \
         suspend or terminate access if you violate these Terms or misuse the app.
 
-        9. GOVERNING LAW
+        10. GOVERNING LAW
 
         These Terms are governed by the laws of Singapore, without regard to its \
         conflict-of-law rules. Any disputes arising from these Terms or your use \
         of the app are subject to the jurisdiction of the courts of Singapore.
 
-        10. CHANGES TO THESE TERMS
+        11. CHANGES TO THESE TERMS
 
         We may update these Terms from time to time. When we do, we will revise \
         the "Last updated" date above. Continued use of the app after a change \
         means you accept the updated Terms.
 
-        11. CONTACT US
+        12. CONTACT US
 
         If you have any questions about these Terms, contact us at \(contactEmail).
         """

@@ -28,3 +28,18 @@ enum AppearanceMode: String, CaseIterable, Identifiable {
         }
     }
 }
+
+extension View {
+    /// Applies the user's saved appearance to this view. Needed on sheet roots:
+    /// a sheet is presented outside the root's `preferredColorScheme`, so without
+    /// this it ignores the setting until the app relaunches.
+    func appAppearance() -> some View { modifier(AppAppearanceModifier()) }
+}
+
+private struct AppAppearanceModifier: ViewModifier {
+    @AppStorage("appearance") private var appearanceRaw = AppearanceMode.system.rawValue
+
+    func body(content: Content) -> some View {
+        content.preferredColorScheme((AppearanceMode(rawValue: appearanceRaw) ?? .system).colorScheme)
+    }
+}

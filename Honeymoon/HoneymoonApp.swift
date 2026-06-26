@@ -30,6 +30,8 @@ struct HoneymoonApp: App {
     @StateObject private var destinationStore = DestinationStore(repository: FirestoreDestinationRepository())
     @StateObject private var userDataStore = UserDataStore()
     @StateObject private var preferenceStore = PreferenceStore()
+    @StateObject private var coupleStore = CoupleStore()
+    @StateObject private var purchaseStore = PurchaseStore()
 
     var body: some Scene {
         WindowGroup {
@@ -38,6 +40,8 @@ struct HoneymoonApp: App {
                 .environmentObject(destinationStore)
                 .environmentObject(userDataStore)
                 .environmentObject(preferenceStore)
+                .environmentObject(coupleStore)
+                .environmentObject(purchaseStore)
                 .onOpenURL { url in
                     GIDSignIn.sharedInstance.handle(url)
                 }

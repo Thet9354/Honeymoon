@@ -43,6 +43,7 @@ struct RootView: View {
         .environmentObject(DestinationStore())
         .environmentObject(UserDataStore())
         .environmentObject(PreferenceStore())
+        .environmentObject(CoupleStore())
 }
 
 #Preview("Onboarded") {
@@ -52,4 +53,5 @@ struct RootView: View {
         .environmentObject(DestinationStore())
         .environmentObject(UserDataStore())
         .environmentObject(PreferenceStore())
+        .environmentObject(CoupleStore())
 }

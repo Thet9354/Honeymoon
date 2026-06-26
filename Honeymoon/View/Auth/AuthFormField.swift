@@ -15,6 +15,8 @@ struct AuthFormField: View {
     var textContentType: UITextContentType?
     var autocapitalization: TextInputAutocapitalization = .never
 
+    @State private var isRevealed = false
+
     var body: some View {
         HStack(spacing: 12) {
             Image(systemName: systemImage)
@@ -22,7 +24,7 @@ struct AuthFormField: View {
                 .frame(width: 20)
 
             Group {
-                if isSecure {
+                if isSecure && !isRevealed {
                     SecureField(placeholder, text: $text)
                 } else {
                     TextField(placeholder, text: $text)
@@ -32,6 +34,18 @@ struct AuthFormField: View {
             .textContentType(textContentType)
             .textInputAutocapitalization(autocapitalization)
             .autocorrectionDisabled()
+
+            if isSecure {
+                Button {
+                    isRevealed.toggle()
+                } label: {
+                    Image(systemName: isRevealed ? "eye.slash" : "eye")
+                        .foregroundStyle(.secondary)
+                        .frame(width: 22)
+                }
+                .buttonStyle(.plain)
+                .accessibilityLabel(isRevealed ? "Hide password" : "Show password")
+            }
         }
         .padding(14)
         .background(

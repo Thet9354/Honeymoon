@@ -15,10 +15,15 @@ struct DestinationDetailView: View {
     let destination: Destination
 
     @EnvironmentObject private var userDataStore: UserDataStore
+    @EnvironmentObject private var purchaseStore: PurchaseStore
     @Environment(\.dismiss) private var dismiss
     @Environment(\.openURL) private var openURL
 
     @State private var showBookingConfirmation = false
+    @State private var showPaywall = false
+    @State private var showItinerary = false
+    // Held so the "For two" budget re-renders when the user switches currency.
+    @AppStorage("currency") private var currencyRaw = Currency.sgd.rawValue
 
     private var isFavorite: Bool { userDataStore.isFavorite(destination) }
 
@@ -37,6 +42,9 @@ struct DestinationDetailView: View {
         } message: {
             Text("\(destination.place) is saved to your bookings. Open Saved to see all your plans.")
         }
+        .sheet(isPresented: $showPaywall) { PaywallView() }
+        .sheet(isPresented: $showItinerary) { ItineraryView(destination: destination) }
+        .appAppearance()
     }
 
     // MARK: - Hero
@@ -168,24 +176,42 @@ struct DestinationDetailView: View {
     }
 
     private var itineraryTeaser: some View {
-        VStack(alignment: .leading, spacing: 8) {
-            HStack {
-                Label("7-day itinerary", systemImage: "map")
-                    .font(.subheadline.weight(.semibold))
-                Spacer()
-                Label("Premium", systemImage: "lock.fill")
-                    .font(.caption.weight(.semibold))
-                    .padding(.horizontal, 9).padding(.vertical, 4)
-                    .background(Color.purple.opacity(0.15), in: Capsule())
-                    .foregroundStyle(.purple)
+        Button {
+            if purchaseStore.isPremium {
+                showItinerary = true
+            } else {
+                showPaywall = true
             }
-            Text("Day-by-day plan, dining picks and a full budget breakdown — unlock with Premium.")
-                .font(.footnote)
-                .foregroundStyle(.secondary)
+        } label: {
+            VStack(alignment: .leading, spacing: 8) {
+                HStack {
+                    Label("7-day itinerary", systemImage: "map")
+                        .font(.subheadline.weight(.semibold))
+                    Spacer()
+                    if purchaseStore.isPremium {
+                        Image(systemName: "chevron.right")
+                            .font(.caption.weight(.semibold))
+                            .foregroundStyle(.secondary)
+                    } else {
+                        Label("Premium", systemImage: "lock.fill")
+                            .font(.caption.weight(.semibold))
+                            .padding(.horizontal, 9).padding(.vertical, 4)
+                            .background(Color.purple.opacity(0.15), in: Capsule())
+                            .foregroundStyle(.purple)
+                    }
+                }
+                Text(purchaseStore.isPremium
+                     ? "View your day-by-day plan, dining picks and a full budget breakdown."
+                     : "Day-by-day plan, dining picks and a full budget breakdown — unlock with Premium.")
+                    .font(.footnote)
+                    .foregroundStyle(.secondary)
+                    .multilineTextAlignment(.leading)
+            }
+            .padding(14)
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .overlay(RoundedRectangle(cornerRadius: 12).stroke(Color(.separator), lineWidth: 0.5))
         }
-        .padding(14)
-        .frame(maxWidth: .infinity, alignment: .leading)
-        .overlay(RoundedRectangle(cornerRadius: 12).stroke(Color(.separator), lineWidth: 0.5))
+        .buttonStyle(.plain)
     }
 
     private var bookingLinks: some View {
@@ -297,4 +323,5 @@ private struct FlowLayout: Layout {
 #Preview {
     DestinationDetailView(destination: honeymoonData[0])
         .environmentObject(UserDataStore())
+        .environmentObject(PurchaseStore())
 }

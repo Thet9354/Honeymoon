@@ -80,7 +80,7 @@ struct PreferenceQuizView: View {
                 Spacer(minLength: 0)
             }
             .padding(.horizontal, 14).padding(.vertical, 14)
-            .frame(maxWidth: .infinity, alignment: .leading)
+            .frame(maxWidth: .infinity, minHeight: 68, alignment: .leading)
             .background(selected ? Color.pink.opacity(0.15) : Color(.secondarySystemBackground),
                         in: RoundedRectangle(cornerRadius: 14))
             .overlay(
@@ -108,6 +108,7 @@ struct PreferenceQuizView: View {
                                 .foregroundStyle(draft.budgetBand == band ? Color.pink : Color(.tertiaryLabel))
                         }
                         .padding(.vertical, 12).padding(.horizontal, 14)
+                        .contentShape(Rectangle())
                     }
                     .buttonStyle(.plain)
                     if band != BudgetBand.allCases.last {

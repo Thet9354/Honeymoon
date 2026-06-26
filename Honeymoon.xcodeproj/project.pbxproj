@@ -16,6 +16,15 @@
 		AAFF77770000000000000002 /* TripPlan.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAFF77770000000000000001 /* TripPlan.swift */; };
 		AAFF88880000000000000002 /* TripPlanStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAFF88880000000000000001 /* TripPlanStore.swift */; };
 		AAFF99990000000000000002 /* TripPlannerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAFF99990000000000000001 /* TripPlannerView.swift */; };
+		AABB11110000000000000002 /* Couple.swift in Sources */ = {isa = PBXBuildFile; fileRef = AABB11110000000000000001 /* Couple.swift */; };
+		AABB22220000000000000002 /* CoupleStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = AABB22220000000000000001 /* CoupleStore.swift */; };
+		AABB33330000000000000002 /* CoupleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AABB33330000000000000001 /* CoupleView.swift */; };
+		AABB44440000000000000002 /* MatchCelebrationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AABB44440000000000000001 /* MatchCelebrationView.swift */; };
+		AACC11110000000000000002 /* PurchaseStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = AACC11110000000000000001 /* PurchaseStore.swift */; };
+		AACC22220000000000000002 /* PaywallView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AACC22220000000000000001 /* PaywallView.swift */; };
+		AACC33330000000000000002 /* ItineraryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AACC33330000000000000001 /* ItineraryView.swift */; };
+		AACC44440000000000000002 /* Itinerary.swift in Sources */ = {isa = PBXBuildFile; fileRef = AACC44440000000000000001 /* Itinerary.swift */; };
+		AADD11110000000000000002 /* Currency.swift in Sources */ = {isa = PBXBuildFile; fileRef = AADD11110000000000000001 /* Currency.swift */; };
 		D33589CC2FED846C00541A90 /* AuthViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D33589CB2FED846C00541A90 /* AuthViewModel.swift */; };
 		D33589CF2FED88E000541A90 /* OnboardingPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = D33589CE2FED88E000541A90 /* OnboardingPage.swift */; };
 		D33589D12FED88F500541A90 /* OnboardingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D33589D02FED88F500541A90 /* OnboardingView.swift */; };
@@ -69,6 +78,16 @@
 		AAFF77770000000000000001 /* TripPlan.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TripPlan.swift; sourceTree = "<group>"; };
 		AAFF88880000000000000001 /* TripPlanStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TripPlanStore.swift; sourceTree = "<group>"; };
 		AAFF99990000000000000001 /* TripPlannerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TripPlannerView.swift; sourceTree = "<group>"; };
+		AABB11110000000000000001 /* Couple.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Couple.swift; sourceTree = "<group>"; };
+		AABB22220000000000000001 /* CoupleStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoupleStore.swift; sourceTree = "<group>"; };
+		AABB33330000000000000001 /* CoupleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoupleView.swift; sourceTree = "<group>"; };
+		AABB44440000000000000001 /* MatchCelebrationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MatchCelebrationView.swift; sourceTree = "<group>"; };
+		AACC11110000000000000001 /* PurchaseStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PurchaseStore.swift; sourceTree = "<group>"; };
+		AACC22220000000000000001 /* PaywallView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaywallView.swift; sourceTree = "<group>"; };
+		AACC33330000000000000001 /* ItineraryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ItineraryView.swift; sourceTree = "<group>"; };
+		AACC44440000000000000001 /* Itinerary.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Itinerary.swift; sourceTree = "<group>"; };
+		AADD11110000000000000001 /* Currency.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Currency.swift; sourceTree = "<group>"; };
+		AACC66660000000000000001 /* Honeymoon.storekit */ = {isa = PBXFileReference; lastKnownFileType = text; path = Honeymoon.storekit; sourceTree = "<group>"; };
 		D33589CB2FED846C00541A90 /* AuthViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthViewModel.swift; sourceTree = "<group>"; };
 		D33589CE2FED88E000541A90 /* OnboardingPage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingPage.swift; sourceTree = "<group>"; };
 		D33589D02FED88F500541A90 /* OnboardingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingView.swift; sourceTree = "<group>"; };
@@ -139,8 +158,17 @@
 			isa = PBXGroup;
 			children = (
 				AAFF22220000000000000001 /* DestinationDetailView.swift */,
+				AACC33330000000000000001 /* ItineraryView.swift */,
 			);
 			path = Detail;
+			sourceTree = "<group>";
+		};
+		AACC55550000000000000001 /* Paywall */ = {
+			isa = PBXGroup;
+			children = (
+				AACC22220000000000000001 /* PaywallView.swift */,
+			);
+			path = Paywall;
 			sourceTree = "<group>";
 		};
 		AAFFAAAA0000000000000001 /* Trip */ = {
@@ -149,6 +177,15 @@
 				AAFF99990000000000000001 /* TripPlannerView.swift */,
 			);
 			path = Trip;
+			sourceTree = "<group>";
+		};
+		AABB55550000000000000001 /* Couple */ = {
+			isa = PBXGroup;
+			children = (
+				AABB33330000000000000001 /* CoupleView.swift */,
+				AABB44440000000000000001 /* MatchCelebrationView.swift */,
+			);
+			path = Couple;
 			sourceTree = "<group>";
 		};
 		D33589F02FED900000541A90 /* Audio */ = {
@@ -166,6 +203,8 @@
 				D3358A0B2FED900000541A90 /* UserDataStore.swift */,
 				AAFF55550000000000000001 /* PreferenceStore.swift */,
 				AAFF88880000000000000001 /* TripPlanStore.swift */,
+				AABB22220000000000000001 /* CoupleStore.swift */,
+				AACC11110000000000000001 /* PurchaseStore.swift */,
 			);
 			path = ViewModel;
 			sourceTree = "<group>";
@@ -248,6 +287,7 @@
 				D33589FA2FED900000541A90 /* GoogleService-Info.plist */,
 				D33589FC2FED900000541A90 /* Info.plist */,
 				D33589FD2FED900000541A90 /* Honeymoon.entitlements */,
+				AACC66660000000000000001 /* Honeymoon.storekit */,
 			);
 			path = Honeymoon;
 			sourceTree = "<group>";
@@ -275,6 +315,9 @@
 				D3F8460F2AF09B81005090ED /* HoneymoonModel.swift */,
 				AAFF44440000000000000001 /* TravelPreferences.swift */,
 				AAFF77770000000000000001 /* TripPlan.swift */,
+				AABB11110000000000000001 /* Couple.swift */,
+				AACC44440000000000000001 /* Itinerary.swift */,
+				AADD11110000000000000001 /* Currency.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -303,6 +346,8 @@
 				D3358A0C2FED900000541A90 /* Saved */,
 				AAFF33330000000000000001 /* Detail */,
 				AAFFAAAA0000000000000001 /* Trip */,
+				AABB55550000000000000001 /* Couple */,
+				AACC55550000000000000001 /* Paywall */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -480,6 +525,15 @@
 				AAFF77770000000000000002 /* TripPlan.swift in Sources */,
 				AAFF88880000000000000002 /* TripPlanStore.swift in Sources */,
 				AAFF99990000000000000002 /* TripPlannerView.swift in Sources */,
+				AABB11110000000000000002 /* Couple.swift in Sources */,
+				AABB22220000000000000002 /* CoupleStore.swift in Sources */,
+				AABB33330000000000000002 /* CoupleView.swift in Sources */,
+				AABB44440000000000000002 /* MatchCelebrationView.swift in Sources */,
+				AACC11110000000000000002 /* PurchaseStore.swift in Sources */,
+				AACC22220000000000000002 /* PaywallView.swift in Sources */,
+				AACC33330000000000000002 /* ItineraryView.swift in Sources */,
+				AACC44440000000000000002 /* Itinerary.swift in Sources */,
+				AADD11110000000000000002 /* Currency.swift in Sources */,
 				D33589E92FED8B3400541A90 /* SettingsView.swift in Sources */,
 				D3F846292AF1E0B1005090ED /* ButtonModifier.swift in Sources */,
 				D33589D12FED88F500541A90 /* OnboardingView.swift in Sources */,

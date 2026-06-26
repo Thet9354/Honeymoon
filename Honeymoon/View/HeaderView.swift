@@ -13,6 +13,7 @@ struct HeaderView: View {
     @Binding var showGuideView: Bool
     @Binding var showSettingsView: Bool
     @Binding var showSavedView: Bool
+    @Binding var showCoupleView: Bool
 
     var body: some View {
         HStack {
@@ -38,6 +39,18 @@ struct HeaderView: View {
             Spacer()
 
             HStack(spacing: 18) {
+                Button(action: {
+                    self.showCoupleView.toggle()
+                }) {
+                    Image(systemName: "person.2")
+                        .font(.system(size: 22, weight: .regular))
+                }
+                .accentColor(Color.primary)
+                .accessibilityLabel("Couple Mode")
+                .sheet(isPresented: $showCoupleView) {
+                    CoupleView()
+                }
+
                 Button(action: {
                     self.showSavedView.toggle()
                 }) {
@@ -72,10 +85,12 @@ struct HeaderView_Previews: PreviewProvider {
     @State static var showGuide: Bool = false
     @State static var showSettings: Bool = false
     @State static var showSaved: Bool = false
+    @State static var showCouple: Bool = false
 
     static var previews: some View {
-        HeaderView(showGuideView: $showGuide, showSettingsView: $showSettings, showSavedView: $showSaved)
+        HeaderView(showGuideView: $showGuide, showSettingsView: $showSettings, showSavedView: $showSaved, showCoupleView: $showCouple)
             .environmentObject(UserDataStore())
+            .environmentObject(CoupleStore())
             .previewLayout(.fixed(width: 375, height: 80))
     }
 }

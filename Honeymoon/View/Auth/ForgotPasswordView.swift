@@ -29,7 +29,7 @@ struct ForgotPasswordView: View {
                 sendButton
 
                 if didSend {
-                    Text("Check your inbox for password reset instructions.")
+                    Text("If an account exists for this email, a reset link is on its way. Check your inbox and spam folder.\n\nNote: if you signed up with Google or Apple, there's no password to reset — just use that button to sign in.")
                         .font(.footnote)
                         .foregroundStyle(.secondary)
                         .multilineTextAlignment(.center)

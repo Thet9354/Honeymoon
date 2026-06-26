@@ -8,13 +8,17 @@ import SwiftUI
 struct SettingsView: View {
 
     @EnvironmentObject private var authViewModel: AuthViewModel
+    @EnvironmentObject private var purchaseStore: PurchaseStore
     @Environment(\.dismiss) private var dismiss
 
     @AppStorage("appearance") private var appearanceRaw: String = AppearanceMode.system.rawValue
     @AppStorage("soundEnabled") private var soundEnabled: Bool = true
+    @AppStorage("currency") private var currencyRaw: String = Currency.sgd.rawValue
 
     @State private var showSignOutConfirmation = false
     @State private var showDeleteAccountConfirmation = false
+    @State private var showCouple = false
+    @State private var showPaywall = false
 
     private var appearance: Binding<AppearanceMode> {
         Binding(
@@ -23,10 +27,18 @@ struct SettingsView: View {
         )
     }
 
+    private var currency: Binding<Currency> {
+        Binding(
+            get: { Currency(rawValue: currencyRaw) ?? .sgd },
+            set: { currencyRaw = $0.rawValue }
+        )
+    }
+
     var body: some View {
         NavigationStack {
             List {
                 profileSection
+                premiumSection
                 preferencesSection
                 legalSection
                 supportSection
@@ -43,6 +55,7 @@ struct SettingsView: View {
             }
             .tint(Color.pink)
         }
+        .appAppearance()
     }
 
     // MARK: - Sections
@@ -76,8 +89,53 @@ struct SettingsView: View {
         .frame(width: 48, height: 48)
     }
 
+    @ViewBuilder
+    private var premiumSection: some View {
+        Section {
+            if purchaseStore.isPremium {
+                HStack {
+                    Label("Honeymoon Premium", systemImage: "sparkles")
+                        .foregroundStyle(Color.pink)
+                    Spacer()
+                    Text("Active")
+                        .font(.subheadline)
+                        .foregroundStyle(.secondary)
+                }
+            } else {
+                Button {
+                    showPaywall = true
+                } label: {
+                    HStack {
+                        Label("Go Premium", systemImage: "sparkles")
+                            .foregroundStyle(Color.pink)
+                        Spacer()
+                        Text("Itineraries & more")
+                            .font(.subheadline)
+                            .foregroundStyle(.secondary)
+                        Image(systemName: "chevron.right")
+                            .font(.caption.weight(.semibold))
+                            .foregroundStyle(.tertiary)
+                    }
+                }
+                .sheet(isPresented: $showPaywall) {
+                    PaywallView()
+                }
+            }
+        }
+    }
+
     private var preferencesSection: some View {
         Section("Preferences") {
+            Button {
+                showCouple = true
+            } label: {
+                Label("Couple Mode", systemImage: "person.2")
+            }
+            .foregroundStyle(.primary)
+            .sheet(isPresented: $showCouple) {
+                CoupleView()
+            }
+
             NavigationLink {
                 PreferenceQuizView(mode: .edit)
             } label: {
@@ -87,6 +145,12 @@ struct SettingsView: View {
             Picker("Appearance", selection: appearance) {
                 ForEach(AppearanceMode.allCases) { mode in
                     Text(mode.label).tag(mode)
+                }
+            }
+
+            Picker("Currency", selection: currency) {
+                ForEach(Currency.allCases) { unit in
+                    Text(unit.label).tag(unit)
                 }
             }
 
@@ -199,4 +263,6 @@ struct SettingsView: View {
             photoURL: nil
         )))
         .environmentObject(PreferenceStore())
+        .environmentObject(CoupleStore())
+        .environmentObject(PurchaseStore())
 }

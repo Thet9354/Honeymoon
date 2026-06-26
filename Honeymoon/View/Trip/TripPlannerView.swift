@@ -15,6 +15,7 @@ struct TripPlannerView: View {
     @State private var newBudgetTitle = ""
     @State private var newBudgetAmount = ""
     @State private var newChecklistTitle = ""
+    @AppStorage("currency") private var currencyRaw = Currency.sgd.rawValue
 
     init(booking: BookingItem) {
         let seed = TripPlan(
@@ -39,6 +40,17 @@ struct TripPlannerView: View {
         .listStyle(.insetGrouped)
         .navigationTitle(plan.place)
         .navigationBarTitleDisplayMode(.inline)
+        .toolbar {
+            ToolbarItemGroup(placement: .keyboard) {
+                Spacer()
+                Button("Done") {
+                    UIApplication.shared.sendAction(
+                        #selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil
+                    )
+                }
+                .fontWeight(.semibold)
+            }
+        }
         .task { await store.load() }
     }
 
@@ -124,10 +136,10 @@ struct TripPlannerView: View {
 
             HStack(spacing: 8) {
                 TextField("Item", text: $newBudgetTitle)
-                TextField("$0", text: $newBudgetAmount)
+                TextField("\(Currency.current.symbol)0", text: $newBudgetAmount)
                     .keyboardType(.decimalPad)
                     .multilineTextAlignment(.trailing)
-                    .frame(width: 80)
+                    .frame(width: 90)
                 Button {
                     addBudgetItem()
                 } label: {
@@ -151,8 +163,9 @@ struct TripPlannerView: View {
     }
 
     private func addBudgetItem() {
-        let amount = Double(newBudgetAmount.replacingOccurrences(of: ",", with: "")) ?? 0
-        store.addBudgetItem(title: newBudgetTitle, amount: amount)
+        let typed = Double(newBudgetAmount.replacingOccurrences(of: ",", with: "")) ?? 0
+        // The field is in the display currency; store the USD base.
+        store.addBudgetItem(title: newBudgetTitle, amount: Currency.current.usd(fromAmount: typed))
         newBudgetTitle = ""
         newBudgetAmount = ""
     }
@@ -212,12 +225,9 @@ struct TripPlannerView: View {
 
     // MARK: - Helpers
 
-    private func currency(_ amount: Double) -> String {
-        let formatter = NumberFormatter()
-        formatter.numberStyle = .currency
-        formatter.currencyCode = "USD"
-        formatter.maximumFractionDigits = amount.truncatingRemainder(dividingBy: 1) == 0 ? 0 : 2
-        return formatter.string(from: NSNumber(value: amount)) ?? "$\(amount)"
+    /// `amountUSD` is a USD-base value; formats it in the user's chosen currency.
+    private func currency(_ amountUSD: Double) -> String {
+        Currency.current.format(usd: amountUSD)
     }
 }
 

@@ -28,6 +28,7 @@ struct SavedView: View {
             }
             .tint(Color.pink)
         }
+        .appAppearance()
     }
 
     private var list: some View {

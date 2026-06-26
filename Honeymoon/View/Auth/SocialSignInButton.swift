@@ -19,7 +19,7 @@ enum SocialProvider {
     var systemImage: String {
         switch self {
         case .apple:  "apple.logo"
-        case .google: "g.circle.fill"
+        case .google: "g.circle.fill" // fallback only; google uses the brand asset below
         }
     }
 
@@ -46,8 +46,7 @@ struct SocialSignInButton: View {
     var body: some View {
         Button(action: action) {
             HStack(spacing: 10) {
-                Image(systemName: provider.systemImage)
-                    .font(.system(size: 18, weight: .medium))
+                icon
                 Text(provider.label)
                     .font(.system(.headline, design: .rounded))
             }
@@ -62,6 +61,22 @@ struct SocialSignInButton: View {
                 RoundedRectangle(cornerRadius: 14)
                     .stroke(Color(.separator), lineWidth: provider == .google ? 1 : 0)
             )
+        }
+    }
+
+    /// Apple uses the SF Symbol; Google uses its official multi-color brand mark,
+    /// rendered at the same 18pt footprint as the symbol it replaces.
+    @ViewBuilder
+    private var icon: some View {
+        switch provider {
+        case .apple:
+            Image(systemName: provider.systemImage)
+                .font(.system(size: 18, weight: .medium))
+        case .google:
+            Image("google-g")
+                .resizable()
+                .scaledToFit()
+                .frame(width: 18, height: 18)
         }
     }
 }
