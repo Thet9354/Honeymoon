@@ -10,6 +10,9 @@
 		D33589CA2FED845700541A90 /* DestinationRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = D33589C92FED845700541A90 /* DestinationRepository.swift */; };
 		AAFF11110000000000000002 /* AffiliateLinks.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAFF11110000000000000001 /* AffiliateLinks.swift */; };
 		AAFF22220000000000000002 /* DestinationDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAFF22220000000000000001 /* DestinationDetailView.swift */; };
+		AAFF44440000000000000002 /* TravelPreferences.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAFF44440000000000000001 /* TravelPreferences.swift */; };
+		AAFF55550000000000000002 /* PreferenceStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAFF55550000000000000001 /* PreferenceStore.swift */; };
+		AAFF66660000000000000002 /* PreferenceQuizView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAFF66660000000000000001 /* PreferenceQuizView.swift */; };
 		D33589CC2FED846C00541A90 /* AuthViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D33589CB2FED846C00541A90 /* AuthViewModel.swift */; };
 		D33589CF2FED88E000541A90 /* OnboardingPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = D33589CE2FED88E000541A90 /* OnboardingPage.swift */; };
 		D33589D12FED88F500541A90 /* OnboardingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D33589D02FED88F500541A90 /* OnboardingView.swift */; };
@@ -57,6 +60,9 @@
 		D33589C92FED845700541A90 /* DestinationRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DestinationRepository.swift; sourceTree = "<group>"; };
 		AAFF11110000000000000001 /* AffiliateLinks.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AffiliateLinks.swift; sourceTree = "<group>"; };
 		AAFF22220000000000000001 /* DestinationDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DestinationDetailView.swift; sourceTree = "<group>"; };
+		AAFF44440000000000000001 /* TravelPreferences.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TravelPreferences.swift; sourceTree = "<group>"; };
+		AAFF55550000000000000001 /* PreferenceStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreferenceStore.swift; sourceTree = "<group>"; };
+		AAFF66660000000000000001 /* PreferenceQuizView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreferenceQuizView.swift; sourceTree = "<group>"; };
 		D33589CB2FED846C00541A90 /* AuthViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthViewModel.swift; sourceTree = "<group>"; };
 		D33589CE2FED88E000541A90 /* OnboardingPage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingPage.swift; sourceTree = "<group>"; };
 		D33589D02FED88F500541A90 /* OnboardingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingView.swift; sourceTree = "<group>"; };
@@ -144,6 +150,7 @@
 			children = (
 				D33589CB2FED846C00541A90 /* AuthViewModel.swift */,
 				D3358A0B2FED900000541A90 /* UserDataStore.swift */,
+				AAFF55550000000000000001 /* PreferenceStore.swift */,
 			);
 			path = ViewModel;
 			sourceTree = "<group>";
@@ -153,6 +160,7 @@
 			children = (
 				D33589CE2FED88E000541A90 /* OnboardingPage.swift */,
 				D33589D02FED88F500541A90 /* OnboardingView.swift */,
+				AAFF66660000000000000001 /* PreferenceQuizView.swift */,
 			);
 			path = Onboarding;
 			sourceTree = "<group>";
@@ -250,6 +258,7 @@
 			isa = PBXGroup;
 			children = (
 				D3F8460F2AF09B81005090ED /* HoneymoonModel.swift */,
+				AAFF44440000000000000001 /* TravelPreferences.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -448,6 +457,9 @@
 				D33589CA2FED845700541A90 /* DestinationRepository.swift in Sources */,
 				AAFF11110000000000000002 /* AffiliateLinks.swift in Sources */,
 				AAFF22220000000000000002 /* DestinationDetailView.swift in Sources */,
+				AAFF44440000000000000002 /* TravelPreferences.swift in Sources */,
+				AAFF55550000000000000002 /* PreferenceStore.swift in Sources */,
+				AAFF66660000000000000002 /* PreferenceQuizView.swift in Sources */,
 				D33589E92FED8B3400541A90 /* SettingsView.swift in Sources */,
 				D3F846292AF1E0B1005090ED /* ButtonModifier.swift in Sources */,
 				D33589D12FED88F500541A90 /* OnboardingView.swift in Sources */,

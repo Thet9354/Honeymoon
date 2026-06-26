@@ -29,6 +29,7 @@ struct HoneymoonApp: App {
     // bundled catalog as the offline / not-yet-seeded fallback.
     @StateObject private var destinationStore = DestinationStore(repository: FirestoreDestinationRepository())
     @StateObject private var userDataStore = UserDataStore()
+    @StateObject private var preferenceStore = PreferenceStore()
 
     var body: some Scene {
         WindowGroup {
@@ -36,6 +37,7 @@ struct HoneymoonApp: App {
                 .environmentObject(authViewModel)
                 .environmentObject(destinationStore)
                 .environmentObject(userDataStore)
+                .environmentObject(preferenceStore)
                 .onOpenURL { url in
                     GIDSignIn.sharedInstance.handle(url)
                 }

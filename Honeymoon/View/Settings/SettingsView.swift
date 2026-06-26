@@ -78,6 +78,12 @@ struct SettingsView: View {
 
     private var preferencesSection: some View {
         Section("Preferences") {
+            NavigationLink {
+                PreferenceQuizView(mode: .edit)
+            } label: {
+                Label("Travel preferences", systemImage: "slider.horizontal.3")
+            }
+
             Picker("Appearance", selection: appearance) {
                 ForEach(AppearanceMode.allCases) { mode in
                     Text(mode.label).tag(mode)
@@ -192,4 +198,5 @@ struct SettingsView: View {
             displayName: "Thet Pine",
             photoURL: nil
         )))
+        .environmentObject(PreferenceStore())
 }

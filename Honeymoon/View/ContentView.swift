@@ -12,6 +12,7 @@ struct ContentView: View {
     // MARK: - ENVIRONMENT
     @EnvironmentObject private var destinationStore: DestinationStore
     @EnvironmentObject private var userDataStore: UserDataStore
+    @EnvironmentObject private var preferenceStore: PreferenceStore
 
     // MARK: - PROPERTIES
     @State var showAlert: Bool = false
@@ -29,8 +30,14 @@ struct ContentView: View {
 
     // MARK: MOVE THE CARD
 
+    // Destinations ranked by the user's stated preferences (P2). Falls back to
+    // the catalog's natural order when no preferences are set.
+    private var orderedDestinations: [Destination] {
+        preferenceStore.ranked(destinationStore.destinations)
+    }
+
     private func moveCards() {
-        let destinations = destinationStore.destinations
+        let destinations = orderedDestinations
         guard !destinations.isEmpty else { return }
         SoundPlayer.shared.play(.swipe)
         cardViews.removeFirst()
@@ -48,13 +55,21 @@ struct ContentView: View {
 
     private func seedCardsIfNeeded() {
         guard cardViews.isEmpty else { return }
-        let destinations = destinationStore.destinations
+        let destinations = orderedDestinations
         guard destinations.count >= 2 else { return }
         cardViews = [
             CardView(destination: destinations[0]),
             CardView(destination: destinations[1])
         ]
         lastCardIndex = 1
+    }
+
+    // Rebuild the deck from the top — used when preferences change so the
+    // re-ranked order takes effect immediately.
+    private func reseed() {
+        cardViews = []
+        lastCardIndex = 1
+        seedCardsIfNeeded()
     }
 
     // MARK: TOP CARD
@@ -200,6 +215,9 @@ struct ContentView: View {
             await destinationStore.load()
             seedCardsIfNeeded()
         }
+        .onChange(of: preferenceStore.preferences) {
+            reseed()
+        }
         .alert(isPresented: $showAlert) {
             Alert(
                 title: Text("SUCCESS"),
@@ -218,4 +236,5 @@ struct ContentView: View {
     ContentView()
         .environmentObject(DestinationStore())
         .environmentObject(UserDataStore())
+        .environmentObject(PreferenceStore())
 }

@@ -10,6 +10,7 @@ struct OnboardingView: View {
     var onComplete: () -> Void
 
     @State private var selectedPage: Int = 0
+    @State private var showQuiz: Bool = false
 
     private struct Page: Identifiable {
         let id: Int
@@ -46,6 +47,21 @@ struct OnboardingView: View {
     ]
 
     var body: some View {
+        Group {
+            if showQuiz {
+                NavigationStack {
+                    PreferenceQuizView(mode: .onboarding, onFinish: onComplete)
+                }
+                .transition(.move(edge: .trailing).combined(with: .opacity))
+            } else {
+                infoPages
+                    .transition(.opacity)
+            }
+        }
+        .animation(.easeInOut, value: showQuiz)
+    }
+
+    private var infoPages: some View {
         VStack(spacing: 0) {
             TabView(selection: $selectedPage) {
                 ForEach(pages) { page in
@@ -72,14 +88,14 @@ struct OnboardingView: View {
         let isLastPage = selectedPage == pages.count - 1
         Button {
             if isLastPage {
-                onComplete()
+                showQuiz = true
             } else {
                 withAnimation {
                     selectedPage += 1
                 }
             }
         } label: {
-            Text(isLastPage ? "Get Started" : "Continue")
+            Text(isLastPage ? "Personalize" : "Continue")
                 .modifier(ButtonModifier())
         }
     }
@@ -87,4 +103,5 @@ struct OnboardingView: View {
 
 #Preview {
     OnboardingView(onComplete: {})
+        .environmentObject(PreferenceStore())
 }

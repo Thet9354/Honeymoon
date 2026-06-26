@@ -41,6 +41,8 @@ struct RootView: View {
     return RootView()
         .environmentObject(AuthViewModel())
         .environmentObject(DestinationStore())
+        .environmentObject(UserDataStore())
+        .environmentObject(PreferenceStore())
 }
 
 #Preview("Onboarded") {
@@ -48,4 +50,6 @@ struct RootView: View {
     return RootView()
         .environmentObject(AuthViewModel(currentUser: AuthenticatedUser(id: "preview", email: nil, displayName: "Preview", photoURL: nil)))
         .environmentObject(DestinationStore())
+        .environmentObject(UserDataStore())
+        .environmentObject(PreferenceStore())
 }
