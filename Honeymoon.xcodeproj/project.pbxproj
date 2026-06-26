@@ -7,6 +7,23 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		D33589CA2FED845700541A90 /* DestinationRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = D33589C92FED845700541A90 /* DestinationRepository.swift */; };
+		AAFF11110000000000000002 /* AffiliateLinks.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAFF11110000000000000001 /* AffiliateLinks.swift */; };
+		AAFF22220000000000000002 /* DestinationDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAFF22220000000000000001 /* DestinationDetailView.swift */; };
+		D33589CC2FED846C00541A90 /* AuthViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D33589CB2FED846C00541A90 /* AuthViewModel.swift */; };
+		D33589CF2FED88E000541A90 /* OnboardingPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = D33589CE2FED88E000541A90 /* OnboardingPage.swift */; };
+		D33589D12FED88F500541A90 /* OnboardingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D33589D02FED88F500541A90 /* OnboardingView.swift */; };
+		D33589D32FED890900541A90 /* RootView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D33589D22FED890900541A90 /* RootView.swift */; };
+		D33589D62FED89CE00541A90 /* AuthFormField.swift in Sources */ = {isa = PBXBuildFile; fileRef = D33589D52FED89CE00541A90 /* AuthFormField.swift */; };
+		D33589D82FED89CF00541A90 /* SocialSignInButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = D33589D72FED89CF00541A90 /* SocialSignInButton.swift */; };
+		D33589DA2FED89EE00541A90 /* LoginView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D33589D92FED89EE00541A90 /* LoginView.swift */; };
+		D33589DC2FED8A0A00541A90 /* SignUpView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D33589DB2FED8A0A00541A90 /* SignUpView.swift */; };
+		D33589DE2FED8A2500541A90 /* ForgotPasswordView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D33589DD2FED8A2500541A90 /* ForgotPasswordView.swift */; };
+		D33589E02FED8A3100541A90 /* AuthView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D33589DF2FED8A3100541A90 /* AuthView.swift */; };
+		D33589E32FED8AE100541A90 /* AppearanceMode.swift in Sources */ = {isa = PBXBuildFile; fileRef = D33589E22FED8AE100541A90 /* AppearanceMode.swift */; };
+		D33589E52FED8AFD00541A90 /* LegalView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D33589E42FED8AFD00541A90 /* LegalView.swift */; };
+		D33589E72FED8B1400541A90 /* AcknowledgementsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D33589E62FED8B1400541A90 /* AcknowledgementsView.swift */; };
+		D33589E92FED8B3400541A90 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D33589E82FED8B3400541A90 /* SettingsView.swift */; };
 		D3F845FB2AF09593005090ED /* HoneymoonApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3F845FA2AF09593005090ED /* HoneymoonApp.swift */; };
 		D3F845FD2AF09593005090ED /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3F845FC2AF09593005090ED /* ContentView.swift */; };
 		D3F845FF2AF09595005090ED /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D3F845FE2AF09595005090ED /* Assets.xcassets */; };
@@ -27,9 +44,33 @@
 		D3F846292AF1E0B1005090ED /* ButtonModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3F846282AF1E0B1005090ED /* ButtonModifier.swift */; };
 		D3F8462B2AF284D1005090ED /* SymbolModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3F8462A2AF284D1005090ED /* SymbolModifier.swift */; };
 		D3F8462E2AF28741005090ED /* CardTransition.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3F8462D2AF28741005090ED /* CardTransition.swift */; };
+		D33589F22FED900000541A90 /* SoundPlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = D33589F12FED900000541A90 /* SoundPlayer.swift */; };
+		D33589FB2FED900000541A90 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = D33589FA2FED900000541A90 /* GoogleService-Info.plist */; };
+		D3358A052FED900000541A90 /* FirebaseAuth in Frameworks */ = {isa = PBXBuildFile; productRef = D3358A022FED900000541A90 /* FirebaseAuth */; };
+		D3358A062FED900000541A90 /* FirebaseFirestore in Frameworks */ = {isa = PBXBuildFile; productRef = D3358A032FED900000541A90 /* FirebaseFirestore */; };
+		D3358A072FED900000541A90 /* GoogleSignIn in Frameworks */ = {isa = PBXBuildFile; productRef = D3358A042FED900000541A90 /* GoogleSignIn */; };
+		D3358A0A2FED900000541A90 /* UserDataStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3358A0B2FED900000541A90 /* UserDataStore.swift */; };
+		D3358A0D2FED900000541A90 /* SavedView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3358A0E2FED900000541A90 /* SavedView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		D33589C92FED845700541A90 /* DestinationRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DestinationRepository.swift; sourceTree = "<group>"; };
+		AAFF11110000000000000001 /* AffiliateLinks.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AffiliateLinks.swift; sourceTree = "<group>"; };
+		AAFF22220000000000000001 /* DestinationDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DestinationDetailView.swift; sourceTree = "<group>"; };
+		D33589CB2FED846C00541A90 /* AuthViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthViewModel.swift; sourceTree = "<group>"; };
+		D33589CE2FED88E000541A90 /* OnboardingPage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingPage.swift; sourceTree = "<group>"; };
+		D33589D02FED88F500541A90 /* OnboardingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingView.swift; sourceTree = "<group>"; };
+		D33589D22FED890900541A90 /* RootView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootView.swift; sourceTree = "<group>"; };
+		D33589D52FED89CE00541A90 /* AuthFormField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthFormField.swift; sourceTree = "<group>"; };
+		D33589D72FED89CF00541A90 /* SocialSignInButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SocialSignInButton.swift; sourceTree = "<group>"; };
+		D33589D92FED89EE00541A90 /* LoginView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginView.swift; sourceTree = "<group>"; };
+		D33589DB2FED8A0A00541A90 /* SignUpView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpView.swift; sourceTree = "<group>"; };
+		D33589DD2FED8A2500541A90 /* ForgotPasswordView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ForgotPasswordView.swift; sourceTree = "<group>"; };
+		D33589DF2FED8A3100541A90 /* AuthView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthView.swift; sourceTree = "<group>"; };
+		D33589E22FED8AE100541A90 /* AppearanceMode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppearanceMode.swift; sourceTree = "<group>"; };
+		D33589E42FED8AFD00541A90 /* LegalView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LegalView.swift; sourceTree = "<group>"; };
+		D33589E62FED8B1400541A90 /* AcknowledgementsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AcknowledgementsView.swift; sourceTree = "<group>"; };
+		D33589E82FED8B3400541A90 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 		D3F845F72AF09593005090ED /* Honeymoon.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Honeymoon.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		D3F845FA2AF09593005090ED /* HoneymoonApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HoneymoonApp.swift; sourceTree = "<group>"; };
 		D3F845FC2AF09593005090ED /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -51,6 +92,12 @@
 		D3F846282AF1E0B1005090ED /* ButtonModifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ButtonModifier.swift; sourceTree = "<group>"; };
 		D3F8462A2AF284D1005090ED /* SymbolModifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SymbolModifier.swift; sourceTree = "<group>"; };
 		D3F8462D2AF28741005090ED /* CardTransition.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardTransition.swift; sourceTree = "<group>"; };
+		D33589F12FED900000541A90 /* SoundPlayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SoundPlayer.swift; sourceTree = "<group>"; };
+		D33589FA2FED900000541A90 /* GoogleService-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		D33589FC2FED900000541A90 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		D33589FD2FED900000541A90 /* Honeymoon.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Honeymoon.entitlements; sourceTree = "<group>"; };
+		D3358A0B2FED900000541A90 /* UserDataStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDataStore.swift; sourceTree = "<group>"; };
+		D3358A0E2FED900000541A90 /* SavedView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SavedView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -58,12 +105,90 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D3358A052FED900000541A90 /* FirebaseAuth in Frameworks */,
+				D3358A062FED900000541A90 /* FirebaseFirestore in Frameworks */,
+				D3358A072FED900000541A90 /* GoogleSignIn in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		D33589C72FED845200541A90 /* Repository */ = {
+			isa = PBXGroup;
+			children = (
+				D33589C92FED845700541A90 /* DestinationRepository.swift */,
+				AAFF11110000000000000001 /* AffiliateLinks.swift */,
+			);
+			path = Repository;
+			sourceTree = "<group>";
+		};
+		AAFF33330000000000000001 /* Detail */ = {
+			isa = PBXGroup;
+			children = (
+				AAFF22220000000000000001 /* DestinationDetailView.swift */,
+			);
+			path = Detail;
+			sourceTree = "<group>";
+		};
+		D33589F02FED900000541A90 /* Audio */ = {
+			isa = PBXGroup;
+			children = (
+				D33589F12FED900000541A90 /* SoundPlayer.swift */,
+			);
+			path = Audio;
+			sourceTree = "<group>";
+		};
+		D33589C82FED845300541A90 /* ViewModel */ = {
+			isa = PBXGroup;
+			children = (
+				D33589CB2FED846C00541A90 /* AuthViewModel.swift */,
+				D3358A0B2FED900000541A90 /* UserDataStore.swift */,
+			);
+			path = ViewModel;
+			sourceTree = "<group>";
+		};
+		D33589CD2FED88D700541A90 /* Onboarding */ = {
+			isa = PBXGroup;
+			children = (
+				D33589CE2FED88E000541A90 /* OnboardingPage.swift */,
+				D33589D02FED88F500541A90 /* OnboardingView.swift */,
+			);
+			path = Onboarding;
+			sourceTree = "<group>";
+		};
+		D33589D42FED89BD00541A90 /* Auth */ = {
+			isa = PBXGroup;
+			children = (
+				D33589D52FED89CE00541A90 /* AuthFormField.swift */,
+				D33589D72FED89CF00541A90 /* SocialSignInButton.swift */,
+				D33589D92FED89EE00541A90 /* LoginView.swift */,
+				D33589DB2FED8A0A00541A90 /* SignUpView.swift */,
+				D33589DD2FED8A2500541A90 /* ForgotPasswordView.swift */,
+				D33589DF2FED8A3100541A90 /* AuthView.swift */,
+			);
+			path = Auth;
+			sourceTree = "<group>";
+		};
+		D33589E12FED8ADC00541A90 /* Settings */ = {
+			isa = PBXGroup;
+			children = (
+				D33589E22FED8AE100541A90 /* AppearanceMode.swift */,
+				D33589E42FED8AFD00541A90 /* LegalView.swift */,
+				D33589E62FED8B1400541A90 /* AcknowledgementsView.swift */,
+				D33589E82FED8B3400541A90 /* SettingsView.swift */,
+			);
+			path = Settings;
+			sourceTree = "<group>";
+		};
+		D3358A0C2FED900000541A90 /* Saved */ = {
+			isa = PBXGroup;
+			children = (
+				D3358A0E2FED900000541A90 /* SavedView.swift */,
+			);
+			path = Saved;
+			sourceTree = "<group>";
+		};
 		D3F845EE2AF09593005090ED = {
 			isa = PBXGroup;
 			children = (
@@ -94,6 +219,12 @@
 				D3F846002AF09595005090ED /* Preview Content */,
 				D3F8460D2AF09785005090ED /* LaunchScreen.storyboard */,
 				D3F846272AF1DF9D005090ED /* Modifier */,
+				D33589C72FED845200541A90 /* Repository */,
+				D33589C82FED845300541A90 /* ViewModel */,
+				D33589F02FED900000541A90 /* Audio */,
+				D33589FA2FED900000541A90 /* GoogleService-Info.plist */,
+				D33589FC2FED900000541A90 /* Info.plist */,
+				D33589FD2FED900000541A90 /* Honeymoon.entitlements */,
 			);
 			path = Honeymoon;
 			sourceTree = "<group>";
@@ -140,6 +271,12 @@
 				D3F8461A2AF0AED4005090ED /* FooterView.swift */,
 				D3F846212AF0B1D9005090ED /* GuideView.swift */,
 				D3F846232AF1DEBC005090ED /* InfoView.swift */,
+				D33589CD2FED88D700541A90 /* Onboarding */,
+				D33589D22FED890900541A90 /* RootView.swift */,
+				D33589D42FED89BD00541A90 /* Auth */,
+				D33589E12FED8ADC00541A90 /* Settings */,
+				D3358A0C2FED900000541A90 /* Saved */,
+				AAFF33330000000000000001 /* Detail */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -187,6 +324,11 @@
 			dependencies = (
 			);
 			name = Honeymoon;
+			packageProductDependencies = (
+				D3358A022FED900000541A90 /* FirebaseAuth */,
+				D3358A032FED900000541A90 /* FirebaseFirestore */,
+				D3358A042FED900000541A90 /* GoogleSignIn */,
+			);
 			productName = Honeymoon;
 			productReference = D3F845F72AF09593005090ED /* Honeymoon.app */;
 			productType = "com.apple.product-type.application";
@@ -215,6 +357,10 @@
 				Base,
 			);
 			mainGroup = D3F845EE2AF09593005090ED;
+			packageReferences = (
+				D3358A002FED900000541A90 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
+				D3358A012FED900000541A90 /* XCRemoteSwiftPackageReference "GoogleSignIn-iOS" */,
+			);
 			productRefGroup = D3F845F82AF09593005090ED /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -224,11 +370,49 @@
 		};
 /* End PBXProject section */
 
+/* Begin XCRemoteSwiftPackageReference section */
+		D3358A002FED900000541A90 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/firebase/firebase-ios-sdk.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 11.0.0;
+			};
+		};
+		D3358A012FED900000541A90 /* XCRemoteSwiftPackageReference "GoogleSignIn-iOS" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/google/GoogleSignIn-iOS.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 7.0.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		D3358A022FED900000541A90 /* FirebaseAuth */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = D3358A002FED900000541A90 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseAuth;
+		};
+		D3358A032FED900000541A90 /* FirebaseFirestore */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = D3358A002FED900000541A90 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseFirestore;
+		};
+		D3358A042FED900000541A90 /* GoogleSignIn */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = D3358A012FED900000541A90 /* XCRemoteSwiftPackageReference "GoogleSignIn-iOS" */;
+			productName = GoogleSignIn;
+		};
+/* End XCSwiftPackageProductDependency section */
+
 /* Begin PBXResourcesBuildPhase section */
 		D3F845F52AF09593005090ED /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D33589FB2FED900000541A90 /* GoogleService-Info.plist in Resources */,
 				D3F8460B2AF096F5005090ED /* sound-rise.mp3 in Resources */,
 				D3F8460C2AF096F5005090ED /* sound-click.mp3 in Resources */,
 				D3F846022AF09595005090ED /* Preview Assets.xcassets in Resources */,
@@ -248,16 +432,36 @@
 				D3F846242AF1DEBC005090ED /* InfoView.swift in Sources */,
 				D3F8461B2AF0AED4005090ED /* FooterView.swift in Sources */,
 				D3F846262AF1DF5B005090ED /* TitleModifier.swift in Sources */,
+				D33589DC2FED8A0A00541A90 /* SignUpView.swift in Sources */,
+				D33589DA2FED89EE00541A90 /* LoginView.swift in Sources */,
+				D33589E52FED8AFD00541A90 /* LegalView.swift in Sources */,
+				D33589D32FED890900541A90 /* RootView.swift in Sources */,
 				D3F8462E2AF28741005090ED /* CardTransition.swift in Sources */,
+				D33589F22FED900000541A90 /* SoundPlayer.swift in Sources */,
+				D3358A0A2FED900000541A90 /* UserDataStore.swift in Sources */,
+				D3358A0D2FED900000541A90 /* SavedView.swift in Sources */,
 				D3F8462B2AF284D1005090ED /* SymbolModifier.swift in Sources */,
 				D3F846192AF0ABEE005090ED /* HeaderView.swift in Sources */,
+				D33589CC2FED846C00541A90 /* AuthViewModel.swift in Sources */,
 				D3F846102AF09B81005090ED /* HoneymoonModel.swift in Sources */,
+				D33589D82FED89CF00541A90 /* SocialSignInButton.swift in Sources */,
+				D33589CA2FED845700541A90 /* DestinationRepository.swift in Sources */,
+				AAFF11110000000000000002 /* AffiliateLinks.swift in Sources */,
+				AAFF22220000000000000002 /* DestinationDetailView.swift in Sources */,
+				D33589E92FED8B3400541A90 /* SettingsView.swift in Sources */,
 				D3F846292AF1E0B1005090ED /* ButtonModifier.swift in Sources */,
+				D33589D12FED88F500541A90 /* OnboardingView.swift in Sources */,
+				D33589E02FED8A3100541A90 /* AuthView.swift in Sources */,
+				D33589CF2FED88E000541A90 /* OnboardingPage.swift in Sources */,
+				D33589E72FED8B1400541A90 /* AcknowledgementsView.swift in Sources */,
 				D3F8461E2AF0B010005090ED /* HeaderComponent.swift in Sources */,
+				D33589DE2FED8A2500541A90 /* ForgotPasswordView.swift in Sources */,
 				D3F845FD2AF09593005090ED /* ContentView.swift in Sources */,
 				D3F845FB2AF09593005090ED /* HoneymoonApp.swift in Sources */,
+				D33589D62FED89CE00541A90 /* AuthFormField.swift in Sources */,
 				D3F846172AF09C2B005090ED /* CardView.swift in Sources */,
 				D3F846202AF0B08A005090ED /* GuideComponent.swift in Sources */,
+				D33589E32FED8AE100541A90 /* AppearanceMode.swift in Sources */,
 				D3F846222AF0B1D9005090ED /* GuideView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -394,8 +598,11 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"Honeymoon/Preview Content\"";
 				DEVELOPMENT_TEAM = K8FKWBYV9S;
+				CODE_SIGN_ENTITLEMENTS = Honeymoon/Honeymoon.entitlements;
 				ENABLE_PREVIEWS = YES;
-				GENERATE_INFOPLIST_FILE = YES;
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = Honeymoon/Info.plist;
+				INFOPLIST_KEY_ITSAppUsesNonExemptEncryption = NO;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -407,7 +614,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = frederick.Honeymoon;
+				PRODUCT_BUNDLE_IDENTIFIER = com.thetpine.honeymoon;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_EMIT_LOC_STRINGS = YES;
@@ -426,8 +633,11 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"Honeymoon/Preview Content\"";
 				DEVELOPMENT_TEAM = K8FKWBYV9S;
+				CODE_SIGN_ENTITLEMENTS = Honeymoon/Honeymoon.entitlements;
 				ENABLE_PREVIEWS = YES;
-				GENERATE_INFOPLIST_FILE = YES;
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = Honeymoon/Info.plist;
+				INFOPLIST_KEY_ITSAppUsesNonExemptEncryption = NO;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -439,7 +649,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = frederick.Honeymoon;
+				PRODUCT_BUNDLE_IDENTIFIER = com.thetpine.honeymoon;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_EMIT_LOC_STRINGS = YES;

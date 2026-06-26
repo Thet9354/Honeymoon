@@ -1,0 +1,14 @@
+# Firebase service-account credentials — NEVER commit these
+**/serviceAccountKey.json
+scripts/serviceAccountKey.json
+
+# Node
+scripts/node_modules/
+scripts/package-lock.json
+
+# macOS
+.DS_Store
+
+# Xcode user data
+xcuserdata/
+*.xcuserstate

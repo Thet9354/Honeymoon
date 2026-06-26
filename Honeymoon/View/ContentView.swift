@@ -8,40 +8,55 @@
 import SwiftUI
 
 struct ContentView: View {
-    
+
+    // MARK: - ENVIRONMENT
+    @EnvironmentObject private var destinationStore: DestinationStore
+    @EnvironmentObject private var userDataStore: UserDataStore
+
     // MARK: - PROPERTIES
     @State var showAlert: Bool = false
     @State var showGuide: Bool = false
-    @State var showInfo: Bool = false
+    @State var showSettings: Bool = false
+    @State var showSaved: Bool = false
+    @State private var detailDestination: Destination?
     @GestureState private var dragState = DragState.inactive
     private var dragAreaThreshold: CGFloat = 65.0
     @State private var lastCardIndex: Int = 1
     @State private var cardRemovalTransition = AnyTransition.trailingBottom
-    
+
     // MARK: - CARD VIEWS
-    
-   @State var cardViews: [CardView] = {
-        var views = [CardView]()
-        for index in 0..<2 {
-            views.append(CardView(honeymoon: honeymoonData[index]))
-        }
-        return views
-    }()
-    
+    @State var cardViews: [CardView] = []
+
     // MARK: MOVE THE CARD
-    
+
     private func moveCards() {
+        let destinations = destinationStore.destinations
+        guard !destinations.isEmpty else { return }
+        SoundPlayer.shared.play(.swipe)
         cardViews.removeFirst()
-        
+
         self.lastCardIndex += 1
-        
-        let honeymoon = honeymoonData[lastCardIndex % honeymoonData.count]
-        
-        let newCardView = CardView(honeymoon: honeymoon)
-        
+
+        let destination = destinations[lastCardIndex % destinations.count]
+
+        let newCardView = CardView(destination: destination)
+
         cardViews.append(newCardView)
     }
-    
+
+    // MARK: SEED CARDS
+
+    private func seedCardsIfNeeded() {
+        guard cardViews.isEmpty else { return }
+        let destinations = destinationStore.destinations
+        guard destinations.count >= 2 else { return }
+        cardViews = [
+            CardView(destination: destinations[0]),
+            CardView(destination: destinations[1])
+        ]
+        lastCardIndex = 1
+    }
+
     // MARK: TOP CARD
     private func isTopCard(cardView: CardView) -> Bool {
         guard let index = cardViews.firstIndex(where: { $0.id == cardView.id}) else {
@@ -49,13 +64,13 @@ struct ContentView: View {
         }
         return index == 0
     }
-    
+
     // MARK: DRAG STATES
     enum DragState {
         case inactive
         case pressing
         case dragging(translation: CGSize)
-        
+
         var translation: CGSize {
             switch self {
             case .inactive, .pressing:
@@ -64,7 +79,7 @@ struct ContentView: View {
                 return translation
             }
         }
-        
+
         var isDragging: Bool {
             switch self {
             case .dragging:
@@ -73,7 +88,7 @@ struct ContentView: View {
                 return false
             }
         }
-        
+
         var isPressing: Bool {
             switch self {
             case .pressing, .dragging:
@@ -83,18 +98,18 @@ struct ContentView: View {
             }
         }
     }
-    
+
     var body: some View {
         VStack {
             // MARK: - HEADER
-            HeaderView(showGuideView: $showGuide, showInfoView: $showInfo)
+            HeaderView(showGuideView: $showGuide, showSettingsView: $showSettings, showSavedView: $showSaved)
                 .opacity(dragState.isDragging ? 0.0 : 1.0)
-                .animation(.default)
-            
+                .animation(.default, value: dragState.isDragging)
+
             Spacer()
-            
+
             // MARK: - CARDS
-           
+
             ZStack {
                 ForEach(cardViews) { cardView in
                     cardView
@@ -105,7 +120,7 @@ struct ContentView: View {
                                 Image(systemName: "x.circle")
                                     .modifier(SymbolModifier())
                                     .opacity(self.dragState.translation.width < -self.dragAreaThreshold && self.isTopCard(cardView: cardView) ? 1.0 : 0.0)
-                                
+
                                 // HEART SYMBOL
                                 Image(systemName: "heart.circle")
                                     .modifier(SymbolModifier())
@@ -115,7 +130,7 @@ struct ContentView: View {
                         .offset(x: self.isTopCard(cardView: cardView) ? self.dragState.translation.width : 0, y: self.isTopCard(cardView: cardView) ? self.dragState.translation.height : 0)
                         .scaleEffect(self.dragState.isDragging && self.isTopCard(cardView: cardView) ? 0.85 : 1.0)
                         .rotationEffect(Angle(degrees: self.isTopCard(cardView: cardView) ? Double(self.dragState.translation.width / 12) : 0))
-                        .animation(.interpolatingSpring(stiffness: 120, damping: 120))
+                        .animation(.interpolatingSpring(stiffness: 120, damping: 120), value: dragState.translation)
                         .gesture(LongPressGesture(minimumDuration: 0.01)
                             .sequenced(before: DragGesture())
                             .updating(self.$dragState, body: { (value, state, transaction) in
@@ -132,11 +147,11 @@ struct ContentView: View {
                                     guard case .second(true, let drag?) = value else {
                                         return
                                     }
-                                    
+
                                     if drag.translation.width < -self.dragAreaThreshold {
                                         self.cardRemovalTransition = .leadingBottom
                                     }
-                                    
+
                                     if drag.translation.width > self.dragAreaThreshold {
                                         self.cardRemovalTransition = .trailingBottom
                                     }
@@ -145,24 +160,45 @@ struct ContentView: View {
                                     guard case .second(true, let drag?) = value else {
                                         return
                                     }
-                                    
-                                    if drag.translation.width < -self.dragAreaThreshold || drag.translation.width > self.dragAreaThreshold {
+
+                                    if drag.translation.width > self.dragAreaThreshold {
+                                        // Swipe right = save to favorites.
+                                        if let destination = self.cardViews.first?.destination {
+                                            self.userDataStore.addFavorite(destination)
+                                        }
+                                        self.moveCards()
+                                    } else if drag.translation.width < -self.dragAreaThreshold {
                                         self.moveCards()
                                     }
                                 })
                     )
+                        .simultaneousGesture(
+                            TapGesture().onEnded {
+                                if self.isTopCard(cardView: cardView) {
+                                    self.detailDestination = cardView.destination
+                                }
+                            }
+                        )
                         .transition(self.cardRemovalTransition)
                 }
             }
             .padding(.horizontal)
-            
+
             Spacer()
-            
+
             // MARK: - FOOTER
-            
-            FooterView(showBookingAlert: $showAlert)
+
+            FooterView(showBookingAlert: $showAlert, onBook: {
+                if let destination = cardViews.first?.destination {
+                    userDataStore.addBooking(destination)
+                }
+            })
                 .opacity(dragState.isDragging ? 0.0 : 1.0)
-                .animation(.default)
+                .animation(.default, value: dragState.isDragging)
+        }
+        .task {
+            await destinationStore.load()
+            seedCardsIfNeeded()
         }
         .alert(isPresented: $showAlert) {
             Alert(
@@ -171,9 +207,15 @@ struct ContentView: View {
                 dismissButton: .default(Text("Happy HoneyMoon!"))
             )
         }
+        .sheet(item: $detailDestination) { destination in
+            DestinationDetailView(destination: destination)
+                .environmentObject(userDataStore)
+        }
     }
 }
 
 #Preview {
     ContentView()
+        .environmentObject(DestinationStore())
+        .environmentObject(UserDataStore())
 }

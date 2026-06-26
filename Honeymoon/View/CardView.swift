@@ -8,23 +8,23 @@
 import SwiftUI
 
 struct CardView: View, Identifiable {
-    
+
     // MARK: - PROPERTIES
-    
+
     let id = UUID()
-    var honeymoon: Destination
-    
+    var destination: Destination
+
     // MARK: - BODY
 
     var body: some View {
-        Image(honeymoon.image)
+        Image(destination.image)
             .resizable()
             .cornerRadius(24)
             .scaledToFit()
             .frame(minWidth: 0, maxWidth: .infinity)
             .overlay(
                 VStack(alignment: .center, spacing: 12) {
-                    Text(honeymoon.place.uppercased())
+                    Text(destination.place.uppercased())
                         .foregroundColor(Color.white)
                         .font(.largeTitle)
                         .fontWeight(.bold)
@@ -37,8 +37,8 @@ struct CardView: View, Identifiable {
                                 .frame(height: 1),
                             alignment: .bottom
                         )
-                    
-                    Text(honeymoon.country.uppercased())
+
+                    Text(destination.country.uppercased())
                         .foregroundColor(Color.black)
                         .font(.footnote)
                         .fontWeight(.bold)
@@ -54,12 +54,16 @@ struct CardView: View, Identifiable {
                     .padding(.bottom, 50),
                 alignment: .bottom
             )
+            .accessibilityElement(children: .ignore)
+            .accessibilityLabel("\(destination.place), \(destination.country)")
+            .accessibilityHint("Swipe right to like, swipe left to pass")
+            .accessibilityAddTraits(.isImage)
     }
 }
 
 // MARK: - PREVIEW
 
 #Preview {
-    CardView(honeymoon: honeymoonData[0])
+    CardView(destination: honeymoonData[0])
         .previewLayout(.fixed(width: 375, height: 600))
 }

@@ -11,18 +11,20 @@ struct FooterView: View {
     
     // MARK: - PROPERTIES
     @Binding var showBookingAlert: Bool
-    
-    
+    var onBook: () -> Void = {}
+
+
     var body: some View {
         HStack {
             Image(systemName: "xmark.circle")
                 .font(.system(size: 42, weight: .light))
-            
+                .accessibilityHidden(true)
+
             Spacer()
-            
+
             Button(action: {
-                // ACTION
-                // print("Success")
+                SoundPlayer.shared.play(.booking)
+                self.onBook()
                 self.showBookingAlert.toggle()
             }) {
                 Text("Book Destination".uppercased())
@@ -35,11 +37,14 @@ struct FooterView: View {
                             .stroke(Color.pink, lineWidth: 2)
                     )
             }
-            
+            .accessibilityLabel("Book destination")
+            .accessibilityHint("Confirms a booking for the current destination")
+
             Spacer()
-            
+
             Image(systemName: "heart.circle")
                 .font(.system(size: 42, weight: .light))
+                .accessibilityHidden(true)
         }
         .padding()
     }

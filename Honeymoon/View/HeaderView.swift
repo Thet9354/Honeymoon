@@ -8,46 +8,59 @@
 import SwiftUI
 
 struct HeaderView: View {
-    
+
     // MARK: - PROPERTIES
     @Binding var showGuideView: Bool
-    @Binding var showInfoView: Bool
-    
+    @Binding var showSettingsView: Bool
+    @Binding var showSavedView: Bool
+
     var body: some View {
         HStack {
             Button(action: {
-                // ACTION
-                // print("Information")
-                self.showInfoView.toggle()
+                self.showSettingsView.toggle()
             }) {
-                Image(systemName: "info.circle")
+                Image(systemName: "gearshape")
                     .font(.system(size: 24, weight: .regular))
             }
             .accentColor(Color.primary)
-            .sheet(isPresented: $showInfoView) {
-                InfoView()
+            .accessibilityLabel("Settings")
+            .sheet(isPresented: $showSettingsView) {
+                SettingsView()
             }
-            
+
             Spacer()
-            
+
             Image("logo-honeymoon-pink")
                 .resizable()
                 .scaledToFit()
                 .frame(height: 28)
-            
+
             Spacer()
-            
-            Button(action: {
-                // ACTION
-                // print("Guide")
-                self.showGuideView.toggle()
-            }) {
-                Image(systemName: "questionmark.circle")
-                    .font(.system(size: 24, weight: .regular))
-            }
-            .accentColor(Color.primary)
-            .sheet(isPresented: $showGuideView) {
-                GuideView()
+
+            HStack(spacing: 18) {
+                Button(action: {
+                    self.showSavedView.toggle()
+                }) {
+                    Image(systemName: "bookmark")
+                        .font(.system(size: 24, weight: .regular))
+                }
+                .accentColor(Color.primary)
+                .accessibilityLabel("Saved")
+                .sheet(isPresented: $showSavedView) {
+                    SavedView()
+                }
+
+                Button(action: {
+                    self.showGuideView.toggle()
+                }) {
+                    Image(systemName: "questionmark.circle")
+                        .font(.system(size: 24, weight: .regular))
+                }
+                .accentColor(Color.primary)
+                .accessibilityLabel("How it works")
+                .sheet(isPresented: $showGuideView) {
+                    GuideView()
+                }
             }
         }
         .padding()
@@ -55,12 +68,14 @@ struct HeaderView: View {
 }
 
 struct HeaderView_Previews: PreviewProvider {
-    
+
     @State static var showGuide: Bool = false
-    @State static var showInfoView: Bool = false
-    
+    @State static var showSettings: Bool = false
+    @State static var showSaved: Bool = false
+
     static var previews: some View {
-        HeaderView(showGuideView: $showGuide, showInfoView: $showInfoView)
+        HeaderView(showGuideView: $showGuide, showSettingsView: $showSettings, showSavedView: $showSaved)
+            .environmentObject(UserDataStore())
             .previewLayout(.fixed(width: 375, height: 80))
     }
 }
