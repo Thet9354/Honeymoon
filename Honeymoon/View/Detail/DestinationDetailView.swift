@@ -9,6 +9,8 @@
 //
 
 import SwiftUI
+import MapKit
+import CoreLocation
 
 struct DestinationDetailView: View {
 
@@ -124,6 +126,7 @@ struct DestinationDetailView: View {
                     .foregroundStyle(.secondary)
             }
             if !destination.highlights.isEmpty { highlightsSection }
+            mapSection
             itineraryTeaser
             bookingLinks
             bookButton
@@ -177,6 +180,18 @@ struct DestinationDetailView: View {
             Text("Romantic highlights")
                 .font(.headline)
             FlowChips(items: destination.highlights)
+        }
+    }
+
+    private var mapSection: some View {
+        VStack(alignment: .leading, spacing: 10) {
+            Text("Where you're headed")
+                .font(.headline)
+            DestinationMapView(place: destination.place, country: destination.country)
+                .frame(height: 180)
+                .clipShape(RoundedRectangle(cornerRadius: 12))
+                .overlay(RoundedRectangle(cornerRadius: 12).stroke(Color(.separator), lineWidth: 0.5))
+                .accessibilityLabel("Map of \(destination.place), \(destination.country)")
         }
     }
 
@@ -291,6 +306,51 @@ struct DestinationDetailView: View {
         }
         .foregroundStyle(.primary)
         .overlay(RoundedRectangle(cornerRadius: 12).stroke(Color(.separator), lineWidth: 0.5))
+    }
+}
+
+// MARK: - Destination map snippet
+
+/// A small, non-interactive map for the destination. Resolves the coordinate from
+/// the place name via the system geocoder, so no per-destination coordinates need
+/// to be stored. Falls back to a neutral placeholder if geocoding fails.
+private struct DestinationMapView: View {
+    let place: String
+    let country: String
+
+    @State private var coordinate: CLLocationCoordinate2D?
+    @State private var position: MapCameraPosition = .automatic
+    @State private var didResolve = false
+
+    var body: some View {
+        Group {
+            if let coordinate {
+                Map(position: $position, interactionModes: []) {
+                    Marker(place, coordinate: coordinate).tint(.pink)
+                }
+            } else {
+                ZStack {
+                    Rectangle().fill(Color(.secondarySystemBackground))
+                    Image(systemName: "map")
+                        .font(.title2)
+                        .foregroundStyle(.secondary)
+                }
+            }
+        }
+        .task {
+            guard !didResolve else { return }
+            didResolve = true
+            let geocoder = CLGeocoder()
+            guard
+                let placemark = try? await geocoder.geocodeAddressString("\(place), \(country)").first,
+                let location = placemark.location
+            else { return }
+            coordinate = location.coordinate
+            position = .region(MKCoordinateRegion(
+                center: location.coordinate,
+                span: MKCoordinateSpan(latitudeDelta: 3, longitudeDelta: 3)
+            ))
+        }
     }
 }
 
