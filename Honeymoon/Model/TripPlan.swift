@@ -13,12 +13,17 @@ struct BudgetItem: Identifiable, Codable, Hashable {
     var id: String = UUID().uuidString
     var title: String
     var amountUSD: Double
+    /// Client-set ordering key so shared items show in a stable, consistent order
+    /// across both partners (subcollection docs have no inherent order).
+    var createdAt: Double = Date().timeIntervalSince1970
 }
 
 struct ChecklistItem: Identifiable, Codable, Hashable {
     var id: String = UUID().uuidString
     var title: String
     var done: Bool = false
+    /// Client-set ordering key (see BudgetItem.createdAt).
+    var createdAt: Double = Date().timeIntervalSince1970
 }
 
 struct TripPlan: Codable, Equatable {
