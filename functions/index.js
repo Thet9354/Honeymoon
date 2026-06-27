@@ -23,6 +23,9 @@ const MODEL = "claude-opus-4-8";
 // costs ~$0.10–0.15, so this bounds the absolute worst case to a few dollars
 // even if the premium gate were somehow bypassed.
 const MONTHLY_CAP = 30;
+// Free preview allowance for non-premium users (lifetime per account) — lets a
+// couple experience one real AI itinerary before the paywall.
+const FREE_LIMIT = 1;
 
 // JSON shape Claude must return — mirrors the Swift `Itinerary` model.
 const ITINERARY_SCHEMA = {
@@ -70,28 +73,39 @@ exports.generateItinerary = onCall(
 
     const db = admin.firestore();
 
-    // 1. Premium gate — the security boundary. The client mirrors its StoreKit
-    //    entitlement into users/{uid}.isPremium; we trust nothing else.
+    // 1. Entitlement — the client mirrors its StoreKit entitlement into
+    //    users/{uid}.isPremium; we trust nothing else.
     const userSnap = await db.collection("users").doc(uid).get();
-    if (userSnap.get("isPremium") !== true) {
-      throw new HttpsError("permission-denied", "Premium is required to generate itineraries.");
-    }
+    const isPremium = userSnap.get("isPremium") === true;
 
-    // 2. Monthly cap — atomic check-and-increment so concurrent calls can't race past it.
+    // 2. Allowance — atomic check-and-increment so concurrent calls can't race
+    //    past it. Premium: MONTHLY_CAP per month. Free: FREE_LIMIT lifetime.
     const month = new Date().toISOString().slice(0, 7); // e.g. "2026-06"
     const usageRef = db.collection("users").doc(uid).collection("usage").doc("itinerary");
     await db.runTransaction(async (tx) => {
       const snap = await tx.get(usageRef);
       const data = snap.exists ? snap.data() : {};
-      const count = data.month === month ? data.count || 0 : 0;
-      if (count >= MONTHLY_CAP) {
-        throw new HttpsError("resource-exhausted", "Monthly itinerary limit reached.");
+      if (isPremium) {
+        const count = data.month === month ? data.count || 0 : 0;
+        if (count >= MONTHLY_CAP) {
+          throw new HttpsError("resource-exhausted", "Monthly itinerary limit reached.");
+        }
+        tx.set(
+          usageRef,
+          { month, count: count + 1, updatedAt: admin.firestore.FieldValue.serverTimestamp() },
+          { merge: true }
+        );
+      } else {
+        const freeUsed = data.freeCount || 0;
+        if (freeUsed >= FREE_LIMIT) {
+          throw new HttpsError("permission-denied", "Upgrade to Premium for more itineraries.");
+        }
+        tx.set(
+          usageRef,
+          { freeCount: freeUsed + 1, updatedAt: admin.firestore.FieldValue.serverTimestamp() },
+          { merge: true }
+        );
       }
-      tx.set(
-        usageRef,
-        { month, count: count + 1, updatedAt: admin.firestore.FieldValue.serverTimestamp() },
-        { merge: true }
-      );
     });
 
     // 3. Validate input.

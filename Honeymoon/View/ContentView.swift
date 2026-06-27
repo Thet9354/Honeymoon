@@ -20,6 +20,7 @@ struct ContentView: View {
     @State var showAlert: Bool = false
     /// True only the first time the user ever books, so the celebration shows once.
     @AppStorage("hasBookedBefore") private var hasBookedBefore: Bool = false
+    @AppStorage("hasUsedFreeItinerary") private var hasUsedFreeItinerary = false
     @State private var bookingIsFirst: Bool = false
     @State var showGuide: Bool = false
     @State var showSettings: Bool = false
@@ -315,7 +316,9 @@ struct ContentView: View {
                         // Let the cover finish dismissing before presenting the next sheet.
                         try? await Task.sleep(nanoseconds: 350_000_000)
                         guard let destination else { return }
-                        if purchaseStore.isPremium {
+                        // Premium (or a free user's one preview) opens the plan;
+                        // otherwise the paywall at peak intent.
+                        if purchaseStore.isPremium || !hasUsedFreeItinerary {
                             matchPlanDestination = destination
                         } else {
                             showMatchPaywall = true

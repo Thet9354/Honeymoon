@@ -18,12 +18,16 @@ struct ItineraryView: View {
 
     @EnvironmentObject private var itineraryService: ItineraryService
     @EnvironmentObject private var preferenceStore: PreferenceStore
+    @EnvironmentObject private var purchaseStore: PurchaseStore
     @Environment(\.dismiss) private var dismiss
     // Held so the budget re-renders when the user switches currency.
     @AppStorage("currency") private var currencyRaw = Currency.sgd.rawValue
+    // The one-time free AI itinerary preview for non-premium users.
+    @AppStorage("hasUsedFreeItinerary") private var hasUsedFreeItinerary = false
 
     @State private var itinerary: Itinerary?
     @State private var isLoading = true
+    @State private var showPaywall = false
 
     var body: some View {
         NavigationStack {
@@ -40,17 +44,20 @@ struct ItineraryView: View {
                 ToolbarItem(placement: .topBarLeading) {
                     Button("Done") { dismiss() }
                 }
-                ToolbarItem(placement: .topBarTrailing) {
-                    Button {
-                        Task { await load(force: true) }
-                    } label: {
-                        Image(systemName: "arrow.clockwise")
+                if purchaseStore.isPremium {
+                    ToolbarItem(placement: .topBarTrailing) {
+                        Button {
+                            Task { await load(force: true) }
+                        } label: {
+                            Image(systemName: "arrow.clockwise")
+                        }
+                        .disabled(isLoading)
+                        .accessibilityLabel("Regenerate itinerary")
                     }
-                    .disabled(isLoading)
-                    .accessibilityLabel("Regenerate itinerary")
                 }
             }
             .tint(Color.pink)
+            .sheet(isPresented: $showPaywall) { PaywallView() }
         }
         .task {
             if itinerary == nil { await load(force: false) }
@@ -67,7 +74,11 @@ struct ItineraryView: View {
             startDate: startDate,
             forceRegenerate: force
         )
-        itinerary = result
+        itinerary = result.itinerary
+        // A non-premium user "spends" their free preview only on a real AI plan.
+        if !purchaseStore.isPremium, result.source != .fallback {
+            hasUsedFreeItinerary = true
+        }
         isLoading = false
     }
 
@@ -129,8 +140,34 @@ struct ItineraryView: View {
                     Text("Indicative only — actual prices vary by season and how you book.")
                 }
             }
+
+            if !purchaseStore.isPremium {
+                Section { upgradeBanner }
+            }
         }
         .listStyle(.insetGrouped)
+    }
+
+    private var upgradeBanner: some View {
+        VStack(alignment: .leading, spacing: 8) {
+            Label("Your free preview", systemImage: "sparkles")
+                .font(.subheadline.weight(.semibold))
+                .foregroundStyle(Color.pink)
+            Text("Unlock Premium to generate a personalized plan for every destination on your shortlist.")
+                .font(.footnote)
+                .foregroundStyle(.secondary)
+            Button {
+                showPaywall = true
+            } label: {
+                Text("Unlock Premium")
+                    .font(.headline)
+                    .frame(maxWidth: .infinity)
+                    .padding(.vertical, 12)
+            }
+            .background(Color.pink, in: RoundedRectangle(cornerRadius: 12))
+            .foregroundStyle(.white)
+        }
+        .padding(.vertical, 4)
     }
 
     private func beat(icon: String, label: String, text: String) -> some View {
@@ -155,4 +192,5 @@ struct ItineraryView: View {
     ItineraryView(destination: honeymoonData[0])
         .environmentObject(ItineraryService())
         .environmentObject(PreferenceStore())
+        .environmentObject(PurchaseStore())
 }

@@ -24,6 +24,11 @@ struct DestinationDetailView: View {
     @State private var showItinerary = false
     // Held so the "For two" budget re-renders when the user switches currency.
     @AppStorage("currency") private var currencyRaw = Currency.sgd.rawValue
+    // One free AI itinerary preview for non-premium users.
+    @AppStorage("hasUsedFreeItinerary") private var hasUsedFreeItinerary = false
+
+    /// Premium users always; free users until they've used their one preview.
+    private var canOpenItinerary: Bool { purchaseStore.isPremium || !hasUsedFreeItinerary }
 
     private var isFavorite: Bool { userDataStore.isFavorite(destination) }
 
@@ -177,7 +182,7 @@ struct DestinationDetailView: View {
 
     private var itineraryTeaser: some View {
         Button {
-            if purchaseStore.isPremium {
+            if canOpenItinerary {
                 showItinerary = true
             } else {
                 showPaywall = true
@@ -188,21 +193,9 @@ struct DestinationDetailView: View {
                     Label("AI honeymoon itinerary", systemImage: "sparkles")
                         .font(.subheadline.weight(.semibold))
                     Spacer()
-                    if purchaseStore.isPremium {
-                        Image(systemName: "chevron.right")
-                            .font(.caption.weight(.semibold))
-                            .foregroundStyle(.secondary)
-                    } else {
-                        Label("Premium", systemImage: "lock.fill")
-                            .font(.caption.weight(.semibold))
-                            .padding(.horizontal, 9).padding(.vertical, 4)
-                            .background(Color.purple.opacity(0.15), in: Capsule())
-                            .foregroundStyle(.purple)
-                    }
+                    itineraryBadge
                 }
-                Text(purchaseStore.isPremium
-                     ? "A personalized day-by-day plan with dining picks and a full budget breakdown."
-                     : "A personalized day-by-day plan, dining picks and a full budget breakdown — unlock with Premium.")
+                Text(itineraryTeaserSubtitle)
                     .font(.footnote)
                     .foregroundStyle(.secondary)
                     .multilineTextAlignment(.leading)
@@ -212,6 +205,37 @@ struct DestinationDetailView: View {
             .overlay(RoundedRectangle(cornerRadius: 12).stroke(Color(.separator), lineWidth: 0.5))
         }
         .buttonStyle(.plain)
+    }
+
+    @ViewBuilder
+    private var itineraryBadge: some View {
+        if purchaseStore.isPremium {
+            Image(systemName: "chevron.right")
+                .font(.caption.weight(.semibold))
+                .foregroundStyle(.secondary)
+        } else if !hasUsedFreeItinerary {
+            Label("Free preview", systemImage: "sparkles")
+                .font(.caption.weight(.semibold))
+                .padding(.horizontal, 9).padding(.vertical, 4)
+                .background(Color.pink.opacity(0.15), in: Capsule())
+                .foregroundStyle(Color.pink)
+        } else {
+            Label("Premium", systemImage: "lock.fill")
+                .font(.caption.weight(.semibold))
+                .padding(.horizontal, 9).padding(.vertical, 4)
+                .background(Color.purple.opacity(0.15), in: Capsule())
+                .foregroundStyle(.purple)
+        }
+    }
+
+    private var itineraryTeaserSubtitle: String {
+        if purchaseStore.isPremium {
+            return "A personalized day-by-day plan with dining picks and a full budget breakdown."
+        } else if !hasUsedFreeItinerary {
+            return "Try one free — a personalized day-by-day plan, dining picks and a full budget breakdown."
+        } else {
+            return "A personalized day-by-day plan, dining picks and a full budget breakdown — unlock with Premium."
+        }
     }
 
     private var bookingLinks: some View {
