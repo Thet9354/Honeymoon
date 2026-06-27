@@ -16,6 +16,7 @@ struct TripPlannerView: View {
     @State private var newBudgetAmount = ""
     @State private var newChecklistTitle = ""
     @AppStorage("currency") private var currencyRaw = Currency.sgd.rawValue
+    @AppStorage("tripRemindersEnabled") private var tripRemindersEnabled = true
 
     init(booking: BookingItem) {
         let seed = TripPlan(
@@ -51,7 +52,26 @@ struct TripPlannerView: View {
                 .fontWeight(.semibold)
             }
         }
-        .task { await store.load() }
+        .task {
+            await store.load()
+            refreshReminders()
+        }
+    }
+
+    /// Schedules or clears the trip's countdown notifications based on the date
+    /// and the user's reminders preference.
+    private func refreshReminders() {
+        guard tripRemindersEnabled, let date = plan.startDate else {
+            NotificationService.shared.cancel(destinationId: plan.destinationId)
+            return
+        }
+        Task {
+            await NotificationService.shared.scheduleCountdown(
+                destinationId: plan.destinationId,
+                place: plan.place,
+                startDate: date
+            )
+        }
     }
 
     // MARK: - Header
@@ -82,7 +102,7 @@ struct TripPlannerView: View {
     private var dateBinding: Binding<Date> {
         Binding(
             get: { plan.startDate ?? defaultStartDate },
-            set: { store.setStartDate($0) }
+            set: { store.setStartDate($0); refreshReminders() }
         )
     }
 
@@ -95,6 +115,7 @@ struct TripPlannerView: View {
             if plan.startDate == nil {
                 Button {
                     store.setStartDate(defaultStartDate)
+                    refreshReminders()
                 } label: {
                     Label("Set travel date", systemImage: "calendar.badge.plus")
                 }
@@ -110,7 +131,10 @@ struct TripPlannerView: View {
                 }
                 DatePicker("Date", selection: dateBinding, displayedComponents: .date)
                     .datePickerStyle(.compact)
-                Button("Clear date", role: .destructive) { store.setStartDate(nil) }
+                Button("Clear date", role: .destructive) {
+                    store.setStartDate(nil)
+                    refreshReminders()
+                }
             }
         }
     }
@@ -200,7 +224,7 @@ struct TripPlannerView: View {
             .onDelete { store.removeChecklistItems(at: $0) }
 
             HStack(spacing: 8) {
-                TextField("Add a packing item", text: $newChecklistTitle)
+                TextField("Add a checklist item", text: $newChecklistTitle)
                 Button {
                     addChecklistItem()
                 } label: {
@@ -208,8 +232,34 @@ struct TripPlannerView: View {
                 }
                 .disabled(newChecklistTitle.trimmingCharacters(in: .whitespaces).isEmpty)
             }
+
+            if missingEssentialsCount > 0 {
+                Button {
+                    addEssentials()
+                } label: {
+                    Label(
+                        plan.checklist.isEmpty ? "Add honeymoon essentials" : "Add \(missingEssentialsCount) more essentials",
+                        systemImage: "sparkles"
+                    )
+                }
+                .foregroundStyle(Color.pink)
+            }
         } header: {
-            Text("Packing checklist")
+            Text("Honeymoon checklist")
+        } footer: {
+            Text("Tip: most countries need your passport valid for 6+ months beyond your trip.")
+        }
+    }
+
+    private var missingEssentialsCount: Int {
+        let existing = Set(plan.checklist.map(\.title))
+        return TripPlan.honeymoonEssentials.filter { !existing.contains($0) }.count
+    }
+
+    private func addEssentials() {
+        let existing = Set(plan.checklist.map(\.title))
+        for title in TripPlan.honeymoonEssentials where !existing.contains(title) {
+            store.addChecklistItem(title: title)
         }
     }
 

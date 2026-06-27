@@ -22,6 +22,7 @@
 		AABB44440000000000000002 /* MatchCelebrationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AABB44440000000000000001 /* MatchCelebrationView.swift */; };
 		AACC11110000000000000002 /* PurchaseStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = AACC11110000000000000001 /* PurchaseStore.swift */; };
 		AAEE11110000000000000002 /* ItineraryService.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAEE11110000000000000001 /* ItineraryService.swift */; };
+		AAEE22220000000000000002 /* NotificationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAEE22220000000000000001 /* NotificationService.swift */; };
 		AACC22220000000000000002 /* PaywallView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AACC22220000000000000001 /* PaywallView.swift */; };
 		AACC33330000000000000002 /* ItineraryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AACC33330000000000000001 /* ItineraryView.swift */; };
 		AACC44440000000000000002 /* Itinerary.swift in Sources */ = {isa = PBXBuildFile; fileRef = AACC44440000000000000001 /* Itinerary.swift */; };
@@ -86,6 +87,7 @@
 		AABB44440000000000000001 /* MatchCelebrationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MatchCelebrationView.swift; sourceTree = "<group>"; };
 		AACC11110000000000000001 /* PurchaseStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PurchaseStore.swift; sourceTree = "<group>"; };
 		AAEE11110000000000000001 /* ItineraryService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ItineraryService.swift; sourceTree = "<group>"; };
+		AAEE22220000000000000001 /* NotificationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationService.swift; sourceTree = "<group>"; };
 		AACC22220000000000000001 /* PaywallView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaywallView.swift; sourceTree = "<group>"; };
 		AACC33330000000000000001 /* ItineraryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ItineraryView.swift; sourceTree = "<group>"; };
 		AACC44440000000000000001 /* Itinerary.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Itinerary.swift; sourceTree = "<group>"; };
@@ -210,6 +212,7 @@
 				AABB22220000000000000001 /* CoupleStore.swift */,
 				AACC11110000000000000001 /* PurchaseStore.swift */,
 				AAEE11110000000000000001 /* ItineraryService.swift */,
+				AAEE22220000000000000001 /* NotificationService.swift */,
 			);
 			path = ViewModel;
 			sourceTree = "<group>";
@@ -542,6 +545,7 @@
 				AABB44440000000000000002 /* MatchCelebrationView.swift in Sources */,
 				AACC11110000000000000002 /* PurchaseStore.swift in Sources */,
 				AAEE11110000000000000002 /* ItineraryService.swift in Sources */,
+				AAEE22220000000000000002 /* NotificationService.swift in Sources */,
 				AACC22220000000000000002 /* PaywallView.swift in Sources */,
 				AACC33330000000000000002 /* ItineraryView.swift in Sources */,
 				AACC44440000000000000002 /* Itinerary.swift in Sources */,

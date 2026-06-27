@@ -14,6 +14,7 @@ struct SettingsView: View {
     @AppStorage("appearance") private var appearanceRaw: String = AppearanceMode.system.rawValue
     @AppStorage("soundEnabled") private var soundEnabled: Bool = true
     @AppStorage("currency") private var currencyRaw: String = Currency.sgd.rawValue
+    @AppStorage("tripRemindersEnabled") private var tripRemindersEnabled: Bool = true
 
     @State private var showSignOutConfirmation = false
     @State private var showDeleteAccountConfirmation = false
@@ -171,6 +172,16 @@ struct SettingsView: View {
                 PreferenceQuizView(mode: .edit)
             } label: {
                 Label("Travel preferences", systemImage: "slider.horizontal.3")
+            }
+
+            Toggle(isOn: Binding(
+                get: { tripRemindersEnabled },
+                set: { newValue in
+                    tripRemindersEnabled = newValue
+                    if !newValue { NotificationService.shared.cancelAll() }
+                }
+            )) {
+                Label("Trip reminders", systemImage: "bell")
             }
 
             Picker("Appearance", selection: appearance) {

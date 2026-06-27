@@ -64,4 +64,21 @@ extension TripPlan {
         guard !checklist.isEmpty else { return 0 }
         return Double(checklist.filter(\.done).count) / Double(checklist.count)
     }
+
+    /// A curated honeymoon-readiness checklist a couple can add in one tap. These
+    /// are the anxiety-reducing essentials people most often forget.
+    static let honeymoonEssentials: [String] = [
+        "Passport valid 6+ months",
+        "Visa / entry requirements checked",
+        "Travel insurance",
+        "Vaccinations checked",
+        "Flights booked",
+        "Accommodation booked",
+        "Airport transfers arranged",
+        "Notify bank of travel",
+        "Local currency & cards",
+        "eSIM or roaming plan",
+        "Power adapters",
+        "Copies of key documents"
+    ]
 }
