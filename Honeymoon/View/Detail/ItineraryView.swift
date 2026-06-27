@@ -198,12 +198,8 @@ struct ItineraryView: View {
                 showPaywall = true
             } label: {
                 Text("Unlock Premium")
-                    .font(.headline)
-                    .frame(maxWidth: .infinity)
-                    .padding(.vertical, 12)
             }
-            .background(Color.pink, in: RoundedRectangle(cornerRadius: 12))
-            .foregroundStyle(.white)
+            .buttonStyle(PrimaryButtonStyle())
         }
         .padding(.vertical, 4)
     }

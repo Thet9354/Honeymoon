@@ -57,12 +57,8 @@ struct MatchCelebrationView: View {
 
                 Button(action: onPlan) {
                     Text("Plan \(match.place) together")
-                        .font(.headline)
-                        .frame(maxWidth: .infinity)
-                        .padding(.vertical, 14)
                 }
-                .background(Color.pink, in: RoundedRectangle(cornerRadius: 14))
-                .foregroundStyle(.white)
+                .buttonStyle(PrimaryButtonStyle())
                 .padding(.horizontal, 40)
                 .padding(.top, 8)
 

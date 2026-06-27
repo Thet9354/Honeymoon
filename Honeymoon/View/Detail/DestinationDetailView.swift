@@ -274,12 +274,8 @@ struct DestinationDetailView: View {
             showBookingConfirmation = true
         } label: {
             Label("Add to our trip", systemImage: "calendar.badge.plus")
-                .font(.headline)
-                .frame(maxWidth: .infinity)
-                .padding(.vertical, 14)
         }
-        .background(Color.pink, in: RoundedRectangle(cornerRadius: 14))
-        .foregroundStyle(.white)
+        .buttonStyle(PrimaryButtonStyle())
     }
 
     // MARK: - Helpers
