@@ -19,6 +19,7 @@ struct SettingsView: View {
     @State private var showDeleteAccountConfirmation = false
     @State private var showCouple = false
     @State private var showPaywall = false
+    @State private var showAuthSheet = false
 
     private var appearance: Binding<AppearanceMode> {
         Binding(
@@ -55,26 +56,56 @@ struct SettingsView: View {
             }
             .tint(Color.pink)
         }
+        .sheet(isPresented: $showAuthSheet) {
+            AuthView()
+                .onChange(of: authViewModel.isGuest) { _, guest in
+                    if !guest { showAuthSheet = false }
+                }
+        }
         .appAppearance()
     }
 
     // MARK: - Sections
 
+    @ViewBuilder
     private var profileSection: some View {
         Section {
-            HStack(spacing: 16) {
-                avatar
-                VStack(alignment: .leading, spacing: 2) {
-                    Text(authViewModel.currentUser?.displayName ?? "Guest")
-                        .font(.headline)
-                    if let email = authViewModel.currentUser?.email {
-                        Text(email)
-                            .font(.subheadline)
-                            .foregroundStyle(.secondary)
+            if authViewModel.isGuest || authViewModel.currentUser == nil {
+                Button {
+                    showAuthSheet = true
+                } label: {
+                    HStack(spacing: 16) {
+                        avatar
+                        VStack(alignment: .leading, spacing: 2) {
+                            Text("Sign in or create an account")
+                                .font(.headline)
+                            Text("Save your matches and plans across devices.")
+                                .font(.subheadline)
+                                .foregroundStyle(.secondary)
+                        }
+                        Spacer()
+                        Image(systemName: "chevron.right")
+                            .font(.footnote)
+                            .foregroundStyle(.tertiary)
+                    }
+                    .padding(.vertical, 4)
+                }
+                .buttonStyle(.plain)
+            } else {
+                HStack(spacing: 16) {
+                    avatar
+                    VStack(alignment: .leading, spacing: 2) {
+                        Text(authViewModel.currentUser?.displayName ?? "You")
+                            .font(.headline)
+                        if let email = authViewModel.currentUser?.email {
+                            Text(email)
+                                .font(.subheadline)
+                                .foregroundStyle(.secondary)
+                        }
                     }
                 }
+                .padding(.vertical, 4)
             }
-            .padding(.vertical, 4)
         }
     }
 
@@ -200,21 +231,25 @@ struct SettingsView: View {
         }
     }
 
+    @ViewBuilder
     private var dangerZoneSection: some View {
-        Section {
-            Button(role: .none) {
-                showSignOutConfirmation = true
-            } label: {
-                Label("Sign Out", systemImage: "rectangle.portrait.and.arrow.right")
-                    .foregroundStyle(Color.pink)
-            }
+        // A guest has no account to sign out of or delete — only show this once
+        // they've created one.
+        if !authViewModel.isGuest {
+            Section {
+                Button(role: .none) {
+                    showSignOutConfirmation = true
+                } label: {
+                    Label("Sign Out", systemImage: "rectangle.portrait.and.arrow.right")
+                        .foregroundStyle(Color.pink)
+                }
 
-            Button(role: .destructive) {
-                showDeleteAccountConfirmation = true
-            } label: {
-                Label("Delete Account", systemImage: "trash")
+                Button(role: .destructive) {
+                    showDeleteAccountConfirmation = true
+                } label: {
+                    Label("Delete Account", systemImage: "trash")
+                }
             }
-        }
         .confirmationDialog(
             "Sign out of Honeymoon?",
             isPresented: $showSignOutConfirmation,
@@ -240,6 +275,7 @@ struct SettingsView: View {
             Button("Cancel", role: .cancel) {}
         } message: {
             Text("This permanently removes your account and all saved favorites. This cannot be undone.")
+        }
         }
     }
 

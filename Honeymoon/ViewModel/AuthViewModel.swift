@@ -17,6 +17,8 @@ struct AuthenticatedUser: Identifiable, Equatable {
     let email: String?
     let displayName: String?
     let photoURL: URL?
+    /// True for an anonymous "guest" session (browse-before-sign-in).
+    var isAnonymous: Bool = false
 }
 
 enum AuthError: LocalizedError {
@@ -43,6 +45,9 @@ final class AuthViewModel: NSObject, ObservableObject {
     @Published var errorMessage: String?
 
     var isAuthenticated: Bool { currentUser != nil }
+    /// A guest is signed in anonymously — they can use the app, but should be
+    /// nudged to create an account to keep their data across devices.
+    var isGuest: Bool { currentUser?.isAnonymous ?? false }
 
     private var authStateHandle: AuthStateDidChangeListenerHandle?
 
@@ -67,6 +72,18 @@ final class AuthViewModel: NSObject, ObservableObject {
                 self?.currentUser = user.map(Self.mapUser)
             }
         }
+
+        // Browse-before-sign-in: ensure there's always a (guest) session so the
+        // user reaches the app immediately instead of an auth wall.
+        Task { [weak self] in await self?.ensureSignedIn() }
+    }
+
+    /// Signs in anonymously when no session exists. If the Anonymous provider is
+    /// disabled in Firebase, this fails quietly — the app still works (browsing),
+    /// just without persistence until the user signs in.
+    func ensureSignedIn() async {
+        guard FirebaseApp.app() != nil, Auth.auth().currentUser == nil else { return }
+        try? await Auth.auth().signInAnonymously()
     }
 
     deinit {
@@ -86,16 +103,40 @@ final class AuthViewModel: NSObject, ObservableObject {
     func signUp(email: String, password: String, displayName: String) async {
         let trimmedName = displayName.trimmingCharacters(in: .whitespaces)
         await run {
-            let result = try await Auth.auth().createUser(withEmail: email, password: password)
+            // Upgrade the guest account in place when possible, so favorites,
+            // matches, and plans created as a guest carry over.
+            let user: User
+            if let current = Auth.auth().currentUser, current.isAnonymous {
+                let credential = EmailAuthProvider.credential(withEmail: email, password: password)
+                user = try await current.link(with: credential).user
+            } else {
+                user = try await Auth.auth().createUser(withEmail: email, password: password).user
+            }
             if !trimmedName.isEmpty {
-                let change = result.user.createProfileChangeRequest()
+                let change = user.createProfileChangeRequest()
                 change.displayName = trimmedName
                 try? await change.commitChanges()
             }
-            try? await result.user.sendEmailVerification()
-            await self.upsertUserDoc(result.user, displayName: trimmedName)
-            self.currentUser = Self.mapUser(result.user)
+            try? await user.sendEmailVerification()
+            await self.upsertUserDoc(user, displayName: trimmedName)
+            self.currentUser = Self.mapUser(user)
         }
+    }
+
+    /// Upgrades an anonymous guest by linking the credential (preserving the uid
+    /// and all their data); falls back to a normal sign-in if that credential is
+    /// already attached to another account.
+    @discardableResult
+    private func linkOrSignIn(with credential: AuthCredential) async throws -> AuthDataResult {
+        if let user = Auth.auth().currentUser, user.isAnonymous {
+            do {
+                return try await user.link(with: credential)
+            } catch {
+                let updated = (error as NSError).userInfo[AuthErrorUserInfoUpdatedCredentialKey] as? AuthCredential
+                return try await Auth.auth().signIn(with: updated ?? credential)
+            }
+        }
+        return try await Auth.auth().signIn(with: credential)
     }
 
     func sendPasswordReset(email: String) async -> Bool {
@@ -134,7 +175,7 @@ final class AuthViewModel: NSObject, ObservableObject {
                 withIDToken: idToken,
                 accessToken: result.user.accessToken.tokenString
             )
-            let authResult = try await Auth.auth().signIn(with: credential)
+            let authResult = try await self.linkOrSignIn(with: credential)
             await self.upsertUserDoc(authResult.user, displayName: authResult.user.displayName)
         } isCancellation: { error in
             (error as NSError).code == GIDSignInError.canceled.rawValue
@@ -171,6 +212,8 @@ final class AuthViewModel: NSObject, ObservableObject {
         try? Auth.auth().signOut()
         GIDSignIn.sharedInstance.signOut()
         errorMessage = nil
+        // Drop back to a guest session rather than an auth wall.
+        Task { await ensureSignedIn() }
     }
 
     func deleteAccount() async {
@@ -181,7 +224,8 @@ final class AuthViewModel: NSObject, ObservableObject {
         do {
             try? await Firestore.firestore().collection("users").document(user.uid).delete()
             try await user.delete()
-            // The auth state listener clears currentUser.
+            // The auth state listener clears currentUser; return to a guest session.
+            await ensureSignedIn()
         } catch {
             errorMessage = Self.message(for: error)
         }
@@ -230,7 +274,8 @@ final class AuthViewModel: NSObject, ObservableObject {
             id: user.uid,
             email: user.email,
             displayName: user.displayName,
-            photoURL: user.photoURL
+            photoURL: user.photoURL,
+            isAnonymous: user.isAnonymous
         )
     }
 
@@ -315,7 +360,7 @@ extension AuthViewModel: ASAuthorizationControllerDelegate, ASAuthorizationContr
                     rawNonce: nonce,
                     fullName: credential.fullName
                 )
-                let result = try await Auth.auth().signIn(with: firebaseCredential)
+                let result = try await linkOrSignIn(with: firebaseCredential)
 
                 let appleName = [credential.fullName?.givenName, credential.fullName?.familyName]
                     .compactMap { $0 }

@@ -7,7 +7,6 @@ import SwiftUI
 
 struct RootView: View {
 
-    @EnvironmentObject private var authViewModel: AuthViewModel
     @AppStorage("hasCompletedOnboarding") private var hasCompletedOnboarding: Bool = false
     @AppStorage("appearance") private var appearanceRaw: String = AppearanceMode.system.rawValue
 
@@ -22,16 +21,15 @@ struct RootView: View {
                     hasCompletedOnboarding = true
                 })
                 .transition(.opacity)
-            } else if !authViewModel.isAuthenticated {
-                AuthView()
-                    .transition(.opacity)
             } else {
+                // Browse-before-sign-in: the deck is always reachable. A guest
+                // (anonymous) session is created automatically; signing in is an
+                // in-app action from Settings.
                 ContentView()
                     .transition(.opacity)
             }
         }
         .animation(.easeInOut, value: hasCompletedOnboarding)
-        .animation(.easeInOut, value: authViewModel.isAuthenticated)
         .preferredColorScheme(appearance.colorScheme)
     }
 }
