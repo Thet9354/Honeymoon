@@ -173,6 +173,56 @@ final class TripPlanStore: ObservableObject {
         }
     }
 
+    // MARK: - Bridge from a generated itinerary
+
+    /// Seeds this trip from an AI itinerary: adds the budget breakdown (deduped by
+    /// title) and writes the day-by-day plan into notes. Idempotent — running it
+    /// twice won't duplicate budget lines or re-append the plan.
+    func applyItinerary(_ itinerary: Itinerary) async {
+        guard let parentRef else { return }
+
+        // Budget: add only lines not already present (by title).
+        let existing = (try? await parentRef.collection("budget").getDocuments())?
+            .documents.compactMap { try? $0.data(as: BudgetItem.self) } ?? []
+        let existingTitles = Set(existing.map(\.title))
+        var order = Date().timeIntervalSince1970
+        for line in itinerary.budget where line.amountUSD > 0 && !existingTitles.contains(line.category) {
+            let item = BudgetItem(title: line.category, amountUSD: Double(line.amountUSD), createdAt: order)
+            order += 1
+            try? parentRef.collection("budget").document(item.id).setData(from: item) { _ in }
+        }
+
+        // Notes: write the plan once (don't clobber existing notes or re-append).
+        let currentNotes = ((try? await parentRef.getDocument())?.data()?["notes"] as? String) ?? ""
+        let planText = Self.notesText(from: itinerary)
+        if currentNotes.isEmpty {
+            writeNotes(planText)
+        } else if !currentNotes.contains(Self.itineraryMarker) {
+            writeNotes(currentNotes + "\n\n" + planText)
+        }
+    }
+
+    private func writeNotes(_ text: String) {
+        plan.notes = text
+        lastWrittenNotes = text
+        parentRef?.setData(["notes": text], merge: true) { _ in }
+    }
+
+    private static let itineraryMarker = "✨ Your AI honeymoon itinerary"
+
+    private static func notesText(from itinerary: Itinerary) -> String {
+        var lines = [itineraryMarker, ""]
+        for day in itinerary.days {
+            lines.append("Day \(day.dayNumber) · \(day.title)")
+            lines.append("• Morning: \(day.morning)")
+            lines.append("• Afternoon: \(day.afternoon)")
+            lines.append("• Evening: \(day.evening)")
+            lines.append("• Dining: \(day.dining)")
+            lines.append("")
+        }
+        return lines.joined(separator: "\n").trimmingCharacters(in: .whitespacesAndNewlines)
+    }
+
     // MARK: - Legacy migration (one-time, tiny pre-launch user base)
 
     private func migrateIfNeeded(into ref: DocumentReference, uid: String, coupleId: String?) async {

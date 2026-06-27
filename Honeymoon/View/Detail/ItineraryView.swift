@@ -19,6 +19,7 @@ struct ItineraryView: View {
     @EnvironmentObject private var itineraryService: ItineraryService
     @EnvironmentObject private var preferenceStore: PreferenceStore
     @EnvironmentObject private var purchaseStore: PurchaseStore
+    @EnvironmentObject private var userDataStore: UserDataStore
     @Environment(\.dismiss) private var dismiss
     // Held so the budget re-renders when the user switches currency.
     @AppStorage("currency") private var currencyRaw = Currency.sgd.rawValue
@@ -28,6 +29,8 @@ struct ItineraryView: View {
     @State private var itinerary: Itinerary?
     @State private var isLoading = true
     @State private var showPaywall = false
+    @State private var isAddingToTrip = false
+    @State private var addedToTrip = false
 
     var body: some View {
         NavigationStack {
@@ -82,6 +85,23 @@ struct ItineraryView: View {
         isLoading = false
     }
 
+    /// Bridges the itinerary into the (shared) trip plan: books the destination so
+    /// it appears in Saved, then seeds the trip's budget and notes from the plan.
+    private func addToTrip(_ itinerary: Itinerary) async {
+        isAddingToTrip = true
+        userDataStore.addBooking(destination)
+        let store = TripPlanStore(seed: TripPlan(
+            destinationId: destination.id,
+            place: destination.place,
+            country: destination.country,
+            image: destination.image
+        ))
+        await store.load()
+        await store.applyItinerary(itinerary)
+        isAddingToTrip = false
+        addedToTrip = true
+    }
+
     private var loadingState: some View {
         VStack(spacing: 16) {
             ProgressView()
@@ -107,6 +127,24 @@ struct ItineraryView: View {
                         .foregroundStyle(.secondary)
                 }
                 .padding(.vertical, 4)
+            }
+
+            Section {
+                Button {
+                    Task { await addToTrip(itinerary) }
+                } label: {
+                    HStack {
+                        Label(addedToTrip ? "Added to your trip" : "Add to our trip plan",
+                              systemImage: addedToTrip ? "checkmark.circle.fill" : "calendar.badge.plus")
+                            .font(.headline)
+                        Spacer()
+                        if isAddingToTrip { ProgressView() }
+                    }
+                }
+                .disabled(isAddingToTrip || addedToTrip)
+                .foregroundStyle(addedToTrip ? Color.secondary : Color.pink)
+            } footer: {
+                Text("Saves the budget and day-by-day plan to your shared trip — find it in Saved to keep planning together.")
             }
 
             ForEach(itinerary.days) { day in
@@ -193,4 +231,5 @@ struct ItineraryView: View {
         .environmentObject(ItineraryService())
         .environmentObject(PreferenceStore())
         .environmentObject(PurchaseStore())
+        .environmentObject(UserDataStore())
 }
