@@ -12,6 +12,8 @@ struct MatchCelebrationView: View {
 
     let match: CoupleMatch
     var onDismiss: () -> Void
+    /// Primary action: start planning this matched destination together.
+    var onPlan: () -> Void = {}
 
     @State private var appeared = false
 
@@ -53,8 +55,8 @@ struct MatchCelebrationView: View {
                     .font(.headline)
                     .foregroundStyle(.white)
 
-                Button(action: onDismiss) {
-                    Text("Keep swiping")
+                Button(action: onPlan) {
+                    Text("Plan \(match.place) together")
                         .font(.headline)
                         .frame(maxWidth: .infinity)
                         .padding(.vertical, 14)
@@ -63,6 +65,13 @@ struct MatchCelebrationView: View {
                 .foregroundStyle(.white)
                 .padding(.horizontal, 40)
                 .padding(.top, 8)
+
+                Button(action: onDismiss) {
+                    Text("Keep swiping")
+                        .font(.subheadline.weight(.semibold))
+                        .foregroundStyle(.white.opacity(0.85))
+                }
+                .padding(.top, 2)
             }
             .padding(28)
             .scaleEffect(appeared ? 1 : 0.85)

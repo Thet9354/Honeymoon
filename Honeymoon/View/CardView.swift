@@ -13,6 +13,8 @@ struct CardView: View, Identifiable {
 
     let id = UUID()
     var destination: Destination
+    /// Optional one-line "why this was picked for you" rationale (P2 preferences).
+    var reason: String? = nil
 
     // MARK: - BODY
 
@@ -49,6 +51,17 @@ struct CardView: View, Identifiable {
                             Capsule()
                                 .fill(Color.white)
                         )
+
+                    if let reason {
+                        Text(reason)
+                            .foregroundColor(.white)
+                            .font(.caption2.weight(.semibold))
+                            .multilineTextAlignment(.center)
+                            .padding(.horizontal, 12)
+                            .padding(.vertical, 6)
+                            .background(.ultraThinMaterial, in: Capsule())
+                            .padding(.top, 2)
+                    }
                 }
                     .frame(minWidth: 280)
                     .padding(.bottom, 50),

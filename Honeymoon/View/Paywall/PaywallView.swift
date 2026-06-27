@@ -124,8 +124,9 @@ struct PaywallView: View {
                         product: lifetime,
                         headline: "Lifetime",
                         priceLine: "\(lifetime.displayPrice) once",
-                        caption: "Pay once, yours forever",
-                        highlighted: true
+                        caption: "Pay once, yours forever — most couples' pick",
+                        highlighted: true,
+                        badge: "BEST VALUE"
                     )
                 }
                 if let annual = purchaseStore.annualProduct {
@@ -141,7 +142,7 @@ struct PaywallView: View {
         }
     }
 
-    private func planButton(product: Product, headline: String, priceLine: String, caption: String?, highlighted: Bool) -> some View {
+    private func planButton(product: Product, headline: String, priceLine: String, caption: String?, highlighted: Bool, badge: String? = nil) -> some View {
         Button {
             buy(product)
         } label: {
@@ -176,6 +177,16 @@ struct PaywallView: View {
             RoundedRectangle(cornerRadius: 16)
                 .stroke(highlighted ? Color.clear : Color(.separator), lineWidth: 0.5)
         )
+        .overlay(alignment: .topTrailing) {
+            if let badge {
+                Text(badge)
+                    .font(.caption2.weight(.bold))
+                    .padding(.horizontal, 10).padding(.vertical, 4)
+                    .background(Color.white, in: Capsule())
+                    .foregroundStyle(Color.pink)
+                    .offset(x: -12, y: -10)
+            }
+        }
         .disabled(isPurchasing)
     }
 

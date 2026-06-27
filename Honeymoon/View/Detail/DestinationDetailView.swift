@@ -215,9 +215,16 @@ struct DestinationDetailView: View {
     }
 
     private var bookingLinks: some View {
-        HStack(spacing: 10) {
-            outboundButton(title: "Find hotels", icon: "bed.double", url: AffiliateLinks.hotels(for: destination))
-            outboundButton(title: "Experiences", icon: "ticket", url: AffiliateLinks.experiences(for: destination))
+        VStack(alignment: .leading, spacing: 8) {
+            Text("Book your honeymoon")
+                .font(.headline)
+            HStack(spacing: 10) {
+                outboundButton(title: "Find hotels", icon: "bed.double", url: AffiliateLinks.hotels(for: destination))
+                outboundButton(title: "Experiences", icon: "ticket", url: AffiliateLinks.experiences(for: destination))
+            }
+            Text("Search our trusted travel partners — rates for two.")
+                .font(.caption)
+                .foregroundStyle(.secondary)
         }
     }
 

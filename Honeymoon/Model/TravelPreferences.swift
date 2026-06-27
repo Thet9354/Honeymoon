@@ -116,6 +116,26 @@ extension TravelPreferences {
         return score
     }
 
+    /// A short, human-readable reason this destination suits the couple, for the
+    /// top card ("Picked for you · beaches & islands · Asia"). Returns nil when no
+    /// preferences are set or nothing matches, so the card stays clean.
+    func rationale(for destination: Destination) -> String? {
+        guard !isEmpty else { return nil }
+        var reasons: [String] = []
+        let destinationTags = Set(destination.tags)
+        if let matched = interests.first(where: { !$0.tags.isDisjoint(with: destinationTags) }) {
+            reasons.append(matched.label.lowercased())
+        }
+        if !destination.region.isEmpty, regions.contains(destination.region) {
+            reasons.append(destination.region)
+        }
+        if let budgetBand, budgetBand.contains(destination.estBudgetForTwoUSD) {
+            reasons.append(budgetBand.label.lowercased())
+        }
+        guard !reasons.isEmpty else { return nil }
+        return "Picked for you · " + reasons.prefix(2).joined(separator: " · ")
+    }
+
     /// Returns destinations ranked by relevance. Ties and the no-preference
     /// case preserve the original order (stable sort by index).
     func ranked(_ destinations: [Destination]) -> [Destination] {
