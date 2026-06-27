@@ -122,3 +122,43 @@ private extension String {
         return first.uppercased() + String(dropFirst())
     }
 }
+
+// MARK: - Generated payload (Cloud Function / Firestore cache)
+
+/// The Codable payload returned by the `generateItinerary` Cloud Function and
+/// cached in Firestore. It mirrors the function's JSON schema exactly. Days carry
+/// no stable id in transit — it's assigned from order when converting to the
+/// runtime `Itinerary`.
+struct GeneratedItinerary: Codable {
+    struct Day: Codable {
+        let title: String
+        let morning: String
+        let afternoon: String
+        let evening: String
+        let dining: String
+    }
+    struct BudgetLineDTO: Codable {
+        let category: String
+        let amountUSD: Int
+    }
+    var days: [Day]
+    var budget: [BudgetLineDTO]
+}
+
+extension Itinerary {
+    /// Builds a runtime `Itinerary` for a destination from a generated payload.
+    init(destination: Destination, generated: GeneratedItinerary) {
+        self.destination = destination
+        self.days = generated.days.enumerated().map { index, day in
+            ItineraryDay(
+                id: index + 1,
+                title: day.title,
+                morning: day.morning,
+                afternoon: day.afternoon,
+                evening: day.evening,
+                dining: day.dining
+            )
+        }
+        self.budget = generated.budget.map { BudgetLine(category: $0.category, amountUSD: $0.amountUSD) }
+    }
+}

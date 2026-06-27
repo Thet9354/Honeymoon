@@ -32,6 +32,7 @@ struct HoneymoonApp: App {
     @StateObject private var preferenceStore = PreferenceStore()
     @StateObject private var coupleStore = CoupleStore()
     @StateObject private var purchaseStore = PurchaseStore()
+    @StateObject private var itineraryService = ItineraryService()
 
     var body: some Scene {
         WindowGroup {
@@ -42,6 +43,7 @@ struct HoneymoonApp: App {
                 .environmentObject(preferenceStore)
                 .environmentObject(coupleStore)
                 .environmentObject(purchaseStore)
+                .environmentObject(itineraryService)
                 .onOpenURL { url in
                     GIDSignIn.sharedInstance.handle(url)
                 }

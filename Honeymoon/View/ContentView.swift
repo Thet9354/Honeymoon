@@ -14,6 +14,7 @@ struct ContentView: View {
     @EnvironmentObject private var userDataStore: UserDataStore
     @EnvironmentObject private var preferenceStore: PreferenceStore
     @EnvironmentObject private var coupleStore: CoupleStore
+    @EnvironmentObject private var purchaseStore: PurchaseStore
 
     // MARK: - PROPERTIES
     @State var showAlert: Bool = false
@@ -25,6 +26,9 @@ struct ContentView: View {
     @State var showSaved: Bool = false
     @State var showCouple: Bool = false
     @State private var detailDestination: Destination?
+    /// Drives the "Plan together" routing from the match celebration.
+    @State private var matchPlanDestination: Destination?
+    @State private var showMatchPaywall = false
     @GestureState private var dragState = DragState.inactive
     private var dragAreaThreshold: CGFloat = 65.0
     @State private var lastCardIndex: Int = 1
@@ -55,7 +59,10 @@ struct ContentView: View {
 
         let destination = destinations[lastCardIndex % destinations.count]
 
-        let newCardView = CardView(destination: destination)
+        let newCardView = CardView(
+            destination: destination,
+            reason: preferenceStore.preferences.rationale(for: destination)
+        )
 
         cardViews.append(newCardView)
     }
@@ -67,8 +74,10 @@ struct ContentView: View {
         let destinations = orderedDestinations
         guard destinations.count >= 2 else { return }
         cardViews = [
-            CardView(destination: destinations[0]),
-            CardView(destination: destinations[1])
+            CardView(destination: destinations[0],
+                     reason: preferenceStore.preferences.rationale(for: destinations[0])),
+            CardView(destination: destinations[1],
+                     reason: preferenceStore.preferences.rationale(for: destinations[1]))
         ]
         lastCardIndex = 1
     }
@@ -294,9 +303,32 @@ struct ContentView: View {
                 .environmentObject(userDataStore)
         }
         .fullScreenCover(item: $coupleStore.pendingMatch) { match in
-            MatchCelebrationView(match: match) {
-                coupleStore.pendingMatch = nil
-            }
+            MatchCelebrationView(
+                match: match,
+                onDismiss: { coupleStore.pendingMatch = nil },
+                onPlan: {
+                    // Sell at peak intent: route premium couples straight to the
+                    // shared plan, free couples to the paywall.
+                    let destination = destinationStore.destinations.first { $0.id == match.id }
+                    coupleStore.pendingMatch = nil
+                    Task {
+                        // Let the cover finish dismissing before presenting the next sheet.
+                        try? await Task.sleep(nanoseconds: 350_000_000)
+                        guard let destination else { return }
+                        if purchaseStore.isPremium {
+                            matchPlanDestination = destination
+                        } else {
+                            showMatchPaywall = true
+                        }
+                    }
+                }
+            )
+        }
+        .sheet(item: $matchPlanDestination) { destination in
+            ItineraryView(destination: destination)
+        }
+        .sheet(isPresented: $showMatchPaywall) {
+            PaywallView()
         }
     }
 }
@@ -307,4 +339,6 @@ struct ContentView: View {
         .environmentObject(UserDataStore())
         .environmentObject(PreferenceStore())
         .environmentObject(CoupleStore())
+        .environmentObject(PurchaseStore())
+        .environmentObject(ItineraryService())
 }

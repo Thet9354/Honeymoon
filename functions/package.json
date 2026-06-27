@@ -1,0 +1,14 @@
+{
+  "name": "honeymoon-functions",
+  "description": "Cloud Functions for Honeymoon — secure Claude itinerary generation",
+  "main": "index.js",
+  "engines": {
+    "node": "20"
+  },
+  "dependencies": {
+    "@anthropic-ai/sdk": "^0.106.0",
+    "firebase-admin": "^12.7.0",
+    "firebase-functions": "^6.4.0"
+  },
+  "private": true
+}

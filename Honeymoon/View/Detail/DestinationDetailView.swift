@@ -185,7 +185,7 @@ struct DestinationDetailView: View {
         } label: {
             VStack(alignment: .leading, spacing: 8) {
                 HStack {
-                    Label("7-day itinerary", systemImage: "map")
+                    Label("AI honeymoon itinerary", systemImage: "sparkles")
                         .font(.subheadline.weight(.semibold))
                     Spacer()
                     if purchaseStore.isPremium {
@@ -201,8 +201,8 @@ struct DestinationDetailView: View {
                     }
                 }
                 Text(purchaseStore.isPremium
-                     ? "View your day-by-day plan, dining picks and a full budget breakdown."
-                     : "Day-by-day plan, dining picks and a full budget breakdown — unlock with Premium.")
+                     ? "A personalized day-by-day plan with dining picks and a full budget breakdown."
+                     : "A personalized day-by-day plan, dining picks and a full budget breakdown — unlock with Premium.")
                     .font(.footnote)
                     .foregroundStyle(.secondary)
                     .multilineTextAlignment(.leading)
@@ -215,9 +215,16 @@ struct DestinationDetailView: View {
     }
 
     private var bookingLinks: some View {
-        HStack(spacing: 10) {
-            outboundButton(title: "Find hotels", icon: "bed.double", url: AffiliateLinks.hotels(for: destination))
-            outboundButton(title: "Experiences", icon: "ticket", url: AffiliateLinks.experiences(for: destination))
+        VStack(alignment: .leading, spacing: 8) {
+            Text("Book your honeymoon")
+                .font(.headline)
+            HStack(spacing: 10) {
+                outboundButton(title: "Find hotels", icon: "bed.double", url: AffiliateLinks.hotels(for: destination))
+                outboundButton(title: "Experiences", icon: "ticket", url: AffiliateLinks.experiences(for: destination))
+            }
+            Text("Search our trusted travel partners — rates for two.")
+                .font(.caption)
+                .foregroundStyle(.secondary)
         }
     }
 

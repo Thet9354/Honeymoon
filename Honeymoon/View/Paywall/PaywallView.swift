@@ -73,7 +73,7 @@ struct PaywallView: View {
             Text("Plan the perfect honeymoon")
                 .font(.system(.title2, design: .rounded).weight(.bold))
                 .multilineTextAlignment(.center)
-            Text("Unlock full day-by-day itineraries and smarter recommendations for every destination.")
+            Text("Unlock AI-personalized day-by-day itineraries built around your tastes, budget, and travel dates.")
                 .font(.subheadline)
                 .foregroundStyle(.secondary)
                 .multilineTextAlignment(.center)
@@ -85,7 +85,7 @@ struct PaywallView: View {
 
     private var benefits: some View {
         VStack(alignment: .leading, spacing: 14) {
-            benefitRow("map", "Full 7-day itineraries", "Day-by-day plans with dining picks and a budget breakdown.")
+            benefitRow("sparkles", "AI-personalized itineraries", "Day-by-day plans written for you two — with dining picks and a full budget breakdown.")
             benefitRow("wand.and.stars", "Smarter recommendations", "Your deck, tuned more closely to what you both love.")
             benefitRow("heart.text.square", "Plan without limits", "Rich trip plans for every destination on your shortlist.")
         }
@@ -124,8 +124,9 @@ struct PaywallView: View {
                         product: lifetime,
                         headline: "Lifetime",
                         priceLine: "\(lifetime.displayPrice) once",
-                        caption: "Pay once, yours forever",
-                        highlighted: true
+                        caption: "Pay once, yours forever — most couples' pick",
+                        highlighted: true,
+                        badge: "BEST VALUE"
                     )
                 }
                 if let annual = purchaseStore.annualProduct {
@@ -141,7 +142,7 @@ struct PaywallView: View {
         }
     }
 
-    private func planButton(product: Product, headline: String, priceLine: String, caption: String?, highlighted: Bool) -> some View {
+    private func planButton(product: Product, headline: String, priceLine: String, caption: String?, highlighted: Bool, badge: String? = nil) -> some View {
         Button {
             buy(product)
         } label: {
@@ -176,6 +177,16 @@ struct PaywallView: View {
             RoundedRectangle(cornerRadius: 16)
                 .stroke(highlighted ? Color.clear : Color(.separator), lineWidth: 0.5)
         )
+        .overlay(alignment: .topTrailing) {
+            if let badge {
+                Text(badge)
+                    .font(.caption2.weight(.bold))
+                    .padding(.horizontal, 10).padding(.vertical, 4)
+                    .background(Color.white, in: Capsule())
+                    .foregroundStyle(Color.pink)
+                    .offset(x: -12, y: -10)
+            }
+        }
         .disabled(isPurchasing)
     }
 

@@ -66,6 +66,11 @@ struct TripPlannerView: View {
                 VStack(alignment: .leading, spacing: 4) {
                     Text(plan.place).font(.title3.weight(.semibold))
                     Text(plan.country).font(.subheadline).foregroundStyle(.secondary)
+                    if store.isShared {
+                        Label("Shared with your partner", systemImage: "person.2.fill")
+                            .font(.caption)
+                            .foregroundStyle(Color.pink)
+                    }
                 }
             }
             .padding(.vertical, 4)

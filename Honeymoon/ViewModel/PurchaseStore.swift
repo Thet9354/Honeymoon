@@ -13,6 +13,9 @@
 
 import Foundation
 import StoreKit
+import FirebaseCore
+import FirebaseAuth
+import FirebaseFirestore
 
 @MainActor
 final class PurchaseStore: ObservableObject {
@@ -30,6 +33,7 @@ final class PurchaseStore: ObservableObject {
     @Published var purchaseError: String?
 
     private var updatesTask: Task<Void, Never>?
+    private var authHandle: AuthStateDidChangeListenerHandle?
 
     /// Hero offer: one-time unlock, a natural fit for a once-in-a-lifetime trip.
     var lifetimeProduct: Product? { products.first { $0.id == PremiumProduct.lifetime.rawValue } }
@@ -38,13 +42,25 @@ final class PurchaseStore: ObservableObject {
 
     init() {
         updatesTask = listenForTransactions()
+        // Re-mirror the entitlement once a user signs in, so a returning premium
+        // user reliably passes the server-side gate even if auth restores after
+        // the initial entitlement check.
+        if FirebaseApp.app() != nil {
+            authHandle = Auth.auth().addStateDidChangeListener { [weak self] _, user in
+                guard let self, user != nil else { return }
+                Task { @MainActor in self.mirrorEntitlement(self.isPremium) }
+            }
+        }
         Task {
             await loadProducts()
             await refreshEntitlements()
         }
     }
 
-    deinit { updatesTask?.cancel() }
+    deinit {
+        updatesTask?.cancel()
+        if let authHandle { Auth.auth().removeStateDidChangeListener(authHandle) }
+    }
 
     // MARK: - Loading
 
@@ -116,6 +132,15 @@ final class PurchaseStore: ObservableObject {
             }
         }
         isPremium = active
+        mirrorEntitlement(active)
+    }
+
+    /// Mirrors the entitlement into Firestore (`users/{uid}.isPremium`) so the
+    /// itinerary Cloud Function can gate generation server-side.
+    private func mirrorEntitlement(_ premium: Bool) {
+        guard FirebaseApp.app() != nil, let uid = Auth.auth().currentUser?.uid else { return }
+        Firestore.firestore().collection("users").document(uid)
+            .setData(["isPremium": premium], merge: true)
     }
 
     private func listenForTransactions() -> Task<Void, Never> {
