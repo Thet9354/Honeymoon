@@ -21,6 +21,7 @@
 		AABB33330000000000000002 /* CoupleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AABB33330000000000000001 /* CoupleView.swift */; };
 		AABB44440000000000000002 /* MatchCelebrationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AABB44440000000000000001 /* MatchCelebrationView.swift */; };
 		AACC11110000000000000002 /* PurchaseStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = AACC11110000000000000001 /* PurchaseStore.swift */; };
+		AAEE11110000000000000002 /* ItineraryService.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAEE11110000000000000001 /* ItineraryService.swift */; };
 		AACC22220000000000000002 /* PaywallView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AACC22220000000000000001 /* PaywallView.swift */; };
 		AACC33330000000000000002 /* ItineraryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AACC33330000000000000001 /* ItineraryView.swift */; };
 		AACC44440000000000000002 /* Itinerary.swift in Sources */ = {isa = PBXBuildFile; fileRef = AACC44440000000000000001 /* Itinerary.swift */; };
@@ -64,6 +65,7 @@
 		D3358A052FED900000541A90 /* FirebaseAuth in Frameworks */ = {isa = PBXBuildFile; productRef = D3358A022FED900000541A90 /* FirebaseAuth */; };
 		D3358A062FED900000541A90 /* FirebaseFirestore in Frameworks */ = {isa = PBXBuildFile; productRef = D3358A032FED900000541A90 /* FirebaseFirestore */; };
 		D3358A072FED900000541A90 /* GoogleSignIn in Frameworks */ = {isa = PBXBuildFile; productRef = D3358A042FED900000541A90 /* GoogleSignIn */; };
+		AAEE99990000000000000002 /* FirebaseFunctions in Frameworks */ = {isa = PBXBuildFile; productRef = AAEE99990000000000000001 /* FirebaseFunctions */; };
 		D3358A0A2FED900000541A90 /* UserDataStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3358A0B2FED900000541A90 /* UserDataStore.swift */; };
 		D3358A0D2FED900000541A90 /* SavedView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3358A0E2FED900000541A90 /* SavedView.swift */; };
 /* End PBXBuildFile section */
@@ -83,6 +85,7 @@
 		AABB33330000000000000001 /* CoupleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoupleView.swift; sourceTree = "<group>"; };
 		AABB44440000000000000001 /* MatchCelebrationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MatchCelebrationView.swift; sourceTree = "<group>"; };
 		AACC11110000000000000001 /* PurchaseStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PurchaseStore.swift; sourceTree = "<group>"; };
+		AAEE11110000000000000001 /* ItineraryService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ItineraryService.swift; sourceTree = "<group>"; };
 		AACC22220000000000000001 /* PaywallView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaywallView.swift; sourceTree = "<group>"; };
 		AACC33330000000000000001 /* ItineraryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ItineraryView.swift; sourceTree = "<group>"; };
 		AACC44440000000000000001 /* Itinerary.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Itinerary.swift; sourceTree = "<group>"; };
@@ -139,6 +142,7 @@
 				D3358A052FED900000541A90 /* FirebaseAuth in Frameworks */,
 				D3358A062FED900000541A90 /* FirebaseFirestore in Frameworks */,
 				D3358A072FED900000541A90 /* GoogleSignIn in Frameworks */,
+				AAEE99990000000000000002 /* FirebaseFunctions in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -205,6 +209,7 @@
 				AAFF88880000000000000001 /* TripPlanStore.swift */,
 				AABB22220000000000000001 /* CoupleStore.swift */,
 				AACC11110000000000000001 /* PurchaseStore.swift */,
+				AAEE11110000000000000001 /* ItineraryService.swift */,
 			);
 			path = ViewModel;
 			sourceTree = "<group>";
@@ -399,6 +404,7 @@
 				D3358A022FED900000541A90 /* FirebaseAuth */,
 				D3358A032FED900000541A90 /* FirebaseFirestore */,
 				D3358A042FED900000541A90 /* GoogleSignIn */,
+				AAEE99990000000000000001 /* FirebaseFunctions */,
 			);
 			productName = Honeymoon;
 			productReference = D3F845F72AF09593005090ED /* Honeymoon.app */;
@@ -476,6 +482,11 @@
 			package = D3358A012FED900000541A90 /* XCRemoteSwiftPackageReference "GoogleSignIn-iOS" */;
 			productName = GoogleSignIn;
 		};
+		AAEE99990000000000000001 /* FirebaseFunctions */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = D3358A002FED900000541A90 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseFunctions;
+		};
 /* End XCSwiftPackageProductDependency section */
 
 /* Begin PBXResourcesBuildPhase section */
@@ -530,6 +541,7 @@
 				AABB33330000000000000002 /* CoupleView.swift in Sources */,
 				AABB44440000000000000002 /* MatchCelebrationView.swift in Sources */,
 				AACC11110000000000000002 /* PurchaseStore.swift in Sources */,
+				AAEE11110000000000000002 /* ItineraryService.swift in Sources */,
 				AACC22220000000000000002 /* PaywallView.swift in Sources */,
 				AACC33330000000000000002 /* ItineraryView.swift in Sources */,
 				AACC44440000000000000002 /* Itinerary.swift in Sources */,

@@ -73,7 +73,7 @@ struct PaywallView: View {
             Text("Plan the perfect honeymoon")
                 .font(.system(.title2, design: .rounded).weight(.bold))
                 .multilineTextAlignment(.center)
-            Text("Unlock full day-by-day itineraries and smarter recommendations for every destination.")
+            Text("Unlock AI-personalized day-by-day itineraries built around your tastes, budget, and travel dates.")
                 .font(.subheadline)
                 .foregroundStyle(.secondary)
                 .multilineTextAlignment(.center)
@@ -85,7 +85,7 @@ struct PaywallView: View {
 
     private var benefits: some View {
         VStack(alignment: .leading, spacing: 14) {
-            benefitRow("map", "Full 7-day itineraries", "Day-by-day plans with dining picks and a budget breakdown.")
+            benefitRow("sparkles", "AI-personalized itineraries", "Day-by-day plans written for you two — with dining picks and a full budget breakdown.")
             benefitRow("wand.and.stars", "Smarter recommendations", "Your deck, tuned more closely to what you both love.")
             benefitRow("heart.text.square", "Plan without limits", "Rich trip plans for every destination on your shortlist.")
         }
