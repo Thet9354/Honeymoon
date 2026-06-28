@@ -58,10 +58,12 @@ onboarding it lands on the deck via an anonymous "guest" session.
 ## Backlog (recommended next, in priority order)
 1. **Remote push notifications** — APNs + FCM via Cloud Function (needs Blaze + paid program). Local countdown nudges already exist (N1).
 2. ✅ **DONE** (branch `catalog-galleries`) — **Bigger destination catalog + photo gallery**: catalog grown **21 → 41** destinations, each with a bundled primary photo + real coordinates; paged photo gallery with page-dots and tap-to-zoom in `DestinationDetailView`; extra gallery photos stream from Wikimedia Commons via a disk+memory-cached, retrying loader (`RemoteImageLoader`). Also fixed two reliability issues found in testing: maps now use **stored coordinates** (no geocoder throttling) and gallery images self-heal transient failures. New `Destination` fields: `gallery: [String]`, `latitude`/`longitude`. New bundled assets live under `Assets.xcassets/Photos/` (no pbxproj edits needed — `.xcassets` is a folder resource).
-3. **Live weather** on the detail screen — needs a weather API key.
-4. **Empty/loading-state polish** across deck/saved/planner.
-5. **Fuller design-token rollout** — `Theme`/`PrimaryButtonStyle` exist (`Honeymoon/Modifier/Theme.swift`); adopt `Color.brand` + the button style app-wide.
-6. **Travel-insurance affiliate** link (ties into the N2 readiness checklist).
+3. **Live weather** on the detail screen — needs a weather API key. (Only remaining codeable item, gated on a key.)
+4. ✅ **DONE** (branch `catalog-galleries`) — **Empty/loading-state polish**: the swipe deck now shows a branded loading card while destinations load and a retryable empty state on failure (`ContentView`). Saved/planner already had adequate states.
+5. ✅ **DONE** (branch `catalog-galleries`) — **Design-token rollout**: every hardcoded `.pink` replaced with the `Color.brand` token (now a `ShapeStyle where Self == Color` extension, so `.brand` is a drop-in for `.pink` everywhere); `PrimaryButtonStyle` adopted for the remaining hand-rolled brand CTAs. Rebrand the whole app from `Theme.swift`.
+6. ✅ **DONE** (branch `catalog-galleries`) — **Travel-insurance affiliate**: the readiness checklist's "Travel insurance" item shows a "Get a quote" link (2 travellers, deep-linked to trip dates). Set `insurancePartnerID` in `AffiliateLinks.swift` after partner sign-up.
+
+Branch `catalog-galleries` (off `main`) holds items #2, #4, #5, #6 plus the two reliability fixes — not yet merged/pushed.
 
 ## Key files
 - Cloud Function: `functions/index.js`
