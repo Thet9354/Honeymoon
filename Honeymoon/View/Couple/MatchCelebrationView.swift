@@ -24,7 +24,7 @@ struct MatchCelebrationView: View {
             VStack(spacing: 20) {
                 Image(systemName: "heart.fill")
                     .font(.system(size: 64))
-                    .foregroundStyle(Color.pink)
+                    .foregroundStyle(Color.brand)
                     .scaleEffect(appeared ? 1 : 0.4)
                     .opacity(appeared ? 1 : 0)
 

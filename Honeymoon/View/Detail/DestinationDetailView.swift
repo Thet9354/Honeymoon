@@ -134,7 +134,7 @@ struct DestinationDetailView: View {
     private var actionButtons: some View {
         HStack(spacing: 10) {
             circleButton(systemName: isFavorite ? "heart.fill" : "heart",
-                         tint: isFavorite ? .pink : .primary) {
+                         tint: isFavorite ? .brand : .primary) {
                 if isFavorite {
                     userDataStore.removeFavorite(destination.id)
                 } else {
@@ -284,8 +284,8 @@ struct DestinationDetailView: View {
             Label("Free preview", systemImage: "sparkles")
                 .font(.caption.weight(.semibold))
                 .padding(.horizontal, 9).padding(.vertical, 4)
-                .background(Color.pink.opacity(0.15), in: Capsule())
-                .foregroundStyle(Color.pink)
+                .background(Color.brand.opacity(0.15), in: Capsule())
+                .foregroundStyle(Color.brand)
         } else {
             Label("Premium", systemImage: "lock.fill")
                 .font(.caption.weight(.semibold))
@@ -377,7 +377,7 @@ private struct DestinationMapView: View {
         Group {
             if let coordinate {
                 Map(position: $position, interactionModes: []) {
-                    Marker(place, coordinate: coordinate).tint(.pink)
+                    Marker(place, coordinate: coordinate).tint(.brand)
                 }
             } else {
                 ZStack {
@@ -429,8 +429,8 @@ private struct FlowChips: View {
                 Text(item)
                     .font(.footnote)
                     .padding(.horizontal, 12).padding(.vertical, 7)
-                    .background(Color.pink.opacity(0.12), in: Capsule())
-                    .foregroundStyle(Color.pink)
+                    .background(Color.brand.opacity(0.12), in: Capsule())
+                    .foregroundStyle(Color.brand)
             }
         }
     }

@@ -59,7 +59,7 @@ struct ItineraryView: View {
                     }
                 }
             }
-            .tint(Color.pink)
+            .tint(Color.brand)
             .sheet(isPresented: $showPaywall) { PaywallView() }
         }
         .task {
@@ -106,7 +106,7 @@ struct ItineraryView: View {
         VStack(spacing: 16) {
             ProgressView()
                 .controlSize(.large)
-                .tint(Color.pink)
+                .tint(Color.brand)
             Text("Crafting your personalized plan…")
                 .font(.subheadline)
                 .foregroundStyle(.secondary)
@@ -142,7 +142,7 @@ struct ItineraryView: View {
                     }
                 }
                 .disabled(isAddingToTrip || addedToTrip)
-                .foregroundStyle(addedToTrip ? Color.secondary : Color.pink)
+                .foregroundStyle(addedToTrip ? Color.secondary : Color.brand)
             } footer: {
                 Text("Saves the budget and day-by-day plan to your shared trip — find it in Saved to keep planning together.")
             }
@@ -190,7 +190,7 @@ struct ItineraryView: View {
         VStack(alignment: .leading, spacing: 8) {
             Label("Your free preview", systemImage: "sparkles")
                 .font(.subheadline.weight(.semibold))
-                .foregroundStyle(Color.pink)
+                .foregroundStyle(Color.brand)
             Text("Unlock Premium to generate a personalized plan for every destination on your shortlist.")
                 .font(.footnote)
                 .foregroundStyle(.secondary)
@@ -208,7 +208,7 @@ struct ItineraryView: View {
         HStack(alignment: .top, spacing: 12) {
             Image(systemName: icon)
                 .font(.system(size: 16))
-                .foregroundStyle(Color.pink)
+                .foregroundStyle(Color.brand)
                 .frame(width: 24, alignment: .center)
             VStack(alignment: .leading, spacing: 2) {
                 Text(label)

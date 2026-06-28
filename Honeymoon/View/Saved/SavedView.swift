@@ -26,7 +26,7 @@ struct SavedView: View {
                     Button("Done") { dismiss() }
                 }
             }
-            .tint(Color.pink)
+            .tint(Color.brand)
         }
         .appAppearance()
     }
@@ -88,7 +88,7 @@ struct SavedView: View {
 
             if booked {
                 Image(systemName: "airplane.circle.fill")
-                    .foregroundStyle(Color.pink)
+                    .foregroundStyle(Color.brand)
             }
         }
         .padding(.vertical, 4)
@@ -100,7 +100,7 @@ struct SavedView: View {
         VStack(spacing: 12) {
             Image(systemName: "heart.text.square")
                 .font(.system(size: 56, weight: .light))
-                .foregroundStyle(Color.pink.opacity(0.6))
+                .foregroundStyle(Color.brand.opacity(0.6))
             Text("Nothing saved yet")
                 .font(.system(.title3, design: .rounded))
                 .fontWeight(.semibold)

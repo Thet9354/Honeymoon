@@ -43,7 +43,7 @@ struct PaywallView: View {
                     .tint(.secondary)
                 }
             }
-            .tint(Color.pink)
+            .tint(Color.brand)
             .alert(
                 "Something went wrong",
                 isPresented: Binding(
@@ -69,7 +69,7 @@ struct PaywallView: View {
             Image(systemName: "sparkles")
                 .font(.system(size: 56, weight: .light))
                 .symbolRenderingMode(.hierarchical)
-                .foregroundStyle(Color.pink)
+                .foregroundStyle(Color.brand)
             Text("Plan the perfect honeymoon")
                 .font(.system(.title2, design: .rounded).weight(.bold))
                 .multilineTextAlignment(.center)
@@ -96,7 +96,7 @@ struct PaywallView: View {
         HStack(alignment: .top, spacing: 14) {
             Image(systemName: icon)
                 .font(.system(size: 20))
-                .foregroundStyle(Color.pink)
+                .foregroundStyle(Color.brand)
                 .frame(width: 28)
             VStack(alignment: .leading, spacing: 2) {
                 Text(title).font(.subheadline.weight(.semibold))
@@ -158,7 +158,7 @@ struct PaywallView: View {
                 Spacer()
                 if purchasingID == product.id {
                     ProgressView()
-                        .tint(highlighted ? .white : .pink)
+                        .tint(highlighted ? .white : .brand)
                 } else {
                     Text(priceLine)
                         .font(.subheadline.weight(.semibold))
@@ -169,7 +169,7 @@ struct PaywallView: View {
             .frame(maxWidth: .infinity)
         }
         .background(
-            highlighted ? Color.pink : Color(.secondarySystemBackground),
+            highlighted ? Color.brand : Color(.secondarySystemBackground),
             in: RoundedRectangle(cornerRadius: 16)
         )
         .foregroundStyle(highlighted ? .white : .primary)
@@ -183,7 +183,7 @@ struct PaywallView: View {
                     .font(.caption2.weight(.bold))
                     .padding(.horizontal, 10).padding(.vertical, 4)
                     .background(Color.white, in: Capsule())
-                    .foregroundStyle(Color.pink)
+                    .foregroundStyle(Color.brand)
                     .offset(x: -12, y: -10)
             }
         }
@@ -220,7 +220,7 @@ struct PaywallView: View {
             Task { await purchaseStore.restore() }
         }
         .font(.subheadline)
-        .tint(.pink)
+        .tint(.brand)
         .disabled(isPurchasing)
     }
 
@@ -236,7 +236,7 @@ struct PaywallView: View {
                 NavigationLink("Privacy") { LegalView(document: .privacyPolicy) }
             }
             .font(.caption2)
-            .tint(.pink)
+            .tint(.brand)
         }
         .padding(.top, 4)
     }

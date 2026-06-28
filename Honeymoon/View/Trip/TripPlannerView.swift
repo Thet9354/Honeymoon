@@ -89,7 +89,7 @@ struct TripPlannerView: View {
                     if store.isShared {
                         Label("Shared with your partner", systemImage: "person.2.fill")
                             .font(.caption)
-                            .foregroundStyle(Color.pink)
+                            .foregroundStyle(Color.brand)
                     }
                 }
             }
@@ -123,7 +123,7 @@ struct TripPlannerView: View {
                 HStack {
                     Image(systemName: "calendar.circle.fill")
                         .font(.title2)
-                        .foregroundStyle(Color.pink)
+                        .foregroundStyle(Color.brand)
                     VStack(alignment: .leading, spacing: 2) {
                         Text(countdownText).font(.headline)
                         Text("Travel date").font(.caption).foregroundStyle(.secondary)
@@ -172,7 +172,7 @@ struct TripPlannerView: View {
                 Button {
                     addBudgetItem()
                 } label: {
-                    Image(systemName: "plus.circle.fill").foregroundStyle(Color.pink)
+                    Image(systemName: "plus.circle.fill").foregroundStyle(Color.brand)
                 }
                 .disabled(newBudgetTitle.trimmingCharacters(in: .whitespaces).isEmpty)
             }
@@ -205,7 +205,7 @@ struct TripPlannerView: View {
         Section {
             if !plan.checklist.isEmpty {
                 ProgressView(value: plan.checklistProgress)
-                    .tint(Color.pink)
+                    .tint(Color.brand)
             }
             ForEach(plan.checklist) { item in
                 Button {
@@ -213,7 +213,7 @@ struct TripPlannerView: View {
                 } label: {
                     HStack {
                         Image(systemName: item.done ? "checkmark.circle.fill" : "circle")
-                            .foregroundStyle(item.done ? Color.pink : Color(.tertiaryLabel))
+                            .foregroundStyle(item.done ? Color.brand : Color(.tertiaryLabel))
                         Text(item.title)
                             .strikethrough(item.done)
                             .foregroundStyle(item.done ? .secondary : .primary)
@@ -228,7 +228,7 @@ struct TripPlannerView: View {
                 Button {
                     addChecklistItem()
                 } label: {
-                    Image(systemName: "plus.circle.fill").foregroundStyle(Color.pink)
+                    Image(systemName: "plus.circle.fill").foregroundStyle(Color.brand)
                 }
                 .disabled(newChecklistTitle.trimmingCharacters(in: .whitespaces).isEmpty)
             }
@@ -242,7 +242,7 @@ struct TripPlannerView: View {
                         systemImage: "sparkles"
                     )
                 }
-                .foregroundStyle(Color.pink)
+                .foregroundStyle(Color.brand)
             }
         } header: {
             Text("Honeymoon checklist")

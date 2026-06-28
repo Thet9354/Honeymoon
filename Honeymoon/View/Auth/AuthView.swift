@@ -10,7 +10,7 @@ struct AuthView: View {
         NavigationStack {
             LoginView()
         }
-        .tint(Color.pink)
+        .tint(Color.brand)
     }
 }
 

@@ -31,10 +31,10 @@ struct FooterView: View {
                     .font(.system(.subheadline, design: .rounded))
                     .padding(.horizontal, 20)
                     .padding(.vertical, 12)
-                    .accentColor(Color.pink)
+                    .accentColor(Color.brand)
                     .background(
                         Capsule()
-                            .stroke(Color.pink, lineWidth: 2)
+                            .stroke(Color.brand, lineWidth: 2)
                     )
             }
             .accessibilityLabel("Book destination")

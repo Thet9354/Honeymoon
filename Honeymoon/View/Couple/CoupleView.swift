@@ -33,7 +33,7 @@ struct CoupleView: View {
                     Button("Done") { dismiss() }
                 }
             }
-            .tint(Color.pink)
+            .tint(Color.brand)
             .alert(
                 "Something went wrong",
                 isPresented: Binding(
@@ -64,12 +64,8 @@ struct CoupleView: View {
                     Task { await coupleStore.createCouple() }
                 } label: {
                     Label("Invite your partner", systemImage: "person.badge.plus")
-                        .font(.headline)
-                        .frame(maxWidth: .infinity)
-                        .padding(.vertical, 14)
                 }
-                .background(Color.pink, in: RoundedRectangle(cornerRadius: 14))
-                .foregroundStyle(.white)
+                .buttonStyle(PrimaryButtonStyle())
                 .disabled(coupleStore.isWorking)
 
                 VStack(spacing: 10) {
@@ -94,8 +90,8 @@ struct CoupleView: View {
                             .frame(maxWidth: .infinity)
                             .padding(.vertical, 12)
                     }
-                    .overlay(RoundedRectangle(cornerRadius: 12).stroke(Color.pink, lineWidth: 1.5))
-                    .foregroundStyle(Color.pink)
+                    .overlay(RoundedRectangle(cornerRadius: 12).stroke(Color.brand, lineWidth: 1.5))
+                    .foregroundStyle(Color.brand)
                     .disabled(joinCode.trimmingCharacters(in: .whitespaces).isEmpty || coupleStore.isWorking)
                 }
             }
@@ -119,7 +115,7 @@ struct CoupleView: View {
                         Text(code)
                             .font(.system(size: 40, weight: .bold, design: .monospaced))
                             .tracking(6)
-                            .foregroundStyle(Color.pink)
+                            .foregroundStyle(Color.brand)
                         ShareLink(item: "Join me on Honeymoon! Enter code \(code) in Couple Mode to start planning together.") {
                             Label("Share code", systemImage: "square.and.arrow.up")
                         }
@@ -147,7 +143,7 @@ struct CoupleView: View {
         List {
             Section {
                 Label("You're linked!", systemImage: "heart.fill")
-                    .foregroundStyle(Color.pink)
+                    .foregroundStyle(Color.brand)
                     .font(.headline)
             }
 
@@ -168,7 +164,7 @@ struct CoupleView: View {
                                 Text(match.country).font(.subheadline).foregroundStyle(.secondary)
                             }
                             Spacer()
-                            Image(systemName: "heart.fill").foregroundStyle(Color.pink)
+                            Image(systemName: "heart.fill").foregroundStyle(Color.brand)
                         }
                         .padding(.vertical, 4)
                     }
@@ -193,7 +189,7 @@ struct CoupleView: View {
         VStack(spacing: 16) {
             Image(systemName: icon)
                 .font(.system(size: 72, weight: .light))
-                .foregroundStyle(Color.pink)
+                .foregroundStyle(Color.brand)
                 .symbolRenderingMode(.hierarchical)
             Text(title)
                 .font(.system(.title2, design: .rounded).weight(.bold))

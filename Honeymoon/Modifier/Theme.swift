@@ -14,10 +14,12 @@ enum Theme {
     static let cornerRadius: CGFloat = 14
 }
 
-extension Color {
-    /// The app's brand accent. Aliased to system pink today; if the brand colour
-    /// ever changes, update it here and every CTA follows.
-    static let brand = Color.pink
+extension ShapeStyle where Self == Color {
+    /// The app's brand accent — a drop-in for system colours like `.pink`. Works
+    /// anywhere a color is expected: `Color.brand`, `.foregroundStyle(.brand)`,
+    /// `.tint(.brand)`, `.fill(.brand)`. Aliased to system pink today; change it
+    /// here and every brand usage across the app follows.
+    static var brand: Color { .pink }
 }
 
 /// Full-width, filled brand button for primary calls to action.

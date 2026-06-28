@@ -51,13 +51,13 @@ struct SignUpView: View {
         VStack(spacing: 8) {
             Image(systemName: "heart.circle.fill")
                 .font(.system(size: 60, weight: .light))
-                .foregroundStyle(Color.pink)
+                .foregroundStyle(Color.brand)
                 .symbolRenderingMode(.hierarchical)
 
             Text("Plan trips, together")
                 .font(.system(.title2, design: .rounded))
                 .fontWeight(.bold)
-                .foregroundStyle(Color.pink)
+                .foregroundStyle(Color.brand)
 
             Text("Create your account to save the places you love.")
                 .font(.subheadline)
@@ -120,7 +120,7 @@ struct SignUpView: View {
                 .font(.footnote)
                 .foregroundStyle(.secondary)
         }
-        .tint(Color.pink)
+        .tint(Color.brand)
     }
 
     private var createButton: some View {

@@ -46,7 +46,7 @@ struct PreferenceQuizView: View {
         VStack(alignment: .leading, spacing: 8) {
             Text("What's your dream trip?")
                 .font(.system(.largeTitle, design: .rounded).weight(.bold))
-                .foregroundStyle(Color.pink)
+                .foregroundStyle(Color.brand)
             Text("Pick what you love and we'll put the best matches first. You can change these anytime.")
                 .font(.body)
                 .foregroundStyle(.secondary)
@@ -81,13 +81,13 @@ struct PreferenceQuizView: View {
             }
             .padding(.horizontal, 14).padding(.vertical, 14)
             .frame(maxWidth: .infinity, minHeight: 68, alignment: .leading)
-            .background(selected ? Color.pink.opacity(0.15) : Color(.secondarySystemBackground),
+            .background(selected ? Color.brand.opacity(0.15) : Color(.secondarySystemBackground),
                         in: RoundedRectangle(cornerRadius: 14))
             .overlay(
                 RoundedRectangle(cornerRadius: 14)
-                    .stroke(selected ? Color.pink : .clear, lineWidth: 1.5)
+                    .stroke(selected ? Color.brand : .clear, lineWidth: 1.5)
             )
-            .foregroundStyle(selected ? Color.pink : .primary)
+            .foregroundStyle(selected ? Color.brand : .primary)
         }
         .buttonStyle(.plain)
     }
@@ -105,7 +105,7 @@ struct PreferenceQuizView: View {
                             }
                             Spacer()
                             Image(systemName: draft.budgetBand == band ? "checkmark.circle.fill" : "circle")
-                                .foregroundStyle(draft.budgetBand == band ? Color.pink : Color(.tertiaryLabel))
+                                .foregroundStyle(draft.budgetBand == band ? Color.brand : Color(.tertiaryLabel))
                         }
                         .padding(.vertical, 12).padding(.horizontal, 14)
                         .contentShape(Rectangle())
@@ -142,12 +142,8 @@ struct PreferenceQuizView: View {
         VStack(spacing: 8) {
             Button { finish() } label: {
                 Text(primaryTitle)
-                    .font(.headline)
-                    .frame(maxWidth: .infinity)
-                    .padding(.vertical, 15)
             }
-            .background(Color.pink, in: RoundedRectangle(cornerRadius: 14))
-            .foregroundStyle(.white)
+            .buttonStyle(PrimaryButtonStyle())
 
             if mode == .onboarding {
                 Button("Skip for now") { finish(skip: true) }
@@ -208,10 +204,10 @@ private struct FlexibleChips: View {
                     Text(item)
                         .font(.subheadline)
                         .padding(.horizontal, 14).padding(.vertical, 9)
-                        .background(selected ? Color.pink.opacity(0.15) : Color(.secondarySystemBackground),
+                        .background(selected ? Color.brand.opacity(0.15) : Color(.secondarySystemBackground),
                                     in: Capsule())
-                        .overlay(Capsule().stroke(selected ? Color.pink : .clear, lineWidth: 1.5))
-                        .foregroundStyle(selected ? Color.pink : .primary)
+                        .overlay(Capsule().stroke(selected ? Color.brand : .clear, lineWidth: 1.5))
+                        .foregroundStyle(selected ? Color.brand : .primary)
                 }
                 .buttonStyle(.plain)
             }

@@ -52,7 +52,7 @@ struct LoginView: View {
             Text("Welcome back")
                 .font(.system(.title, design: .rounded))
                 .fontWeight(.bold)
-                .foregroundStyle(Color.pink)
+                .foregroundStyle(Color.brand)
 
             Text("Sign in to keep your favorites in sync.")
                 .font(.subheadline)
@@ -106,7 +106,7 @@ struct LoginView: View {
                 ForgotPasswordView()
             }
             .font(.footnote)
-            .foregroundStyle(Color.pink)
+            .foregroundStyle(Color.brand)
             .frame(maxWidth: .infinity, alignment: .trailing)
 
             Button {
@@ -132,7 +132,7 @@ struct LoginView: View {
             NavigationLink("Create an account") {
                 SignUpView()
             }
-            .foregroundStyle(Color.pink)
+            .foregroundStyle(Color.brand)
             .fontWeight(.semibold)
         }
         .font(.footnote)

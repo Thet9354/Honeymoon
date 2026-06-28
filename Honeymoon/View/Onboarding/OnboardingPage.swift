@@ -16,7 +16,7 @@ struct OnboardingPage: View {
             Spacer()
 
             Image(systemName: systemImage)                .font(.system(size: 120, weight: .light))
-                .foregroundStyle(Color.pink)
+                .foregroundStyle(Color.brand)
                 .symbolRenderingMode(.hierarchical)
                 .accessibilityHidden(true)
 
@@ -24,7 +24,7 @@ struct OnboardingPage: View {
                 Text(title)
                     .font(.system(.largeTitle, design: .rounded))
                     .fontWeight(.bold)
-                    .foregroundStyle(Color.pink)
+                    .foregroundStyle(Color.brand)
                     .multilineTextAlignment(.center)
 
                 Text(subtitle)

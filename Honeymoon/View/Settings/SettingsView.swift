@@ -55,7 +55,7 @@ struct SettingsView: View {
                     Button("Done") { dismiss() }
                 }
             }
-            .tint(Color.pink)
+            .tint(Color.brand)
         }
         .sheet(isPresented: $showAuthSheet) {
             AuthView()
@@ -113,10 +113,10 @@ struct SettingsView: View {
     private var avatar: some View {
         ZStack {
             Circle()
-                .fill(Color.pink.opacity(0.15))
+                .fill(Color.brand.opacity(0.15))
             Image(systemName: "person.fill")
                 .font(.system(size: 22))
-                .foregroundStyle(Color.pink)
+                .foregroundStyle(Color.brand)
         }
         .frame(width: 48, height: 48)
     }
@@ -127,7 +127,7 @@ struct SettingsView: View {
             if purchaseStore.isPremium {
                 HStack {
                     Label("Honeymoon Premium", systemImage: "sparkles")
-                        .foregroundStyle(Color.pink)
+                        .foregroundStyle(Color.brand)
                     Spacer()
                     Text("Active")
                         .font(.subheadline)
@@ -139,7 +139,7 @@ struct SettingsView: View {
                 } label: {
                     HStack {
                         Label("Go Premium", systemImage: "sparkles")
-                            .foregroundStyle(Color.pink)
+                            .foregroundStyle(Color.brand)
                         Spacer()
                         Text("Itineraries & more")
                             .font(.subheadline)
@@ -252,7 +252,7 @@ struct SettingsView: View {
                     showSignOutConfirmation = true
                 } label: {
                     Label("Sign Out", systemImage: "rectangle.portrait.and.arrow.right")
-                        .foregroundStyle(Color.pink)
+                        .foregroundStyle(Color.brand)
                 }
 
                 Button(role: .destructive) {
