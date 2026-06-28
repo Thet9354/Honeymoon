@@ -33,12 +33,22 @@ struct Destination: Identifiable, Codable, Hashable {
     var rating: Double
     /// Short romantic highlights shown as chips on the detail page.
     var highlights: [String]
+    /// Extra photos for the detail-screen gallery, shown after the bundled `image`.
+    /// Each entry is either a bundled asset name or a remote `https` URL (entries
+    /// starting with "http" are treated as URLs). Empty = single-photo hero.
+    var gallery: [String]
+    /// Map coordinate. Stored so the detail map is instant and reliable instead of
+    /// depending on the rate-limited runtime geocoder. `nil` falls back to geocoding.
+    var latitude: Double?
+    var longitude: Double?
 
     init(
         id: String,
         place: String,
         country: String,
         image: String,
+        latitude: Double? = nil,
+        longitude: Double? = nil,
         summary: String = "",
         region: String = "",
         tags: [String] = [],
@@ -46,7 +56,8 @@ struct Destination: Identifiable, Codable, Hashable {
         estBudgetForTwoUSD: Int = 0,
         flightHours: Int = 0,
         rating: Double = 0,
-        highlights: [String] = []
+        highlights: [String] = [],
+        gallery: [String] = []
     ) {
         self.id = id
         self.place = place
@@ -60,6 +71,9 @@ struct Destination: Identifiable, Codable, Hashable {
         self.flightHours = flightHours
         self.rating = rating
         self.highlights = highlights
+        self.gallery = gallery
+        self.latitude = latitude
+        self.longitude = longitude
     }
 
     init(from decoder: Decoder) throws {
@@ -76,6 +90,40 @@ struct Destination: Identifiable, Codable, Hashable {
         flightHours = try c.decodeIfPresent(Int.self, forKey: .flightHours) ?? 0
         rating = try c.decodeIfPresent(Double.self, forKey: .rating) ?? 0
         highlights = try c.decodeIfPresent([String].self, forKey: .highlights) ?? []
+        gallery = try c.decodeIfPresent([String].self, forKey: .gallery) ?? []
+        latitude = try c.decodeIfPresent(Double.self, forKey: .latitude)
+        longitude = try c.decodeIfPresent(Double.self, forKey: .longitude)
+    }
+}
+
+extension Destination {
+    /// A single resolved photo — either a bundled asset name or a remote URL.
+    enum PhotoRef: Hashable, Identifiable {
+        case asset(String)
+        case remote(URL)
+
+        var id: String {
+            switch self {
+            case .asset(let name): "asset:\(name)"
+            case .remote(let url): "remote:\(url.absoluteString)"
+            }
+        }
+    }
+
+    /// Ordered photos for the detail gallery: the bundled hero `image` first,
+    /// then each `gallery` entry classified as a bundled asset or a remote URL.
+    var photos: [PhotoRef] {
+        var refs: [PhotoRef] = image.isEmpty ? [] : [.asset(image)]
+        for entry in gallery {
+            let trimmed = entry.trimmingCharacters(in: .whitespacesAndNewlines)
+            guard !trimmed.isEmpty else { continue }
+            if trimmed.hasPrefix("http"), let url = URL(string: trimmed) {
+                refs.append(.remote(url))
+            } else {
+                refs.append(.asset(trimmed))
+            }
+        }
+        return refs
     }
 }
 

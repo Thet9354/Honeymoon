@@ -1,0 +1,12 @@
+{
+  "images" : [
+    {
+      "filename" : "photo-fiji-islands.jpg",
+      "idiom" : "universal"
+    }
+  ],
+  "info" : {
+    "author" : "xcode",
+    "version" : 1
+  }
+}

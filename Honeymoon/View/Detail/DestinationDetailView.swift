@@ -9,6 +9,7 @@
 //
 
 import SwiftUI
+import UIKit
 import MapKit
 import CoreLocation
 
@@ -24,6 +25,9 @@ struct DestinationDetailView: View {
     @State private var showBookingConfirmation = false
     @State private var showPaywall = false
     @State private var showItinerary = false
+    // Paged photo gallery state.
+    @State private var selectedPhoto = 0
+    @State private var showPhotoViewer = false
     // Held so the "For two" budget re-renders when the user switches currency.
     @AppStorage("currency") private var currencyRaw = Currency.sgd.rawValue
     // One free AI itinerary preview for non-premium users.
@@ -51,37 +55,80 @@ struct DestinationDetailView: View {
         }
         .sheet(isPresented: $showPaywall) { PaywallView() }
         .sheet(isPresented: $showItinerary) { ItineraryView(destination: destination) }
+        .fullScreenCover(isPresented: $showPhotoViewer) {
+            PhotoGalleryViewer(photos: photos, selection: $selectedPhoto)
+        }
         .appAppearance()
     }
 
-    // MARK: - Hero
+    // MARK: - Hero gallery
+
+    private var photos: [Destination.PhotoRef] { destination.photos }
 
     private var hero: some View {
-        Image(destination.image)
-            .resizable()
-            .scaledToFill()
-            .frame(height: 300)
-            .frame(maxWidth: .infinity)
-            .clipped()
-            .overlay(
-                LinearGradient(
-                    colors: [.black.opacity(0.55), .clear, .clear, .black.opacity(0.35)],
-                    startPoint: .top, endPoint: .bottom
-                )
+        ZStack(alignment: .bottomLeading) {
+            photoPager
+            LinearGradient(
+                colors: [.black.opacity(0.55), .clear, .clear, .black.opacity(0.35)],
+                startPoint: .top, endPoint: .bottom
             )
-            .overlay(alignment: .bottomLeading) {
-                VStack(alignment: .leading, spacing: 4) {
-                    Text(destination.place)
-                        .font(.system(size: 34, weight: .bold))
-                        .foregroundStyle(.white)
-                    Label(destination.country, systemImage: "mappin.and.ellipse")
-                        .font(.subheadline)
-                        .foregroundStyle(.white.opacity(0.9))
-                }
-                .shadow(radius: 3)
-                .padding(20)
+            .allowsHitTesting(false)
+            VStack(alignment: .leading, spacing: 4) {
+                Text(destination.place)
+                    .font(.system(size: 34, weight: .bold))
+                    .foregroundStyle(.white)
+                Label(destination.country, systemImage: "mappin.and.ellipse")
+                    .font(.subheadline)
+                    .foregroundStyle(.white.opacity(0.9))
             }
-            .overlay(alignment: .topTrailing) { actionButtons }
+            .shadow(radius: 3)
+            .padding(20)
+            .allowsHitTesting(false)
+        }
+        .frame(height: 300)
+        .frame(maxWidth: .infinity)
+        .clipped()
+        .overlay(alignment: .topTrailing) { actionButtons }
+        .overlay(alignment: .bottom) { pageIndicator }
+    }
+
+    @ViewBuilder
+    private var photoPager: some View {
+        if photos.count > 1 {
+            TabView(selection: $selectedPhoto) {
+                ForEach(Array(photos.enumerated()), id: \.element.id) { index, ref in
+                    GalleryPhoto(ref: ref, contentMode: .fill)
+                        .frame(maxWidth: .infinity, maxHeight: .infinity)
+                        .clipped()
+                        .tag(index)
+                }
+            }
+            .tabViewStyle(.page(indexDisplayMode: .never))
+            .onTapGesture { showPhotoViewer = true }
+        } else {
+            GalleryPhoto(ref: photos.first ?? .asset(destination.image), contentMode: .fill)
+                .frame(maxWidth: .infinity, maxHeight: .infinity)
+                .clipped()
+                .onTapGesture { showPhotoViewer = true }
+        }
+    }
+
+    @ViewBuilder
+    private var pageIndicator: some View {
+        if photos.count > 1 {
+            HStack(spacing: 6) {
+                ForEach(photos.indices, id: \.self) { index in
+                    Circle()
+                        .fill(.white.opacity(index == selectedPhoto ? 0.95 : 0.45))
+                        .frame(width: 6, height: 6)
+                }
+            }
+            .padding(.horizontal, 10)
+            .padding(.vertical, 6)
+            .background(.black.opacity(0.25), in: Capsule())
+            .padding(.bottom, 12)
+            .allowsHitTesting(false)
+        }
     }
 
     private var actionButtons: some View {
@@ -187,7 +234,12 @@ struct DestinationDetailView: View {
         VStack(alignment: .leading, spacing: 10) {
             Text("Where you're headed")
                 .font(.headline)
-            DestinationMapView(place: destination.place, country: destination.country)
+            DestinationMapView(
+                place: destination.place,
+                country: destination.country,
+                latitude: destination.latitude,
+                longitude: destination.longitude
+            )
                 .frame(height: 180)
                 .clipShape(RoundedRectangle(cornerRadius: 12))
                 .overlay(RoundedRectangle(cornerRadius: 12).stroke(Color(.separator), lineWidth: 0.5))
@@ -307,12 +359,15 @@ struct DestinationDetailView: View {
 
 // MARK: - Destination map snippet
 
-/// A small, non-interactive map for the destination. Resolves the coordinate from
-/// the place name via the system geocoder, so no per-destination coordinates need
-/// to be stored. Falls back to a neutral placeholder if geocoding fails.
+/// A small, non-interactive map for the destination. Prefers the stored
+/// coordinate (instant and reliable); only when none is provided does it fall
+/// back to the rate-limited runtime geocoder. Shows a neutral placeholder while
+/// resolving / if both fail.
 private struct DestinationMapView: View {
     let place: String
     let country: String
+    var latitude: Double?
+    var longitude: Double?
 
     @State private var coordinate: CLLocationCoordinate2D?
     @State private var position: MapCameraPosition = .automatic
@@ -336,17 +391,29 @@ private struct DestinationMapView: View {
         .task {
             guard !didResolve else { return }
             didResolve = true
+
+            // Stored coordinate — instant, no network.
+            if let latitude, let longitude {
+                show(CLLocationCoordinate2D(latitude: latitude, longitude: longitude))
+                return
+            }
+
+            // Fallback: geocode from the place name (best-effort; may be throttled).
             let geocoder = CLGeocoder()
             guard
                 let placemark = try? await geocoder.geocodeAddressString("\(place), \(country)").first,
                 let location = placemark.location
             else { return }
-            coordinate = location.coordinate
-            position = .region(MKCoordinateRegion(
-                center: location.coordinate,
-                span: MKCoordinateSpan(latitudeDelta: 3, longitudeDelta: 3)
-            ))
+            show(location.coordinate)
         }
+    }
+
+    private func show(_ center: CLLocationCoordinate2D) {
+        coordinate = center
+        position = .region(MKCoordinateRegion(
+            center: center,
+            span: MKCoordinateSpan(latitudeDelta: 3, longitudeDelta: 3)
+        ))
     }
 }
 
@@ -403,6 +470,176 @@ private struct FlowLayout: Layout {
             subview.place(at: CGPoint(x: x, y: y), proposal: ProposedViewSize(size))
             x += size.width + spacing
             rowHeight = max(rowHeight, size.height)
+        }
+    }
+}
+
+// MARK: - Gallery photo
+
+/// Renders one gallery photo: a bundled asset directly, or a remote URL via a
+/// disk-cached, retrying loader so remote photos load reliably and stay loaded.
+/// Callers apply their own frame and clipping.
+private struct GalleryPhoto: View {
+    let ref: Destination.PhotoRef
+    var contentMode: ContentMode = .fill
+
+    var body: some View {
+        switch ref {
+        case .asset(let name):
+            Image(name)
+                .resizable()
+                .aspectRatio(contentMode: contentMode)
+        case .remote(let url):
+            RemoteGalleryImage(url: url, contentMode: contentMode)
+        }
+    }
+}
+
+/// A remote gallery image backed by `RemoteImageLoader` (disk + memory cache,
+/// auto-retry). Shows a branded placeholder while loading and on final failure;
+/// once an image is fetched it's cached, so paging back is instant.
+private struct RemoteGalleryImage: View {
+    let url: URL
+    var contentMode: ContentMode = .fill
+    @StateObject private var loader = RemoteImageLoader()
+
+    var body: some View {
+        Group {
+            if let image = loader.image {
+                Image(uiImage: image)
+                    .resizable()
+                    .aspectRatio(contentMode: contentMode)
+            } else {
+                placeholder(systemImage: loader.didFail ? "photo" : nil)
+            }
+        }
+        .task(id: url) { await loader.load(url) }
+    }
+
+    private func placeholder(systemImage: String?) -> some View {
+        ZStack {
+            LinearGradient(
+                colors: [Color.brand.opacity(0.25), Color.brand.opacity(0.08)],
+                startPoint: .topLeading, endPoint: .bottomTrailing
+            )
+            if let systemImage {
+                Image(systemName: systemImage)
+                    .font(.largeTitle)
+                    .foregroundStyle(.secondary)
+            } else {
+                ProgressView()
+            }
+        }
+    }
+}
+
+/// Loads remote images reliably: an in-memory `NSCache` for instant re-display,
+/// a shared disk-backed `URLCache` that survives relaunches, and up to three
+/// attempts with backoff so a transient hiccup (e.g. a `429`) doesn't strand the
+/// placeholder. The fetch + decode run off the main actor.
+@MainActor
+final class RemoteImageLoader: ObservableObject {
+    @Published private(set) var image: UIImage?
+    @Published private(set) var didFail = false
+
+    func load(_ url: URL) async {
+        if let cached = remoteImageMemoryCache.object(forKey: url as NSURL) {
+            image = cached
+            didFail = false
+            return
+        }
+        didFail = false
+
+        let fetched = await fetchRemoteImage(url)
+        if Task.isCancelled { return }
+        if let fetched {
+            image = fetched
+            didFail = false
+        } else {
+            didFail = true
+        }
+    }
+}
+
+private let remoteImageMemoryCache: NSCache<NSURL, UIImage> = {
+    let cache = NSCache<NSURL, UIImage>()
+    cache.countLimit = 120
+    return cache
+}()
+
+private let remoteImageSession: URLSession = {
+    let config = URLSessionConfiguration.default
+    config.urlCache = URLCache(memoryCapacity: 32 * 1024 * 1024,
+                               diskCapacity: 256 * 1024 * 1024)
+    config.requestCachePolicy = .returnCacheDataElseLoad
+    config.waitsForConnectivity = true
+    config.timeoutIntervalForRequest = 20
+    config.timeoutIntervalForResource = 60
+    return URLSession(configuration: config)
+}()
+
+/// Fetches and decodes a remote image off the main actor, retrying transient
+/// failures, and caches the result in memory. Returns `nil` if all attempts fail.
+private func fetchRemoteImage(_ url: URL) async -> UIImage? {
+    for attempt in 0..<3 {
+        if Task.isCancelled { return nil }
+        do {
+            var request = URLRequest(url: url)
+            request.setValue(
+                "HoneymoonApp/1.0 (https://github.com/Thet9354/Honeymoon)",
+                forHTTPHeaderField: "User-Agent"
+            )
+            let (data, response) = try await remoteImageSession.data(for: request)
+            if let http = response as? HTTPURLResponse,
+               !(200..<300).contains(http.statusCode) {
+                throw URLError(.badServerResponse)
+            }
+            guard let decoded = UIImage(data: data) else {
+                throw URLError(.cannotDecodeContentData)
+            }
+            remoteImageMemoryCache.setObject(decoded, forKey: url as NSURL)
+            return decoded
+        } catch {
+            if Task.isCancelled { return nil }
+            if attempt < 2 {
+                // Backoff: 0.6s, then 1.4s.
+                try? await Task.sleep(nanoseconds: UInt64(600_000_000 + attempt * 800_000_000))
+            }
+        }
+    }
+    return nil
+}
+
+// MARK: - Full-screen photo viewer
+
+/// A tap-to-open full-screen, swipeable viewer for a destination's photos.
+private struct PhotoGalleryViewer: View {
+    let photos: [Destination.PhotoRef]
+    @Binding var selection: Int
+    @Environment(\.dismiss) private var dismiss
+
+    var body: some View {
+        ZStack(alignment: .topTrailing) {
+            Color.black.ignoresSafeArea()
+            TabView(selection: $selection) {
+                ForEach(Array(photos.enumerated()), id: \.element.id) { index, ref in
+                    GalleryPhoto(ref: ref, contentMode: .fit)
+                        .frame(maxWidth: .infinity, maxHeight: .infinity)
+                        .tag(index)
+                }
+            }
+            .tabViewStyle(.page(indexDisplayMode: photos.count > 1 ? .automatic : .never))
+            .ignoresSafeArea()
+
+            Button { dismiss() } label: {
+                Image(systemName: "xmark")
+                    .font(.system(size: 16, weight: .semibold))
+                    .foregroundStyle(.white)
+                    .frame(width: 36, height: 36)
+                    .background(.ultraThinMaterial, in: Circle())
+            }
+            .padding()
+            .accessibilityLabel("Close photo")
         }
     }
 }

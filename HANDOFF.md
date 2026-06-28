@@ -55,9 +55,9 @@ onboarding it lands on the deck via an anonymous "guest" session.
 4. **Affiliate IDs** in `Honeymoon/Repository/AffiliateLinks.swift` after Booking.com / GetYourGuide sign-up.
 5. **App Store**: paid Apple Developer Program (needed for Sign in with Apple + submission), screenshots, metadata/keywords, privacy nutrition labels, archive. (App Icon + launch screen + in-app account deletion are already done.)
 
-## Backlog (recommended next, in priority order — none started)
+## Backlog (recommended next, in priority order)
 1. **Remote push notifications** — APNs + FCM via Cloud Function (needs Blaze + paid program). Local countdown nudges already exist (N1).
-2. **Bigger destination catalog + photo gallery** — blocked on real image assets; enrich `HoneymoonData.swift` + bundle photos, then a gallery in `DestinationDetailView`.
+2. ✅ **DONE** (branch `catalog-galleries`) — **Bigger destination catalog + photo gallery**: catalog grown **21 → 41** destinations, each with a bundled primary photo + real coordinates; paged photo gallery with page-dots and tap-to-zoom in `DestinationDetailView`; extra gallery photos stream from Wikimedia Commons via a disk+memory-cached, retrying loader (`RemoteImageLoader`). Also fixed two reliability issues found in testing: maps now use **stored coordinates** (no geocoder throttling) and gallery images self-heal transient failures. New `Destination` fields: `gallery: [String]`, `latitude`/`longitude`. New bundled assets live under `Assets.xcassets/Photos/` (no pbxproj edits needed — `.xcassets` is a folder resource).
 3. **Live weather** on the detail screen — needs a weather API key.
 4. **Empty/loading-state polish** across deck/saved/planner.
 5. **Fuller design-token rollout** — `Theme`/`PrimaryButtonStyle` exist (`Honeymoon/Modifier/Theme.swift`); adopt `Color.brand` + the button style app-wide.

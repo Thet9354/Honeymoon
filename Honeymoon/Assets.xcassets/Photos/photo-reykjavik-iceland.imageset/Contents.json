@@ -1,0 +1,12 @@
+{
+  "images" : [
+    {
+      "filename" : "photo-reykjavik-iceland.jpg",
+      "idiom" : "universal"
+    }
+  ],
+  "info" : {
+    "author" : "xcode",
+    "version" : 1
+  }
+}
