@@ -158,6 +158,70 @@ struct ContentView: View {
         }
     }
 
+    // MARK: - DECK PLACEHOLDERS
+
+    /// Shown in place of the card stack before the deck is seeded: a loading card
+    /// while destinations are still arriving, or a retryable empty state otherwise.
+    @ViewBuilder
+    private var deckPlaceholder: some View {
+        if destinationStore.isLoading || destinationStore.destinations.isEmpty {
+            loadingCard
+        } else {
+            emptyDeck
+        }
+    }
+
+    private var loadingCard: some View {
+        RoundedRectangle(cornerRadius: 24)
+            .fill(
+                LinearGradient(
+                    colors: [Color.brand.opacity(0.22), Color.brand.opacity(0.08)],
+                    startPoint: .topLeading, endPoint: .bottomTrailing
+                )
+            )
+            .aspectRatio(0.72, contentMode: .fit)
+            .overlay(
+                VStack(spacing: 14) {
+                    ProgressView()
+                        .controlSize(.large)
+                        .tint(Color.brand)
+                    Text("Finding honeymoons for you…")
+                        .font(.subheadline)
+                        .foregroundStyle(.secondary)
+                }
+            )
+            .overlay(
+                RoundedRectangle(cornerRadius: 24)
+                    .stroke(Color(.separator).opacity(0.4), lineWidth: 0.5)
+            )
+            .accessibilityElement(children: .ignore)
+            .accessibilityLabel("Loading destinations")
+    }
+
+    private var emptyDeck: some View {
+        VStack(spacing: 14) {
+            Image(systemName: "binoculars")
+                .font(.system(size: 52, weight: .light))
+                .foregroundStyle(Color.brand.opacity(0.7))
+            Text("No destinations to show")
+                .font(.system(.title3, design: .rounded).weight(.semibold))
+            Text("We couldn't load destinations just now. Check your connection and try again.")
+                .font(.subheadline)
+                .foregroundStyle(.secondary)
+                .multilineTextAlignment(.center)
+                .padding(.horizontal, 32)
+            Button("Try again") {
+                Task {
+                    await destinationStore.load()
+                    reseed()
+                }
+            }
+            .buttonStyle(PrimaryButtonStyle())
+            .padding(.horizontal, 48)
+            .padding(.top, 4)
+        }
+    }
+
     var body: some View {
         VStack {
             // MARK: - HEADER
@@ -170,6 +234,9 @@ struct ContentView: View {
             // MARK: - CARDS
 
             ZStack {
+                if cardViews.isEmpty {
+                    deckPlaceholder
+                } else {
                 ForEach(cardViews) { cardView in
                     cardView
                         .zIndex(self.isTopCard(cardView: cardView) ? 1 : 0)
@@ -256,6 +323,7 @@ struct ContentView: View {
                             }
                         )
                         .transition(self.cardRemovalTransition)
+                }
                 }
             }
             .padding(.horizontal)
