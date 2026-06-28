@@ -65,12 +65,16 @@ extension TripPlan {
         return Double(checklist.filter(\.done).count) / Double(checklist.count)
     }
 
+    /// The checklist item that surfaces a travel-insurance affiliate quote link.
+    /// Kept as a constant so the row and the link stay in sync.
+    static let travelInsuranceItem = "Travel insurance"
+
     /// A curated honeymoon-readiness checklist a couple can add in one tap. These
     /// are the anxiety-reducing essentials people most often forget.
     static let honeymoonEssentials: [String] = [
         "Passport valid 6+ months",
         "Visa / entry requirements checked",
-        "Travel insurance",
+        travelInsuranceItem,
         "Vaccinations checked",
         "Flights booked",
         "Accommodation booked",

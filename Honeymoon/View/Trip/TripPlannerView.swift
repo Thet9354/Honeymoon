@@ -208,18 +208,33 @@ struct TripPlannerView: View {
                     .tint(Color.brand)
             }
             ForEach(plan.checklist) { item in
-                Button {
-                    store.toggleChecklistItem(item)
-                } label: {
-                    HStack {
-                        Image(systemName: item.done ? "checkmark.circle.fill" : "circle")
-                            .foregroundStyle(item.done ? Color.brand : Color(.tertiaryLabel))
-                        Text(item.title)
-                            .strikethrough(item.done)
-                            .foregroundStyle(item.done ? .secondary : .primary)
+                HStack(spacing: 8) {
+                    Button {
+                        store.toggleChecklistItem(item)
+                    } label: {
+                        HStack {
+                            Image(systemName: item.done ? "checkmark.circle.fill" : "circle")
+                                .foregroundStyle(item.done ? Color.brand : Color(.tertiaryLabel))
+                            Text(item.title)
+                                .strikethrough(item.done)
+                                .foregroundStyle(item.done ? .secondary : .primary)
+                            Spacer(minLength: 0)
+                        }
+                        .contentShape(Rectangle())
+                    }
+                    .buttonStyle(.plain)
+
+                    // Revenue tie-in: a quote link on the unchecked insurance item.
+                    if item.title == TripPlan.travelInsuranceItem, !item.done,
+                       let url = AffiliateLinks.travelInsurance(checkIn: plan.startDate) {
+                        Link(destination: url) {
+                            Text("Get a quote")
+                                .font(.caption.weight(.semibold))
+                        }
+                        .buttonStyle(.borderless)
+                        .foregroundStyle(Color.brand)
                     }
                 }
-                .buttonStyle(.plain)
             }
             .onDelete { store.removeChecklistItems(at: $0) }
 
