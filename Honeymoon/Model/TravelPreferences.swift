@@ -193,6 +193,12 @@ extension TravelPreferences {
         if let budgetBand, budgetBand.contains(destination.estBudgetForTwoUSD) {
             score += 2
         }
+        // A short getaway favours shorter-haul destinations; a honeymoon or
+        // babymoon can lean into the once-in-a-while, further-flung options.
+        if occasion == .getaway, destination.flightHours > 0 {
+            if destination.flightHours <= 12 { score += 3 }
+            else if destination.flightHours <= 15 { score += 1 }
+        }
         return score
     }
 
@@ -219,7 +225,9 @@ extension TravelPreferences {
     /// Returns destinations ranked by relevance. Ties and the no-preference
     /// case preserve the original order (stable sort by index).
     func ranked(_ destinations: [Destination]) -> [Destination] {
-        guard !isEmpty else { return destinations }
+        // Rank when there's any taste signal, or an occasion that biases order
+        // (a getaway prefers shorter-haul destinations).
+        guard !isEmpty || occasion == .getaway else { return destinations }
         return destinations
             .enumerated()
             .sorted { lhs, rhs in

@@ -70,10 +70,10 @@ struct PaywallView: View {
                 .font(.system(size: 56, weight: .light))
                 .symbolRenderingMode(.hierarchical)
                 .foregroundStyle(Color.brand)
-            Text("Plan the perfect honeymoon")
+            Text("Plan every romantic trip")
                 .font(.system(.title2, design: .rounded).weight(.bold))
                 .multilineTextAlignment(.center)
-            Text("Unlock AI-personalized day-by-day itineraries built around your tastes, budget, and travel dates.")
+            Text("Unlock AI-personalized, day-by-day itineraries for every trip you take together — honeymoon, anniversary, babymoon or a spontaneous getaway.")
                 .font(.subheadline)
                 .foregroundStyle(.secondary)
                 .multilineTextAlignment(.center)
@@ -87,7 +87,7 @@ struct PaywallView: View {
         VStack(alignment: .leading, spacing: 14) {
             benefitRow("sparkles", "AI-personalized itineraries", "Day-by-day plans written for you two — with dining picks and a full budget breakdown.")
             benefitRow("wand.and.stars", "Smarter recommendations", "Your deck, tuned more closely to what you both love.")
-            benefitRow("heart.text.square", "Plan without limits", "Rich trip plans for every destination on your shortlist.")
+            benefitRow("heart.text.square", "A fresh plan for every trip", "New AI itineraries every time you travel together — all year, not just once.")
         }
         .frame(maxWidth: .infinity, alignment: .leading)
     }
@@ -119,22 +119,22 @@ struct PaywallView: View {
                         .padding(.vertical, 12)
                 }
             } else {
-                if let lifetime = purchaseStore.lifetimeProduct {
-                    planButton(
-                        product: lifetime,
-                        headline: "Lifetime",
-                        priceLine: "\(lifetime.displayPrice) once",
-                        caption: "Pay once, yours forever — most couples' pick",
-                        highlighted: true,
-                        badge: "BEST VALUE"
-                    )
-                }
                 if let annual = purchaseStore.annualProduct {
                     planButton(
                         product: annual,
                         headline: "Annual",
                         priceLine: annualPriceLine(annual),
                         caption: trialCaption(annual),
+                        highlighted: true,
+                        badge: "BEST VALUE"
+                    )
+                }
+                if let lifetime = purchaseStore.lifetimeProduct {
+                    planButton(
+                        product: lifetime,
+                        headline: "Lifetime",
+                        priceLine: "\(lifetime.displayPrice) once",
+                        caption: "One payment — no subscription, yours forever",
                         highlighted: false
                     )
                 }
