@@ -9,6 +9,13 @@ couple matching, StoreKit Premium, affiliate booking links).
 
 ## Git state
 - Everything is merged to **`main`** (origin: `github.com/Thet9354/Honeymoon`).
+- **Unmerged branch `catalog-galleries`** (off `main`) holds recent work: backlog
+  #2/#4/#5/#6 + two reliability fixes, a **deck-card sizing fix** (uniform 0.625
+  portrait cards), and the **couples-travel pivot** — the app now serves all
+  couples' trips, not just honeymoons. A `TripOccasion` (honeymoon / anniversary /
+  romantic getaway / babymoon) is chosen in onboarding and tailors the AI plan's
+  length, tone and copy; the paywall leads with the Annual subscription (Lifetime
+  kept); getaways rank shorter-haul destinations. App name stays "Honeymoon".
 - `main` HEAD includes: P1–P6, **Stage A** (Claude AI itineraries via Cloud Function),
   **Stage B** (shared real-time trip planning), **Stage C** (match-moment paywall +
   affiliate + pricing), **B1** (browse-before-sign-in / anonymous auth), **B3** (one
@@ -49,7 +56,7 @@ onboarding it lands on the deck via an anonymous "guest" session.
 - **Notifications**: `NotificationService` schedules **local** countdown nudges (no APNs).
 
 ## ⚠️ External steps the user must do (not codeable here)
-1. **Firebase Blaze plan** + `firebase deploy --only functions` + `firebase functions:secrets:set ANTHROPIC_API_KEY` — turns on real AI itineraries (until then the deterministic fallback is used; no app update needed when it goes live).
+1. **Firebase Blaze plan** + `firebase deploy --only functions` + `firebase functions:secrets:set ANTHROPIC_API_KEY` — turns on real AI itineraries (until then the deterministic fallback is used; no app update needed when it goes live). **Re-deploy needed** for the couples-travel change: `functions/index.js` now generalises the prompt and accepts an `occasion`. The occasion-aware deterministic fallback already works pre-deploy.
 2. **Enable Anonymous sign-in** in Firebase console (Authentication → Sign-in method) — required for guest persistence (app still runs without it).
 3. **Publish `firestore.rules`** in the console — required for shared trip planning.
 4. **Affiliate IDs** in `Honeymoon/Repository/AffiliateLinks.swift` after Booking.com / GetYourGuide sign-up.
