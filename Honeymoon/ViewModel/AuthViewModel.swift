@@ -222,7 +222,20 @@ final class AuthViewModel: NSObject, ObservableObject {
         errorMessage = nil
         defer { isLoading = false }
         do {
-            try? await Firestore.firestore().collection("users").document(user.uid).delete()
+            let db = Firestore.firestore()
+            let uid = user.uid
+            // Clean up couple membership so a partner isn't left linked to a ghost,
+            // and retire any invite this user's couple still has outstanding.
+            if let userSnap = try? await db.collection("users").document(uid).getDocument(),
+               let coupleId = userSnap.get("coupleId") as? String {
+                if let coupleSnap = try? await db.collection("couples").document(coupleId).getDocument(),
+                   let code = coupleSnap.get("inviteCode") as? String {
+                    try? await db.collection("invites").document(code).delete()
+                }
+                try? await db.collection("couples").document(coupleId)
+                    .updateData(["members": FieldValue.arrayRemove([uid])])
+            }
+            try? await db.collection("users").document(uid).delete()
             try await user.delete()
             // The auth state listener clears currentUser; return to a guest session.
             await ensureSignedIn()

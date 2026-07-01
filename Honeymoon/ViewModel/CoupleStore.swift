@@ -150,7 +150,11 @@ final class CoupleStore: ObservableObject {
                 "inviteCode": code,
                 "createdAt": FieldValue.serverTimestamp()
             ])
-            try await db.collection("invites").document(code).setData(["coupleId": coupleRef.documentID])
+            try await db.collection("invites").document(code).setData([
+                "coupleId": coupleRef.documentID,
+                "createdBy": uid,
+                "createdAt": FieldValue.serverTimestamp()
+            ])
             try await db.collection("users").document(uid).setData(["coupleId": coupleRef.documentID], merge: true)
         } catch {
             errorMessage = "Couldn't create an invite. Please try again."
@@ -172,6 +176,8 @@ final class CoupleStore: ObservableObject {
             try await db.collection("couples").document(cid)
                 .updateData(["members": FieldValue.arrayUnion([uid])])
             try await db.collection("users").document(uid).setData(["coupleId": cid], merge: true)
+            // Single-use: retire the code once it's been redeemed.
+            try? await db.collection("invites").document(code).delete()
         } catch {
             errorMessage = "Couldn't join. Check the code and try again."
         }
@@ -181,6 +187,10 @@ final class CoupleStore: ObservableObject {
         guard let uid, let coupleId else { return }
         isWorking = true
         defer { isWorking = false }
+        // Retire any still-pending invite so a stale code can't be redeemed later.
+        if let code = couple?.inviteCode {
+            try? await db.collection("invites").document(code).delete()
+        }
         try? await db.collection("couples").document(coupleId)
             .updateData(["members": FieldValue.arrayRemove([uid])])
         try? await db.collection("users").document(uid)
@@ -202,9 +212,10 @@ final class CoupleStore: ObservableObject {
 
     // MARK: - Helpers
 
-    /// 6-character code from an unambiguous alphabet (no 0/O/1/I).
+    /// 8-character code from an unambiguous alphabet (no 0/O/1/I). Longer than a
+    /// human-friendly 6 to make active codes impractical to guess.
     private static func generateCode() -> String {
         let alphabet = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789"
-        return String((0..<6).map { _ in alphabet.randomElement()! })
+        return String((0..<8).map { _ in alphabet.randomElement()! })
     }
 }
