@@ -120,9 +120,11 @@ exports.generateItinerary = onCall(
 
     // 4. Build the prompt.
     const system =
-      "You are an expert honeymoon travel planner with deep, current knowledge of " +
+      "You are an expert romantic-travel planner for couples, with deep, current knowledge of " +
       "destinations worldwide. Create a romantic, specific, and realistic day-by-day " +
-      "honeymoon itinerary tailored to the couple's stated tastes, budget, and travel dates. " +
+      "itinerary tailored to the occasion, the couple's stated tastes, budget, and travel dates. " +
+      "Match the length and pacing to the occasion — a short getaway is tighter and more relaxed, " +
+      "a honeymoon is more indulgent. " +
       "Be concrete: name real neighbourhoods, kinds of venues, beaches, viewpoints, and " +
       "experiences a couple could actually do there — never generic filler like 'explore the " +
       "highlights'. Lean into romance (sunsets, private moments, special dinners) without being " +
@@ -131,7 +133,12 @@ exports.generateItinerary = onCall(
       "lines Flights, Stays, Dining, Experiences, and Everything else as USD integers that sum " +
       "to roughly the indicative total provided.";
 
+    const occasion = data.occasion || {};
     const lines = [];
+    if (occasion.descriptor) {
+      lines.push(`Trip type: this is ${occasion.descriptor}.`);
+      if (occasion.tone) lines.push(`Tone & pacing: ${occasion.tone}`);
+    }
     lines.push(`Destination: ${destination.place}${destination.country ? ", " + destination.country : ""}.`);
     if (destination.summary) lines.push(`About: ${destination.summary}`);
     if (destination.region) lines.push(`Region: ${destination.region}.`);

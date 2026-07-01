@@ -44,7 +44,7 @@ struct OnboardingPage: View {
 #Preview {
     OnboardingPage(
         systemImage: "heart.circle.fill",
-        title: "Find your dream honeymoon",
+        title: "Find your dream trip",
         subtitle: "Swipe through hand-picked destinations from around the world."
     )
 }

@@ -19,6 +19,7 @@ struct DestinationDetailView: View {
 
     @EnvironmentObject private var userDataStore: UserDataStore
     @EnvironmentObject private var purchaseStore: PurchaseStore
+    @EnvironmentObject private var preferenceStore: PreferenceStore
     @Environment(\.dismiss) private var dismiss
     @Environment(\.openURL) private var openURL
 
@@ -35,6 +36,12 @@ struct DestinationDetailView: View {
 
     /// Premium users always; free users until they've used their one preview.
     private var canOpenItinerary: Bool { purchaseStore.isPremium || !hasUsedFreeItinerary }
+
+    /// The couple's occasion phrasing for the AI plan, e.g. "honeymoon itinerary"
+    /// or "getaway plan"; neutral fallback before an occasion is chosen.
+    private var itineraryNoun: String {
+        preferenceStore.preferences.occasion?.itineraryNoun ?? "trip itinerary"
+    }
 
     private var isFavorite: Bool { userDataStore.isFavorite(destination) }
 
@@ -257,7 +264,7 @@ struct DestinationDetailView: View {
         } label: {
             VStack(alignment: .leading, spacing: 8) {
                 HStack {
-                    Label("AI honeymoon itinerary", systemImage: "sparkles")
+                    Label("AI \(itineraryNoun)", systemImage: "sparkles")
                         .font(.subheadline.weight(.semibold))
                     Spacer()
                     itineraryBadge
@@ -307,7 +314,7 @@ struct DestinationDetailView: View {
 
     private var bookingLinks: some View {
         VStack(alignment: .leading, spacing: 8) {
-            Text("Book your honeymoon")
+            Text("Book your trip")
                 .font(.headline)
             HStack(spacing: 10) {
                 outboundButton(title: "Find hotels", icon: "bed.double", url: AffiliateLinks.hotels(for: destination))
@@ -648,4 +655,5 @@ private struct PhotoGalleryViewer: View {
     DestinationDetailView(destination: honeymoonData[0])
         .environmentObject(UserDataStore())
         .environmentObject(PurchaseStore())
+        .environmentObject(PreferenceStore())
 }

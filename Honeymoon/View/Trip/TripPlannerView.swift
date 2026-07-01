@@ -253,14 +253,14 @@ struct TripPlannerView: View {
                     addEssentials()
                 } label: {
                     Label(
-                        plan.checklist.isEmpty ? "Add honeymoon essentials" : "Add \(missingEssentialsCount) more essentials",
+                        plan.checklist.isEmpty ? "Add trip essentials" : "Add \(missingEssentialsCount) more essentials",
                         systemImage: "sparkles"
                     )
                 }
                 .foregroundStyle(Color.brand)
             }
         } header: {
-            Text("Honeymoon checklist")
+            Text("Trip readiness")
         } footer: {
             Text("Tip: most countries need your passport valid for 6+ months beyond your trip.")
         }

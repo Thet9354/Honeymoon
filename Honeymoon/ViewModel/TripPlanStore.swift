@@ -208,7 +208,7 @@ final class TripPlanStore: ObservableObject {
         parentRef?.setData(["notes": text], merge: true) { _ in }
     }
 
-    private static let itineraryMarker = "✨ Your AI honeymoon itinerary"
+    private static let itineraryMarker = "✨ Your AI travel plan"
 
     private static func notesText(from itinerary: Itinerary) -> String {
         var lines = [itineraryMarker, ""]

@@ -32,6 +32,12 @@ struct ItineraryView: View {
     @State private var isAddingToTrip = false
     @State private var addedToTrip = false
 
+    /// The couple's occasion word for headings, e.g. "honeymoon" / "romantic
+    /// getaway"; falls back to a neutral "trip" before they've chosen one.
+    private var tripNoun: String {
+        preferenceStore.preferences.occasion?.label.lowercased() ?? "trip"
+    }
+
     var body: some View {
         NavigationStack {
             Group {
@@ -120,7 +126,7 @@ struct ItineraryView: View {
         List {
             Section {
                 VStack(alignment: .leading, spacing: 6) {
-                    Text("\(itinerary.days.count)-day honeymoon")
+                    Text("\(itinerary.days.count)-day \(tripNoun)")
                         .font(.title3.weight(.bold))
                     Text("A romantic day-by-day plan for \(destination.place), \(destination.country), tailored to your tastes.")
                         .font(.subheadline)

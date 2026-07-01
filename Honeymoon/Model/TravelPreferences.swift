@@ -10,6 +10,82 @@
 
 import Foundation
 
+/// What the couple is planning. Tailors the AI itinerary's length, tone and copy
+/// so the same destinations serve a lavish honeymoon and a quick romantic getaway
+/// alike — the app is for couples' trips, not just honeymoons.
+enum TripOccasion: String, Codable, CaseIterable, Identifiable {
+    case honeymoon, anniversary, getaway, babymoon
+
+    var id: String { rawValue }
+
+    var label: String {
+        switch self {
+        case .honeymoon:   "Honeymoon"
+        case .anniversary: "Anniversary"
+        case .getaway:     "Romantic getaway"
+        case .babymoon:    "Babymoon"
+        }
+    }
+
+    var subtitle: String {
+        switch self {
+        case .honeymoon:   "The big one — celebrate your marriage"
+        case .anniversary: "Mark another year together"
+        case .getaway:     "A quick escape, just the two of you"
+        case .babymoon:    "Relax before the baby arrives"
+        }
+    }
+
+    var systemImage: String {
+        switch self {
+        case .honeymoon:   "heart.fill"
+        case .anniversary: "gift.fill"
+        case .getaway:     "airplane.departure"
+        case .babymoon:    "stroller.fill"
+        }
+    }
+
+    /// Default trip length the AI plans for, in days.
+    var defaultTripDays: Int {
+        switch self {
+        case .honeymoon:   7
+        case .anniversary: 5
+        case .getaway:     3
+        case .babymoon:    6
+        }
+    }
+
+    /// Short noun phrase describing the trip, fed to the AI planner.
+    var planDescriptor: String {
+        switch self {
+        case .honeymoon:   "a once-in-a-lifetime honeymoon"
+        case .anniversary: "a romantic anniversary trip"
+        case .getaway:     "a short romantic getaway (a \"mini-moon\")"
+        case .babymoon:    "a relaxed pre-baby babymoon"
+        }
+    }
+
+    /// Tone/pacing guidance for the AI planner.
+    var toneGuidance: String {
+        switch self {
+        case .honeymoon:   "Lean into once-in-a-lifetime romance and special splurges; pace it indulgently."
+        case .anniversary: "Celebratory and sentimental; weave in a standout dinner or experience to mark the milestone."
+        case .getaway:     "Keep it relaxed and efficient for a short break — fewer, higher-impact moments and minimal logistics."
+        case .babymoon:    "Calm, comfortable and low-exertion; prioritise rest, gentle activities and easy access to amenities."
+        }
+    }
+
+    /// User-facing word for the generated plan, e.g. "honeymoon itinerary".
+    var itineraryNoun: String {
+        switch self {
+        case .honeymoon:   "honeymoon itinerary"
+        case .anniversary: "anniversary itinerary"
+        case .getaway:     "getaway plan"
+        case .babymoon:    "babymoon plan"
+        }
+    }
+}
+
 /// A coarse budget band for two people, mapped to the destination budget field.
 enum BudgetBand: String, Codable, CaseIterable, Identifiable {
     case budget, mid, luxury
@@ -84,6 +160,10 @@ enum Interest: String, Codable, CaseIterable, Identifiable {
 }
 
 struct TravelPreferences: Codable, Equatable {
+    /// What the couple is planning. Drives occasion-aware copy and AI tailoring;
+    /// optional so pre-pivot saved preferences still decode (treated as a generic
+    /// romantic trip until the couple picks one).
+    var occasion: TripOccasion? = nil
     var interests: Set<Interest> = []
     var budgetBand: BudgetBand? = nil
     var regions: Set<String> = []

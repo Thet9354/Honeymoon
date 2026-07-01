@@ -23,7 +23,7 @@ struct GuideView: View {
                     .fontWeight(.black)
                     .modifier(TitleModifier())
                 
-                Text("Discover and pick the perfect destination for your romantic Honeymoon!")
+                Text("Discover and pick the perfect destination for your romantic trip together!")
                     .lineLimit(nil)
                     .multilineTextAlignment(.center)
                 
@@ -45,7 +45,7 @@ struct GuideView: View {
                     GuideComponent(
                         title: "Book",
                         subtitle: "Tap the button",
-                        description: "Our selection of honeymoon resorts is perfect setting for you to embark your new life together.",
+                        description: "Our selection of romantic destinations is the perfect setting for your time away together.",
                         icon: "checkmark.circle")
                 }
                 

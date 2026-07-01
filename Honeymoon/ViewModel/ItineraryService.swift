@@ -51,8 +51,9 @@ final class ItineraryService: ObservableObject {
             return (Itinerary(destination: destination, generated: generated), .generated)
         } catch {
             // Offline, function error, or no allowance → never fail the screen;
-            // serve the deterministic plan instead.
-            return (Itinerary.generate(for: destination), .fallback)
+            // serve the deterministic plan instead, at the occasion's length.
+            let days = preferences.occasion?.defaultTripDays ?? 7
+            return (Itinerary.generate(for: destination, days: days), .fallback)
         }
     }
 
@@ -87,6 +88,7 @@ final class ItineraryService: ObservableObject {
         preferences: TravelPreferences,
         startDate: Date?
     ) async throws -> GeneratedItinerary {
+        let occasion = preferences.occasion
         var payload: [String: Any] = [
             "destination": [
                 "place": destination.place,
@@ -98,8 +100,15 @@ final class ItineraryService: ObservableObject {
                 "estBudgetForTwoUSD": destination.estBudgetForTwoUSD
             ],
             "preferences": Self.preferencesPayload(preferences),
-            "days": 7
+            "days": occasion?.defaultTripDays ?? 7
         ]
+        if let occasion {
+            payload["occasion"] = [
+                "label": occasion.label,
+                "descriptor": occasion.planDescriptor,
+                "tone": occasion.toneGuidance
+            ]
+        }
         if let startDate { payload["startDate"] = Self.dateFormatter.string(from: startDate) }
 
         let result = try await functions.httpsCallable("generateItinerary").call(payload)
@@ -120,11 +129,14 @@ final class ItineraryService: ObservableObject {
     /// Stable signature of the inputs that affect generation. A cache entry is
     /// reused only when this matches, so changing preferences/date regenerates.
     private static func signature(preferences: TravelPreferences, startDate: Date?) -> String {
+        let occasion = preferences.occasion?.rawValue ?? "-"
         let interests = preferences.interests.map(\.rawValue).sorted().joined(separator: ",")
         let regions = preferences.regions.sorted().joined(separator: ",")
         let band = preferences.budgetBand?.rawValue ?? "-"
         let date = startDate.map { dateFormatter.string(from: $0) } ?? "-"
-        return "v1|\(interests)|\(regions)|\(band)|\(date)"
+        // v2 adds occasion — changing it regenerates rather than serving a plan
+        // built for a different trip type.
+        return "v2|\(occasion)|\(interests)|\(regions)|\(band)|\(date)"
     }
 
     private static let dateFormatter: DateFormatter = {

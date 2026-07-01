@@ -26,6 +26,7 @@ struct PreferenceQuizView: View {
         ScrollView {
             VStack(alignment: .leading, spacing: 28) {
                 if mode == .onboarding { header }
+                occasionSection
                 interestsSection
                 budgetSection
                 regionsSection
@@ -51,6 +52,45 @@ struct PreferenceQuizView: View {
                 .font(.body)
                 .foregroundStyle(.secondary)
         }
+    }
+
+    private var occasionSection: some View {
+        VStack(alignment: .leading, spacing: 12) {
+            sectionTitle("What are you planning?", subtitle: "We'll tailor your plans to the occasion")
+            VStack(spacing: 10) {
+                ForEach(TripOccasion.allCases) { occasion in
+                    occasionCard(occasion)
+                }
+            }
+        }
+    }
+
+    private func occasionCard(_ occasion: TripOccasion) -> some View {
+        let selected = draft.occasion == occasion
+        return Button {
+            draft.occasion = occasion
+        } label: {
+            HStack(spacing: 12) {
+                Image(systemName: occasion.systemImage)
+                    .font(.system(size: 20))
+                    .frame(width: 28)
+                    .foregroundStyle(selected ? Color.brand : .secondary)
+                VStack(alignment: .leading, spacing: 2) {
+                    Text(occasion.label).font(.subheadline.weight(.semibold))
+                    Text(occasion.subtitle).font(.caption).foregroundStyle(.secondary)
+                }
+                Spacer(minLength: 0)
+                Image(systemName: selected ? "checkmark.circle.fill" : "circle")
+                    .foregroundStyle(selected ? Color.brand : Color(.tertiaryLabel))
+            }
+            .padding(.horizontal, 14).padding(.vertical, 12)
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .background(selected ? Color.brand.opacity(0.12) : Color(.secondarySystemBackground),
+                        in: RoundedRectangle(cornerRadius: 14))
+            .overlay(RoundedRectangle(cornerRadius: 14).stroke(selected ? Color.brand : .clear, lineWidth: 1.5))
+            .foregroundStyle(.primary)
+        }
+        .buttonStyle(.plain)
     }
 
     private var interestsSection: some View {

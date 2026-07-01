@@ -185,7 +185,7 @@ struct ContentView: View {
                     ProgressView()
                         .controlSize(.large)
                         .tint(Color.brand)
-                    Text("Finding honeymoons for you…")
+                    Text("Finding your next trip…")
                         .font(.subheadline)
                         .foregroundStyle(.secondary)
                 }
@@ -357,7 +357,7 @@ struct ContentView: View {
                 Alert(
                     title: Text("SUCCESS"),
                     message: Text("Wishing a lovely and most precious of times together for the amazing couple."),
-                    dismissButton: .default(Text("Happy Honeymoon!"))
+                    dismissButton: .default(Text("Here's to your trip!"))
                 )
             } else {
                 Alert(
