@@ -18,13 +18,22 @@ struct CardView: View, Identifiable {
 
     // MARK: - BODY
 
+    /// The deck's card shape. The original catalogue photos are portrait
+    /// 1200×1920 (0.625); pinning every card to that ratio and filling it keeps
+    /// the deck uniform no matter each source photo's dimensions. The full,
+    /// uncropped image is still used on the detail screen.
+    private let cardAspectRatio: CGFloat = 1200.0 / 1920.0
+
     var body: some View {
-        Image(destination.image)
-            .resizable()
-            .cornerRadius(24)
-            .scaledToFit()
-            .frame(minWidth: 0, maxWidth: .infinity)
-            .overlay(
+        Color.clear
+            .aspectRatio(cardAspectRatio, contentMode: .fit)
+            .overlay {
+                Image(destination.image)
+                    .resizable()
+                    .scaledToFill()
+            }
+            .clipShape(RoundedRectangle(cornerRadius: 24))
+            .overlay(alignment: .bottom) {
                 VStack(alignment: .center, spacing: 12) {
                     Text(destination.place.uppercased())
                         .foregroundColor(Color.white)
@@ -63,10 +72,9 @@ struct CardView: View, Identifiable {
                             .padding(.top, 2)
                     }
                 }
-                    .frame(minWidth: 280)
-                    .padding(.bottom, 50),
-                alignment: .bottom
-            )
+                .frame(minWidth: 280)
+                .padding(.bottom, 50)
+            }
             .accessibilityElement(children: .ignore)
             .accessibilityLabel("\(destination.place), \(destination.country)")
             .accessibilityHint("Swipe right to like, swipe left to pass")
