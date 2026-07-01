@@ -24,6 +24,7 @@
 		AACC11110000000000000002 /* PurchaseStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = AACC11110000000000000001 /* PurchaseStore.swift */; };
 		AAEE11110000000000000002 /* ItineraryService.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAEE11110000000000000001 /* ItineraryService.swift */; };
 		AAEE44440000000000000002 /* WeatherService.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAEE44440000000000000001 /* WeatherService.swift */; };
+		AAEE66660000000000000014 /* HoneymoonLogicTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAEE66660000000000000013 /* HoneymoonLogicTests.swift */; };
 		AAEE22220000000000000002 /* NotificationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAEE22220000000000000001 /* NotificationService.swift */; };
 		AACC22220000000000000002 /* PaywallView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AACC22220000000000000001 /* PaywallView.swift */; };
 		AACC33330000000000000002 /* ItineraryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AACC33330000000000000001 /* ItineraryView.swift */; };
@@ -92,6 +93,8 @@
 		AACC11110000000000000001 /* PurchaseStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PurchaseStore.swift; sourceTree = "<group>"; };
 		AAEE11110000000000000001 /* ItineraryService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ItineraryService.swift; sourceTree = "<group>"; };
 		AAEE44440000000000000001 /* WeatherService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherService.swift; sourceTree = "<group>"; };
+		AAEE66660000000000000013 /* HoneymoonLogicTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HoneymoonLogicTests.swift; sourceTree = "<group>"; };
+		AAEE66660000000000000011 /* HoneymoonTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = HoneymoonTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		AAEE22220000000000000001 /* NotificationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationService.swift; sourceTree = "<group>"; };
 		AACC22220000000000000001 /* PaywallView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaywallView.swift; sourceTree = "<group>"; };
 		AACC33330000000000000001 /* ItineraryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ItineraryView.swift; sourceTree = "<group>"; };
@@ -151,6 +154,13 @@
 				D3358A062FED900000541A90 /* FirebaseFirestore in Frameworks */,
 				D3358A072FED900000541A90 /* GoogleSignIn in Frameworks */,
 				AAEE99990000000000000002 /* FirebaseFunctions in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		AAEE66660000000000000016 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -278,14 +288,24 @@
 			isa = PBXGroup;
 			children = (
 				D3F845F92AF09593005090ED /* Honeymoon */,
+				AAEE66660000000000000012 /* HoneymoonTests */,
 				D3F845F82AF09593005090ED /* Products */,
 			);
+			sourceTree = "<group>";
+		};
+		AAEE66660000000000000012 /* HoneymoonTests */ = {
+			isa = PBXGroup;
+			children = (
+				AAEE66660000000000000013 /* HoneymoonLogicTests.swift */,
+			);
+			path = HoneymoonTests;
 			sourceTree = "<group>";
 		};
 		D3F845F82AF09593005090ED /* Products */ = {
 			isa = PBXGroup;
 			children = (
 				D3F845F72AF09593005090ED /* Honeymoon.app */,
+				AAEE66660000000000000011 /* HoneymoonTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -430,7 +450,43 @@
 			productReference = D3F845F72AF09593005090ED /* Honeymoon.app */;
 			productType = "com.apple.product-type.application";
 		};
+		AAEE66660000000000000010 /* HoneymoonTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = AAEE6666000000000000001A /* Build configuration list for PBXNativeTarget "HoneymoonTests" */;
+			buildPhases = (
+				AAEE66660000000000000015 /* Sources */,
+				AAEE66660000000000000016 /* Frameworks */,
+				AAEE66660000000000000017 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				AAEE66660000000000000018 /* PBXTargetDependency */,
+			);
+			name = HoneymoonTests;
+			productName = HoneymoonTests;
+			productReference = AAEE66660000000000000011 /* HoneymoonTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
 /* End PBXNativeTarget section */
+
+/* Begin PBXTargetDependency section */
+		AAEE66660000000000000018 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = D3F845F62AF09593005090ED /* Honeymoon */;
+			targetProxy = AAEE66660000000000000019 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin PBXContainerItemProxy section */
+		AAEE66660000000000000019 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = D3F845EF2AF09593005090ED /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = D3F845F62AF09593005090ED;
+			remoteInfo = Honeymoon;
+		};
+/* End PBXContainerItemProxy section */
 
 /* Begin PBXProject section */
 		D3F845EF2AF09593005090ED /* Project object */ = {
@@ -442,6 +498,10 @@
 				TargetAttributes = {
 					D3F845F62AF09593005090ED = {
 						CreatedOnToolsVersion = 15.0.1;
+					};
+					AAEE66660000000000000010 = {
+						CreatedOnToolsVersion = 15.0.1;
+						TestTargetID = D3F845F62AF09593005090ED;
 					};
 				};
 			};
@@ -463,6 +523,7 @@
 			projectRoot = "";
 			targets = (
 				D3F845F62AF09593005090ED /* Honeymoon */,
+				AAEE66660000000000000010 /* HoneymoonTests */,
 			);
 		};
 /* End PBXProject section */
@@ -520,6 +581,13 @@
 				D3F846022AF09595005090ED /* Preview Assets.xcassets in Resources */,
 				D3F8460E2AF09785005090ED /* LaunchScreen.storyboard in Resources */,
 				D3F845FF2AF09595005090ED /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		AAEE66660000000000000017 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -585,6 +653,14 @@
 				D3F846202AF0B08A005090ED /* GuideComponent.swift in Sources */,
 				D33589E32FED8AE100541A90 /* AppearanceMode.swift in Sources */,
 				D3F846222AF0B1D9005090ED /* GuideView.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		AAEE66660000000000000015 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				AAEE66660000000000000014 /* HoneymoonLogicTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -780,6 +856,44 @@
 			};
 			name = Release;
 		};
+		AAEE6666000000000000001B /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = K8FKWBYV9S;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.thetpine.honeymoon.tests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Honeymoon.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/Honeymoon";
+			};
+			name = Debug;
+		};
+		AAEE6666000000000000001C /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = K8FKWBYV9S;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.thetpine.honeymoon.tests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Honeymoon.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/Honeymoon";
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -797,6 +911,15 @@
 			buildConfigurations = (
 				D3F846062AF09595005090ED /* Debug */,
 				D3F846072AF09595005090ED /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		AAEE6666000000000000001A /* Build configuration list for PBXNativeTarget "HoneymoonTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				AAEE6666000000000000001B /* Debug */,
+				AAEE6666000000000000001C /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
