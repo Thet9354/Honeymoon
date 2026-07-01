@@ -10,6 +10,7 @@
 		D33589CA2FED845700541A90 /* DestinationRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = D33589C92FED845700541A90 /* DestinationRepository.swift */; };
 		AAFF11110000000000000002 /* AffiliateLinks.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAFF11110000000000000001 /* AffiliateLinks.swift */; };
 		AAFF22220000000000000002 /* DestinationDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAFF22220000000000000001 /* DestinationDetailView.swift */; };
+		AAEE55550000000000000002 /* BrowseView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAEE55550000000000000001 /* BrowseView.swift */; };
 		AAFF44440000000000000002 /* TravelPreferences.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAFF44440000000000000001 /* TravelPreferences.swift */; };
 		AAFF55550000000000000002 /* PreferenceStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAFF55550000000000000001 /* PreferenceStore.swift */; };
 		AAFF66660000000000000002 /* PreferenceQuizView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAFF66660000000000000001 /* PreferenceQuizView.swift */; };
@@ -77,6 +78,7 @@
 		D33589C92FED845700541A90 /* DestinationRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DestinationRepository.swift; sourceTree = "<group>"; };
 		AAFF11110000000000000001 /* AffiliateLinks.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AffiliateLinks.swift; sourceTree = "<group>"; };
 		AAFF22220000000000000001 /* DestinationDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DestinationDetailView.swift; sourceTree = "<group>"; };
+		AAEE55550000000000000001 /* BrowseView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BrowseView.swift; sourceTree = "<group>"; };
 		AAFF44440000000000000001 /* TravelPreferences.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TravelPreferences.swift; sourceTree = "<group>"; };
 		AAFF55550000000000000001 /* PreferenceStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreferenceStore.swift; sourceTree = "<group>"; };
 		AAFF66660000000000000001 /* PreferenceQuizView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreferenceQuizView.swift; sourceTree = "<group>"; };
@@ -264,6 +266,14 @@
 			path = Saved;
 			sourceTree = "<group>";
 		};
+		AAEE55550000000000000010 /* Browse */ = {
+			isa = PBXGroup;
+			children = (
+				AAEE55550000000000000001 /* BrowseView.swift */,
+			);
+			path = Browse;
+			sourceTree = "<group>";
+		};
 		D3F845EE2AF09593005090ED = {
 			isa = PBXGroup;
 			children = (
@@ -357,6 +367,7 @@
 				D33589D42FED89BD00541A90 /* Auth */,
 				D33589E12FED8ADC00541A90 /* Settings */,
 				D3358A0C2FED900000541A90 /* Saved */,
+				AAEE55550000000000000010 /* Browse */,
 				AAFF33330000000000000001 /* Detail */,
 				AAFFAAAA0000000000000001 /* Trip */,
 				AABB55550000000000000001 /* Couple */,
@@ -539,6 +550,7 @@
 				D33589CA2FED845700541A90 /* DestinationRepository.swift in Sources */,
 				AAFF11110000000000000002 /* AffiliateLinks.swift in Sources */,
 				AAFF22220000000000000002 /* DestinationDetailView.swift in Sources */,
+				AAEE55550000000000000002 /* BrowseView.swift in Sources */,
 				AAFF44440000000000000002 /* TravelPreferences.swift in Sources */,
 				AAFF55550000000000000002 /* PreferenceStore.swift in Sources */,
 				AAFF66660000000000000002 /* PreferenceQuizView.swift in Sources */,

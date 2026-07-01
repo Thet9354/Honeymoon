@@ -26,6 +26,7 @@ struct ContentView: View {
     @State var showSettings: Bool = false
     @State var showSaved: Bool = false
     @State var showCouple: Bool = false
+    @State var showBrowse: Bool = false
     @State private var detailDestination: Destination?
     /// Drives the "Plan together" routing from the match celebration.
     @State private var matchPlanDestination: Destination?
@@ -225,7 +226,7 @@ struct ContentView: View {
     var body: some View {
         VStack {
             // MARK: - HEADER
-            HeaderView(showGuideView: $showGuide, showSettingsView: $showSettings, showSavedView: $showSaved, showCoupleView: $showCouple)
+            HeaderView(showGuideView: $showGuide, showSettingsView: $showSettings, showSavedView: $showSaved, showCoupleView: $showCouple, showBrowseView: $showBrowse)
                 .opacity(chromeOpacity)
                 .animation(.easeOut(duration: 0.25), value: dragState.translation)
 
