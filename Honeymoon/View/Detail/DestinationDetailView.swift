@@ -181,6 +181,7 @@ struct DestinationDetailView: View {
             }
             if !destination.highlights.isEmpty { highlightsSection }
             mapSection
+            weatherSection
             itineraryTeaser
             bookingLinks
             bookButton
@@ -251,6 +252,13 @@ struct DestinationDetailView: View {
                 .clipShape(RoundedRectangle(cornerRadius: 12))
                 .overlay(RoundedRectangle(cornerRadius: 12).stroke(Color(.separator), lineWidth: 0.5))
                 .accessibilityLabel("Map of \(destination.place), \(destination.country)")
+        }
+    }
+
+    @ViewBuilder
+    private var weatherSection: some View {
+        if let latitude = destination.latitude, let longitude = destination.longitude {
+            WeatherStrip(latitude: latitude, longitude: longitude, place: destination.place)
         }
     }
 
@@ -361,6 +369,88 @@ struct DestinationDetailView: View {
         }
         .foregroundStyle(.primary)
         .overlay(RoundedRectangle(cornerRadius: 12).stroke(Color(.separator), lineWidth: 0.5))
+    }
+}
+
+// MARK: - Weather strip
+
+/// Live weather for the destination via Open-Meteo (keyless). Loads from the
+/// stored coordinate; renders nothing until/unless it succeeds, so the screen is
+/// unaffected offline or on error.
+private struct WeatherStrip: View {
+    let latitude: Double
+    let longitude: Double
+    var place: String
+
+    @State private var weather: DestinationWeather?
+    @State private var didLoad = false
+
+    var body: some View {
+        Group {
+            if let weather {
+                VStack(alignment: .leading, spacing: 10) {
+                    Text("Weather")
+                        .font(.headline)
+                    HStack(spacing: 16) {
+                        current(weather)
+                        Divider().frame(height: 46)
+                        forecast(weather)
+                        Spacer(minLength: 0)
+                    }
+                    .padding(14)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .background(Color(.secondarySystemBackground), in: RoundedRectangle(cornerRadius: 12))
+                    Text("Current conditions in \(place).")
+                        .font(.caption2)
+                        .foregroundStyle(.secondary)
+                }
+                .accessibilityElement(children: .combine)
+            }
+        }
+        .task {
+            guard !didLoad else { return }
+            didLoad = true
+            weather = await WeatherService.forecast(latitude: latitude, longitude: longitude)
+        }
+    }
+
+    private func current(_ w: DestinationWeather) -> some View {
+        let p = DestinationWeather.presentation(for: w.currentCode)
+        return HStack(spacing: 10) {
+            Image(systemName: p.symbol)
+                .font(.system(size: 28))
+                .symbolRenderingMode(.multicolor)
+            VStack(alignment: .leading, spacing: 2) {
+                Text("\(Int(w.currentTemp.rounded()))\(w.unitSymbol)")
+                    .font(.title2.weight(.semibold))
+                Text(p.label)
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+            }
+        }
+    }
+
+    private func forecast(_ w: DestinationWeather) -> some View {
+        HStack(spacing: 14) {
+            ForEach(w.days) { day in
+                VStack(spacing: 4) {
+                    Text(weekday(day.date))
+                        .font(.caption2)
+                        .foregroundStyle(.secondary)
+                    Image(systemName: DestinationWeather.presentation(for: day.code).symbol)
+                        .font(.system(size: 15))
+                        .symbolRenderingMode(.multicolor)
+                    Text("\(Int(day.high.rounded()))°")
+                        .font(.caption2.weight(.medium))
+                }
+            }
+        }
+    }
+
+    private func weekday(_ date: Date) -> String {
+        let f = DateFormatter()
+        f.dateFormat = "EEE"
+        return f.string(from: date)
     }
 }
 
